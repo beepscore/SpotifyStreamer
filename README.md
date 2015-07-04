@@ -1,5 +1,5 @@
 # Purpose
-Spotify Streamer is a music streaming app, uses Spotify.
+Spotify Streamer is an Android app music streaming client, uses Spotify.
 
 # References
 
