@@ -15,9 +15,9 @@ import java.util.List;
 /**
  * Shows artists
  */
-public class MainActivityFragment extends Fragment {
+public class ArtistsFragment extends Fragment {
 
-    public MainActivityFragment() {
+    public ArtistsFragment() {
     }
 
     ArrayAdapter<String> adapter = null;
