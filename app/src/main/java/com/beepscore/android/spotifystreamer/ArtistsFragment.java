@@ -26,7 +26,7 @@ public class ArtistsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View artistsView = inflater.inflate(R.layout.fragment_main, container, false);
+        View artistsView = inflater.inflate(R.layout.fragment_artists, container, false);
 
         List<String> list = new ArrayList<String>();
 
