@@ -85,7 +85,10 @@ public class ArtistsFragment extends Fragment {
 
 ////////////////////////////////////////////////////////////////////////////
 
-    // first parameter is input, second is integer for onProgressUpdate, third is return for onPostExecute
+    // http://stackoverflow.com/questions/9671546/asynctask-android-example?rq=1
+    // first parameter is doInBackground first argument params[0].
+    // second is onProgressUpdate integer argument.
+    // third is doInBackground return type and onPostExecute argument type.
     private class FetchArtistsTask extends AsyncTask<String, Void, ArtistsPager> {
 
         private final String LOG_TAG = FetchArtistsTask.class.getSimpleName();
