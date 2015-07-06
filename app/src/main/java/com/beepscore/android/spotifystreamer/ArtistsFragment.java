@@ -3,10 +3,13 @@ package com.beepscore.android.spotifystreamer;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -23,6 +26,8 @@ import kaaes.spotify.webapi.android.models.ArtistsPager;
  */
 public class ArtistsFragment extends Fragment {
 
+    private final String LOG_TAG = ArtistsFragment.class.getSimpleName();
+
     public ArtistsFragment() {
     }
 
@@ -33,6 +38,29 @@ public class ArtistsFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View artistsView = inflater.inflate(R.layout.fragment_artists, container, false);
+
+        final EditText editText = (EditText) artistsView.findViewById(R.id.edit_text);
+
+        // http://www.mysamplecode.com/2012/06/android-edittext-text-change-listener.html
+        editText.addTextChangedListener(new TextWatcher() {
+
+            public void beforeTextChanged(CharSequence s, int start,
+                                      int before, int count) {
+            }
+
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {
+            }
+
+            public void afterTextChanged(Editable s) {
+                String artistName = editText.getText().toString();
+                // guard against malformed uri request which could crash app
+                if ((artistName != null)
+                        && !artistName.equals("")) {
+                    fetchArtists(artistName);
+                }
+            }
+        });
 
         List<String> list = new ArrayList<String>();
         // add a placeholder element
@@ -46,8 +74,6 @@ public class ArtistsFragment extends Fragment {
 
         ListView listView = (ListView) artistsView.findViewById(R.id.list_view);
         listView.setAdapter(adapter);
-
-        fetchArtists("Beyonce");
 
         return artistsView;
     }

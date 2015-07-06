@@ -7,10 +7,13 @@
               android:paddingRight="@dimen/activity_horizontal_margin"
               tools:context=".MainActivityFragment">
 
-    <SearchView
-        android:layout_width="wrap_content"
+    <EditText
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/search_view"/>
+        android:inputType="text"
+        android:imeOptions="actionDone"
+        android:hint="@string/artist"
+        android:id="@+id/edit_text"/>
 
     <ListView
         android:layout_width="match_parent"
