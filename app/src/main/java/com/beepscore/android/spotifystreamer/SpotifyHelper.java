@@ -3,13 +3,13 @@ package com.beepscore.android.spotifystreamer;
 import android.net.Uri;
 
 /**
- * Created by stevebaker on 7/5/15.
  * Supports making requests to Spotify web service.
+ * Created by stevebaker on 7/5/15.
  */
 public class SpotifyHelper {
 
     /**
-     * URI for artist query to Spotify
+     * URI to search Spotify for artists
      * @param name specifies an artist name.
      * Name may contain spaces, they will be escaped
      * @return uri
@@ -20,7 +20,7 @@ public class SpotifyHelper {
     }
 
     /**
-     * URI for query to Spotify
+     * URI to search Spotify for type with value
      * @param filterType specifies the type
      * @param value specifies the type's value
      * Value may contain spaces, they will be escaped
