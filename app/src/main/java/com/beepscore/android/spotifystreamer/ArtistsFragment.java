@@ -105,6 +105,7 @@ public class ArtistsFragment extends Fragment {
 
         private void updateAdapter(ArrayAdapter anAdapter, ArrayList<String> artistsStrings) {
             anAdapter.clear();
+            // addAll calls adapter.notifyDataSetChanged()
             anAdapter.addAll(artistsStrings);
         }
 
