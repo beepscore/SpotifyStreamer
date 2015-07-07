@@ -31,7 +31,7 @@ public class ArtistsFragment extends Fragment {
     public ArtistsFragment() {
     }
 
-    ArrayAdapter<String> adapter = null;
+    ArtistsArrayAdapter adapter = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -62,15 +62,10 @@ public class ArtistsFragment extends Fragment {
             }
         });
 
-        List<String> list = new ArrayList<String>();
-        // add a placeholder element
-        list.add(getActivity().getString(R.string.dash));
+        List<Artist> list = new ArrayList<Artist>();
 
         // adapter creates views for each list item
-        adapter = new ArrayAdapter<String>(getActivity(),
-                R.layout.list_item,
-                R.id.list_item_textview,
-                list);
+        adapter = new ArtistsArrayAdapter(getActivity(), list);
 
         ListView listView = (ListView) artistsView.findViewById(R.id.list_view);
         listView.setAdapter(adapter);
@@ -121,21 +116,11 @@ public class ArtistsFragment extends Fragment {
             super.onPostExecute(artistsPager);
 
             // https://developer.spotify.com/web-api/object-model
-            List<Artist> artistList = artistsPager.artists.items;
+            List<Artist> artistsList = artistsPager.artists.items;
 
-            ArrayList<String> artistsStrings = new ArrayList<String>();
-
-            for (Artist artist : artistList) {
-                // also can get artist.id
-                artistsStrings.add(artist.name);
-            }
-            updateAdapter(adapter, artistsStrings);
-        }
-
-        private void updateAdapter(ArrayAdapter anAdapter, ArrayList<String> artistsStrings) {
-            anAdapter.clear();
+            adapter.clear();
             // addAll calls adapter.notifyDataSetChanged()
-            anAdapter.addAll(artistsStrings);
+            adapter.addAll(artistsList);
         }
 
     }
