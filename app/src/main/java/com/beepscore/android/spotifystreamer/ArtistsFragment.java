@@ -11,6 +11,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -117,12 +118,27 @@ public class ArtistsFragment extends Fragment {
         protected void onPostExecute(ArtistsPager artistsPager) {
             super.onPostExecute(artistsPager);
 
-            // https://developer.spotify.com/web-api/object-model
-            List<Artist> artistsList = artistsPager.artists.items;
+            if (isArtistsPagerArtistsNullOrEmpty(artistsPager)) {
+                Toast toast = Toast.makeText(getActivity(),
+                        getActivity().getString(R.string.search_found_no_artists),
+                        Toast.LENGTH_SHORT);
+                toast.show();
+            } else {
+                // https://developer.spotify.com/web-api/object-model
+                List<Artist> artistsList = artistsPager.artists.items;
+                adapter.clear();
+                // addAll calls adapter.notifyDataSetChanged()
+                adapter.addAll(artistsList);
+            }
+        }
 
-            adapter.clear();
-            // addAll calls adapter.notifyDataSetChanged()
-            adapter.addAll(artistsList);
+        private boolean isArtistsPagerArtistsNullOrEmpty(ArtistsPager artistsPager) {
+            // Note: In UI, searching for artistName space " "
+            // supplies artistsPager that causes this method to return true
+            return artistsPager == null
+                    || artistsPager.artists == null
+                    || artistsPager.artists.items == null
+                    || artistsPager.artists.items.size() == 0;
         }
 
     }
