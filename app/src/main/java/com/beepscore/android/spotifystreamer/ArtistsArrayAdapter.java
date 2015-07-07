@@ -8,9 +8,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 import kaaes.spotify.webapi.android.models.Artist;
+import kaaes.spotify.webapi.android.models.Image;
 
 /**
  * Created by stevebaker on 7/6/15.
@@ -53,14 +56,23 @@ public class ArtistsArrayAdapter extends ArrayAdapter<Artist> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item, parent, false);
         }
 
-        ImageView iconView = (ImageView) convertView.findViewById(R.id.list_item_imageview);
-        // TODO: get image. Use Picasso?
-        //iconView.setImageResource(artist.images.get(0));
-        iconView.setImageResource(R.mipmap.ic_launcher);
+        ImageView imageView = (ImageView) convertView.findViewById(R.id.list_item_imageview);
+        loadArtistImageView(artist, imageView);
 
         TextView artistNameView = (TextView) convertView.findViewById(R.id.list_item_textview);
         artistNameView.setText(artist.name);
 
         return convertView;
     }
+
+    private void loadArtistImageView(Artist artist, ImageView imageView) {
+        // https://github.com/kaaes/spotify-web-api-android/blob/master/src/main/java/kaaes/spotify/webapi/android/models/Image.java
+        if (artist.images.size() > 0) {
+            // get the last image because images is sorted decreasing size
+            Image artistLastImage = artist.images.get(artist.images.size() - 1);
+            String artistLastImageUrlString = artistLastImage.url;
+            Picasso.with(getContext()).load(artistLastImageUrlString).into(imageView);
+        }
+    }
+
 }
