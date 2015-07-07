@@ -24,14 +24,20 @@ It uses Retrofit to create Java interfaces from API endpoints."
 # Results
 
 ## Spotify Web API for Android
+
+### Methods
+<https://github.com/kaaes/spotify-web-api-android/blob/master/src/main/java/kaaes/spotify/webapi/android/SpotifyService.java>
 Use wrapper methods to get info from Spotify. e.g.
 
     spotifyService.searchArtists(artistName)
 
+    getArtistTopTrack(artistId, options)
+
 The wrapper builds uri requests and parses json results into Java objects.
 
+### Model objects
+<https://github.com/kaaes/spotify-web-api-android/tree/master/src/main/java/kaaes/spotify/webapi/android/models>
 The wraapper defines and returns Java Model objects such as ArtistPager, Artist, Image.
-https://github.com/kaaes/spotify-web-api-android/tree/master/src/main/java/kaaes/spotify/webapi/android/models
 
 ### Add to project
 Compiled .aar
