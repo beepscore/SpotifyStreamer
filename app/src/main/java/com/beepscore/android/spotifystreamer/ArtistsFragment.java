@@ -3,13 +3,14 @@ package com.beepscore.android.spotifystreamer;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,28 +40,7 @@ public class ArtistsFragment extends Fragment {
         View artistsView = inflater.inflate(R.layout.fragment_artists, container, false);
 
         final EditText editText = (EditText) artistsView.findViewById(R.id.edit_text);
-
-        // TODO: Consider call fetchArtists when user taps Done, not after every letter
-        // http://www.mysamplecode.com/2012/06/android-edittext-text-change-listener.html
-        editText.addTextChangedListener(new TextWatcher() {
-
-            public void beforeTextChanged(CharSequence s, int start,
-                                      int before, int count) {
-            }
-
-            public void onTextChanged(CharSequence s, int start,
-                                      int before, int count) {
-            }
-
-            public void afterTextChanged(Editable s) {
-                String artistName = editText.getText().toString();
-                // guard against malformed uri request which could crash app
-                if ((artistName != null)
-                        && !artistName.equals("")) {
-                    fetchArtists(artistName);
-                }
-            }
-        });
+        configureEditTextListener(editText);
 
         List<Artist> list = new ArrayList<Artist>();
 
@@ -71,6 +51,28 @@ public class ArtistsFragment extends Fragment {
         listView.setAdapter(adapter);
 
         return artistsView;
+    }
+
+    private void configureEditTextListener(final EditText editText) {
+        // Call fetchArtists when user taps Done, not after every letter.
+        // Use setOnEditorActionListener IME_ACTION_DONE instead of addTextChangedListener
+        // http://stackoverflow.com/questions/2004344/android-edittext-imeoptions-done-track-finish-typing
+        // http://stackoverflow.com/questions/14524393/catch-done-key-press-from-soft-keyboard?lq=1
+        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    String artistName = editText.getText().toString();
+                    // guard against malformed uri request which could crash app
+                    if ((artistName != null)
+                            && !artistName.equals("")) {
+                        fetchArtists(artistName);
+                    }
+                }
+                return false;
+            }
+        });
     }
 
     private void fetchArtists(String artistName) {
