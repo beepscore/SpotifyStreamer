@@ -40,6 +40,7 @@ public class ArtistsFragment extends Fragment {
 
         final EditText editText = (EditText) artistsView.findViewById(R.id.edit_text);
 
+        // TODO: Consider call fetchArtists when user taps Done, not after every letter
         // http://www.mysamplecode.com/2012/06/android-edittext-text-change-listener.html
         editText.addTextChangedListener(new TextWatcher() {
 
