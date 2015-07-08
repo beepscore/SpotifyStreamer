@@ -57,16 +57,17 @@ public class ArtistsFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Artist artist = adapter.getItem(i);
-                String artistId = artist.id;
+                String artistIdName = getArtistIdName(artist);
+
                 Intent intent = new Intent(getActivity(), TracksActivity.class);
-                intent.putExtra(Intent.EXTRA_TEXT, artistId);
+                // Use text extra, simpler to implement than Parcelable object
+                intent.putExtra(Intent.EXTRA_TEXT, artistIdName);
                 startActivity(intent);
             }
         });
 
         return artistsView;
     }
-
     private void configureEditTextListener(final EditText editText) {
         // Call fetchArtists when user taps Done, not after every letter.
         // Use setOnEditorActionListener IME_ACTION_DONE instead of addTextChangedListener
@@ -87,6 +88,15 @@ public class ArtistsFragment extends Fragment {
                 return false;
             }
         });
+    }
+
+    /**
+     * @return artistId and artistName in one string
+     * separated by comma ","
+     */
+    private String getArtistIdName(Artist artist) {
+        String separator = ",";
+        return artist.id + separator + artist.name;
     }
 
     private void fetchArtists(String artistName) {

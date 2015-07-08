@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,7 +46,18 @@ public class TracksFragment extends Fragment {
         Intent intent = getActivity().getIntent();
 
         if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
-            artistId = intent.getStringExtra(Intent.EXTRA_TEXT);
+            String artistIdName = intent.getStringExtra(Intent.EXTRA_TEXT);
+
+            if (artistIdName.length() > 0) {
+                // artistId won't contain a comma, artistName might contain a comma
+                // so split on first separator
+                // indexOf returns first index
+                int separatorIndex = artistIdName.indexOf(",");
+                artistId = artistIdName.substring(0, separatorIndex);
+                String artistName = artistIdName.substring(separatorIndex + 1, artistIdName.length());
+                AppCompatActivity activity = (AppCompatActivity) getActivity();
+                activity.getSupportActionBar().setSubtitle(artistName);
+            }
         }
 
         List<Track> list = new ArrayList<Track>();
