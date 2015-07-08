@@ -18,6 +18,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".TracksActivity"
+            android:label="@string/title_activity_tracks"
+            android:parentActivityName=".ArtistsActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.beepscore.android.spotifystreamer.ArtistsActivity" />
+        </activity>
     </application>
 
 </manifest>
