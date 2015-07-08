@@ -63,6 +63,9 @@ public class TracksArrayAdapter extends ArrayAdapter<Track> {
         TextView trackNameView = (TextView) convertView.findViewById(R.id.list_item_textview);
         trackNameView.setText(track.name);
 
+        TextView albumNameView = (TextView) convertView.findViewById(R.id.list_item_album);
+        albumNameView.setText(track.album.name);
+
         return convertView;
     }
 
