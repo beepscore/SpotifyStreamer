@@ -79,6 +79,7 @@ public class ArtistsFragment extends Fragment {
 
         return artistsView;
     }
+    
     private void configureEditTextListener(final EditText editText) {
         // Call fetchArtists when user taps Done, not after every letter.
         // Use setOnEditorActionListener IME_ACTION_DONE instead of addTextChangedListener
