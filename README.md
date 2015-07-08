@@ -52,3 +52,21 @@ App had SpotifyHelper.java to build uri for requests to Spotify.
 Instead of using SpotifyHelper, app uses Spotify api wrapper library methods.
 Deleted unused SpotifyHelper and SpotifyHelperTest.
 Tagged git commit for reference uri building example.
+
+---
+
+## Issues/Questions
+Note: Normally record/manage issues into bug tracker like jira or github issues.
+For Udacity class, put them in README.md so they will survive cloning repo and be easily visible to others.
+
+### bug: soft keyboard appears at start
+When user starts app, soft keyboard appears.
+How to prevent this? I found several approaches on StackOverflow about changing focus.
+Didn't get anything to work yet.
+
+### bug: Navigate from tracks back to artists loses artist list
+How to save/restore artists activity/fragment.
+Use fragment transaction manager?
+
+### onCreate vs onCreateView
+Is it considered best practice to do as much work as possible in onCreate?
