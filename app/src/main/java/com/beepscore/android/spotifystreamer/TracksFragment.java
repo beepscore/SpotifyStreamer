@@ -10,9 +10,9 @@ import android.view.ViewGroup;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class TracksActivityFragment extends Fragment {
+public class TracksFragment extends Fragment {
 
-    public TracksActivityFragment() {
+    public TracksFragment() {
     }
 
     @Override
