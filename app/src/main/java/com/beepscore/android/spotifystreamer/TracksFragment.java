@@ -27,8 +27,6 @@ import kaaes.spotify.webapi.android.models.Tracks;
  */
 public class TracksFragment extends Fragment {
 
-    // TODO: use intent extra (e.g. artistId, artist) to get top tracks and show them in a list
-
     private String artistId = "";
     TracksArrayAdapter adapter = null;
 
