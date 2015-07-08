@@ -53,7 +53,7 @@ public class ArtistsArrayAdapter extends ArrayAdapter<Artist> {
         // If not, this view already has the layout inflated from a previous call to getView,
         // and we modify the View widgets as usual.
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.artists_list_item, parent, false);
         }
 
         ImageView imageView = (ImageView) convertView.findViewById(R.id.list_item_imageview);
