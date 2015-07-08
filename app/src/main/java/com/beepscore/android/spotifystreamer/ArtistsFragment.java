@@ -37,6 +37,22 @@ public class ArtistsFragment extends Fragment {
     ArtistsArrayAdapter adapter = null;
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        List<Artist> list = new ArrayList<Artist>();
+        // adapter creates views for each list item
+        adapter = new ArtistsArrayAdapter(getActivity(), list);
+
+        // retain fragment so if user rotates device, populated list remains visible
+        // setRetainInstance only affects fragments not added to the "back stack".
+        // http://developer.android.com/reference/android/app/Fragment.html#setRetainInstance%28boolean%29
+        // TODO: Consider use fragmentManager to save fragment on back stack
+        setRetainInstance(true);
+
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
@@ -44,11 +60,6 @@ public class ArtistsFragment extends Fragment {
 
         final EditText editText = (EditText) artistsView.findViewById(R.id.edit_text);
         configureEditTextListener(editText);
-
-        List<Artist> list = new ArrayList<Artist>();
-
-        // adapter creates views for each list item
-        adapter = new ArtistsArrayAdapter(getActivity(), list);
 
         ListView listView = (ListView) artistsView.findViewById(R.id.list_view);
         listView.setAdapter(adapter);
