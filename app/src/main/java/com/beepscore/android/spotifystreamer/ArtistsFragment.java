@@ -1,5 +1,6 @@
 package com.beepscore.android.spotifystreamer;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -50,6 +52,17 @@ public class ArtistsFragment extends Fragment {
 
         ListView listView = (ListView) artistsView.findViewById(R.id.list_view);
         listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Artist artist = adapter.getItem(i);
+                String artistId = artist.id;
+                Intent intent = new Intent(getActivity(), TracksActivity.class);
+                intent.putExtra(Intent.EXTRA_TEXT, artistId);
+                startActivity(intent);
+            }
+        });
 
         return artistsView;
     }
