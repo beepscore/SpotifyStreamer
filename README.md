@@ -46,3 +46,9 @@ Add to project by adding .aar to libs and entering 3 app/build.gradle dependenci
 
 ## Picasso
 Add to project via app/build.gradle dependencies.
+
+## SpotifyHelper
+App had SpotifyHelper.java to build uri for requests to Spotify.
+Instead of using SpotifyHelper, app uses Spotify api wrapper library methods.
+Deleted unused SpotifyHelper and SpotifyHelperTest.
+Tagged git commit for reference uri building example.
