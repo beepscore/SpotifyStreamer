@@ -67,6 +67,11 @@ Didn't get anything to work yet.
 ### bug: Navigate from tracks back to artists loses artist list
 How to save/restore artists activity/fragment.
 Use fragment transaction manager?
+#### References
+http://developer.android.com/guide/topics/resources/runtime-changes.html#RetainingAnObject
+http://www.androiddesignpatterns.com/2013/04/retaining-objects-across-config-changes.html
+https://discussions.udacity.com/t/handling-rotation/22391/13
+https://discussions.udacity.com/t/handling-device-rotation-the-easy-way/24344/1
 
 ### onCreate vs onCreateView
 Is it considered best practice to do as much work as possible in onCreate?
