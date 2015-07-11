@@ -11,8 +11,7 @@
         android:id="@+id/search_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="text"
-        android:imeOptions="actionDone"/>
+        android:inputType="text"/>
 
     <ListView
         android:layout_width="match_parent"
