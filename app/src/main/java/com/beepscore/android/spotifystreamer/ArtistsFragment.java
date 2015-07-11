@@ -4,15 +4,12 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.view.KeyEvent;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -58,8 +55,8 @@ public class ArtistsFragment extends Fragment {
 
         View artistsView = inflater.inflate(R.layout.fragment_artists, container, false);
 
-        final EditText editText = (EditText) artistsView.findViewById(R.id.edit_text);
-        configureEditTextListener(editText);
+        final SearchView searchView = (SearchView) artistsView.findViewById(R.id.search_view);
+        configureSearchViewListener(searchView);
 
         ListView listView = (ListView) artistsView.findViewById(R.id.list_view);
         listView.setAdapter(adapter);
@@ -80,25 +77,27 @@ public class ArtistsFragment extends Fragment {
         return artistsView;
     }
     
-    private void configureEditTextListener(final EditText editText) {
-        // Call fetchArtists when user taps Done, not after every letter.
-        // Use setOnEditorActionListener IME_ACTION_DONE instead of addTextChangedListener
-        // http://stackoverflow.com/questions/2004344/android-edittext-imeoptions-done-track-finish-typing
-        // http://stackoverflow.com/questions/14524393/catch-done-key-press-from-soft-keyboard?lq=1
-        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+    private void configureSearchViewListener(final SearchView searchView) {
+        // Call fetchArtists when user taps close, not after every letter.
+        // https://discussions.udacity.com/t/about-the-searchview/24834/4
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
             @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    String artistName = editText.getText().toString();
-                    // guard against malformed uri request which could crash app
-                    if ((artistName != null)
-                            && !artistName.equals("")) {
-                        fetchArtists(artistName);
-                    }
+            public boolean onQueryTextSubmit(String s) {
+                String artistName = searchView.getQuery().toString();
+                // guard against malformed uri request which could crash app
+                if ((artistName != null)
+                        && !artistName.equals("")) {
+                    fetchArtists(artistName);
                 }
                 return false;
             }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+
         });
     }
 
