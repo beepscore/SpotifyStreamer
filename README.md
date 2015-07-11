@@ -60,19 +60,29 @@ Note: Normally record/manage issues into bug tracker like jira or github issues.
 For Udacity class, put them in README.md so they will survive cloning repo and be easily visible to others.
 
 ### bug: Navigate from tracks "up" to artists loses artist list
-Navigate "up" shows empty search field and empty artists list.
+Navigate "up" showed empty search field and empty artists list.
 How to save/restore artists activity/fragment?
 Use fragment transaction manager?
-Also navigate "back" shows previous search field and artists list as desired.
-Also re-shows keyboard.
+Use parcelable?
+Fixed by setting ArtistsActivity launchmode singleTop.
+I don't know if this is considered ok practice or a hack.
+
 #### References
 http://developer.android.com/guide/topics/resources/runtime-changes.html#RetainingAnObject
 http://www.androiddesignpatterns.com/2013/04/retaining-objects-across-config-changes.html
 
+https://discussions.udacity.com/t/how-to-test-out-if-youre-implementing-parcelable-correctly/25172/2
 https://discussions.udacity.com/t/bug-artist-list-activity-is-destroyed-on-navigating-up-but-not-back/21076/2
 https://discussions.udacity.com/t/how-to-save-intent-extras/21024
 https://discussions.udacity.com/t/handling-rotation/22391/13
 https://discussions.udacity.com/t/handling-device-rotation-the-easy-way/24344/1
+
+##### singleTop
+https://discussions.udacity.com/t/how-to-save-intent-extras/21024/4
+https://developer.android.com/reference/android/app/Activity.html
+
+### bug: Navigate from tracks "back" to artists re-shows keyboard
+Navigate "back" shows previous search field and artists list as desired but re-shows keyboard.
 
 ### onCreate vs onCreateView
 Is it considered best practice to do as much work as possible in onCreate?
