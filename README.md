@@ -59,12 +59,18 @@ Tagged git commit for reference uri building example.
 Note: Normally record/manage issues into bug tracker like jira or github issues.
 For Udacity class, put them in README.md so they will survive cloning repo and be easily visible to others.
 
-### bug: Navigate from tracks back to artists loses artist list
-How to save/restore artists activity/fragment.
+### bug: Navigate from tracks "up" to artists loses artist list
+Navigate "up" shows empty search field and empty artists list.
+How to save/restore artists activity/fragment?
 Use fragment transaction manager?
+Also navigate "back" shows previous search field and artists list as desired.
+Also re-shows keyboard.
 #### References
 http://developer.android.com/guide/topics/resources/runtime-changes.html#RetainingAnObject
 http://www.androiddesignpatterns.com/2013/04/retaining-objects-across-config-changes.html
+
+https://discussions.udacity.com/t/bug-artist-list-activity-is-destroyed-on-navigating-up-but-not-back/21076/2
+https://discussions.udacity.com/t/how-to-save-intent-extras/21024
 https://discussions.udacity.com/t/handling-rotation/22391/13
 https://discussions.udacity.com/t/handling-device-rotation-the-easy-way/24344/1
 
