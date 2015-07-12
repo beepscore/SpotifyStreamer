@@ -73,11 +73,9 @@ public class ArtistsFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 ArtistParcelable artistParcelable = adapter.getItem(i);
-                String artistIdName = getArtistIdName(artistParcelable);
 
                 Intent intent = new Intent(getActivity(), TracksActivity.class);
-                // Use text extra, simpler to implement than Parcelable object
-                intent.putExtra(Intent.EXTRA_TEXT, artistIdName);
+                intent.putExtra(getActivity().getString(R.string.ARTIST_KEY), artistParcelable);
                 startActivity(intent);
             }
         });
@@ -128,15 +126,6 @@ public class ArtistsFragment extends Fragment {
             }
 
         });
-    }
-
-    /**
-     * @return artistId and artistName in one string
-     * separated by comma ","
-     */
-    private String getArtistIdName(ArtistParcelable artistParcelable) {
-        String separator = ",";
-        return artistParcelable.id + separator + artistParcelable.name;
     }
 
     private void fetchArtists(String artistName) {

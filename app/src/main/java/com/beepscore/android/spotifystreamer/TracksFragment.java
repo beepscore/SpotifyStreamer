@@ -28,6 +28,7 @@ import kaaes.spotify.webapi.android.models.Tracks;
 public class TracksFragment extends Fragment {
 
     private String artistId = "";
+    private String artistName = "";
     TracksArrayAdapter adapter = null;
 
     public TracksFragment() {
@@ -43,20 +44,8 @@ public class TracksFragment extends Fragment {
         // http://stackoverflow.com/questions/11387740/where-how-to-getintent-getextras-in-an-android-fragment
         Intent intent = getActivity().getIntent();
 
-        if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
-            String artistIdName = intent.getStringExtra(Intent.EXTRA_TEXT);
-
-            if (artistIdName.length() > 0) {
-                // artistId won't contain a comma, artistName might contain a comma
-                // so split on first separator
-                // indexOf returns first index
-                int separatorIndex = artistIdName.indexOf(",");
-                artistId = artistIdName.substring(0, separatorIndex);
-                String artistName = artistIdName.substring(separatorIndex + 1, artistIdName.length());
-                AppCompatActivity activity = (AppCompatActivity) getActivity();
-                activity.getSupportActionBar().setSubtitle(artistName);
-            }
-        }
+        configureArtistIdAndName(intent);
+        configureActionBarSubtitle(artistName);
 
         List<Track> list = new ArrayList<Track>();
 
@@ -68,8 +57,31 @@ public class TracksFragment extends Fragment {
 
         fetchTracks(artistId);
 
-
         return tracksView;
+    }
+
+    private void configureArtistIdAndName(Intent intent) {
+        String ARTIST_KEY = getActivity().getString(R.string.ARTIST_KEY);
+        if (intent != null && intent.hasExtra(ARTIST_KEY)) {
+            ArtistParcelable artistParcelable = intent.getParcelableExtra(ARTIST_KEY);
+
+            if (artistParcelable != null) {
+                if (artistParcelable.id != null) {
+                    artistId = artistParcelable.id;
+                }
+                if (artistParcelable.name != null) {
+                    artistName = artistParcelable.name;
+                }
+            }
+        }
+    }
+
+    private void configureActionBarSubtitle(String artistName) {
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        if (activity != null
+                && activity.getSupportActionBar() != null) {
+            activity.getSupportActionBar().setSubtitle(artistName);
+        }
     }
 
     private void fetchTracks(String artistId) {

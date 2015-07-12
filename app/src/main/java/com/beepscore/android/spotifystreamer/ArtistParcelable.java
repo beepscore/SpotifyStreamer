@@ -48,7 +48,7 @@ public class ArtistParcelable implements Parcelable {
         parcel.writeString(name);
     }
 
-    public final Parcelable.Creator<ArtistParcelable> CREATOR =
+    public static final Parcelable.Creator<ArtistParcelable> CREATOR =
             new Parcelable.Creator<ArtistParcelable>() {
 
                 @Override
