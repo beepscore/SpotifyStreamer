@@ -29,6 +29,7 @@ public class ArtistsFragment extends Fragment {
     private final String LOG_TAG = ArtistsFragment.class.getSimpleName();
     ArrayList<ArtistParcelable> artistsList;
     ArtistsArrayAdapter adapter = null;
+    SearchView searchView = null;
 
     public ArtistsFragment() {
     }
@@ -62,7 +63,7 @@ public class ArtistsFragment extends Fragment {
 
         View artistsView = inflater.inflate(R.layout.fragment_artists, container, false);
 
-        final SearchView searchView = (SearchView) artistsView.findViewById(R.id.search_view);
+        searchView = (SearchView) artistsView.findViewById(R.id.search_view);
         configureSearchViewListener(searchView);
 
         ListView listView = (ListView) artistsView.findViewById(R.id.list_view);
@@ -82,6 +83,18 @@ public class ArtistsFragment extends Fragment {
         });
 
         return artistsView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // hide keyboard when user navigates back or up from Tracks view
+        // http://stackoverflow.com/questions/16184703/unable-to-hide-the-virtual-keyboard-of-searchview-iconfiedbydefaultfalse
+        // big discussion but answers more complicated than above
+        // http://stackoverflow.com/questions/1109022/close-hide-the-android-soft-keyboard?rq=1
+        // this code didn't work when located in onCreateView
+        searchView.clearFocus();
     }
 
     @Override
