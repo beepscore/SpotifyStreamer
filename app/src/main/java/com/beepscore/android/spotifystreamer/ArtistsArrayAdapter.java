@@ -22,7 +22,7 @@ public class ArtistsArrayAdapter extends ArrayAdapter<ArtistParcelable> {
     /**
      * Custom constructor (it doesn't mirror a superclass constructor).
      * @param context The current context. Used to inflate the layout file.
-     * @param artistsList A List of Artist objects to display
+     * @param artistsList A List of ArtistParcelable objects to display
      */
     public ArtistsArrayAdapter(Activity context, List<ArtistParcelable> artistsList) {
         // Initialize the ArrayAdapter's internal storage for the context and the list.
@@ -42,7 +42,7 @@ public class ArtistsArrayAdapter extends ArrayAdapter<ArtistParcelable> {
      */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        // Gets the Artist object from the ArrayAdapter at the appropriate position
+        // Gets the ArtistParcelable object from the ArrayAdapter at the appropriate position
         ArtistParcelable artistParcelable = getItem(position);
 
         // Adapters recycle views to AdapterViews.
