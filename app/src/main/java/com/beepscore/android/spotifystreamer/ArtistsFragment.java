@@ -172,7 +172,7 @@ public class ArtistsFragment extends Fragment {
         protected void onPostExecute(ArrayList<ArtistParcelable> artistsList) {
             super.onPostExecute(artistsList);
 
-            if (isArtistsListsArtistsNullOrEmpty(artistsList)) {
+            if (isArtistsListsNullOrEmpty(artistsList)) {
                 Toast toast = Toast.makeText(getActivity(),
                         getActivity().getString(R.string.search_found_no_artists),
                         Toast.LENGTH_SHORT);
@@ -210,7 +210,7 @@ public class ArtistsFragment extends Fragment {
                     || artistsPager.artists.items.size() == 0;
         }
 
-        private boolean isArtistsListsArtistsNullOrEmpty(ArrayList<ArtistParcelable> artistsList) {
+        private boolean isArtistsListsNullOrEmpty(ArrayList<ArtistParcelable> artistsList) {
             // Note: In UI, searching for artistName space " "
             // supplies artistsList that causes this method to return true
             return (artistsList == null
