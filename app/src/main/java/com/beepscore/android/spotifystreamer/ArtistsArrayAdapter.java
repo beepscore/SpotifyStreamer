@@ -54,8 +54,11 @@ public class ArtistsArrayAdapter extends ArrayAdapter<ArtistParcelable> {
         }
 
         ImageView imageView = (ImageView) convertView.findViewById(R.id.list_item_imageview);
-        if (artistParcelable.imageUrl != null
-                && !artistParcelable.imageUrl.equals("")) {
+        if (artistParcelable.imageUrl == null
+                || artistParcelable.imageUrl.equals("")) {
+            // show placeholder image
+            Picasso.with(getContext()).load(R.mipmap.ic_launcher).into(imageView);
+        } else {
             Picasso.with(getContext()).load(artistParcelable.imageUrl).into(imageView);
         }
 

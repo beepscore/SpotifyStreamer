@@ -54,8 +54,11 @@ public class TracksArrayAdapter extends ArrayAdapter<TrackParcelable> {
         }
 
         ImageView imageView = (ImageView) convertView.findViewById(R.id.list_item_imageview);
-        if (trackParcelable.imageUrl != null
-                && !trackParcelable.imageUrl.equals("")) {
+        if (trackParcelable.imageUrl == null
+                || trackParcelable.imageUrl.equals("")) {
+            // show placeholder image
+            Picasso.with(getContext()).load(R.mipmap.ic_launcher).into(imageView);
+        } else {
             Picasso.with(getContext()).load(trackParcelable.imageUrl).into(imageView);
         }
 

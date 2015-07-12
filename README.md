@@ -59,14 +59,6 @@ Tagged git commit for reference uri building example.
 Note: Normally record/manage issues into bug tracker like jira or github issues.
 For Udacity class, put them in README.md so they will survive cloning repo and be easily visible to others.
 
-### bug: Artists view doesn't refresh images correctly
-Steps to reproduce:
-Search "goo"
-Search "goof"
-Expected behavior- if artist name changes, image changes
-Actual behavior- artists change but sometimes images don't change
-May need to invalidate image cache if new image url is null or empty ""
-
 ### bug: Navigate from tracks "up" to artists loses artist list
 Navigate "up" showed empty search field and empty artists list.
 How to save/restore artists activity/fragment?
