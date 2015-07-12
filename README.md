@@ -63,7 +63,6 @@ For Udacity class, put them in README.md so they will survive cloning repo and b
 Navigate "up" showed empty search field and empty artists list.
 How to save/restore artists activity/fragment?
 Use fragment transaction manager?
-Use parcelable?
 Fixed by setting ArtistsActivity launchmode singleTop.
 I don't know if this is considered ok practice or a hack.
 
@@ -83,6 +82,8 @@ https://developer.android.com/reference/android/app/Activity.html
 
 ### bug: Navigate from tracks "back" to artists re-shows keyboard
 Navigate "back" shows previous search field and artists list as desired but re-shows keyboard.
+This used to happen every time.
+Added searchView.clearFocus. Bug still happens occasionally. Timing dependent?
 
 ### onCreate vs onCreateView
 Is it considered best practice to do as much work as possible in onCreate?
