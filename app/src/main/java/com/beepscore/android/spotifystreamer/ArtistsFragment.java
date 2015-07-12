@@ -27,12 +27,11 @@ import kaaes.spotify.webapi.android.models.Image;
 public class ArtistsFragment extends Fragment {
 
     private final String LOG_TAG = ArtistsFragment.class.getSimpleName();
+    ArrayList<ArtistParcelable> artistsList;
+    ArtistsArrayAdapter adapter = null;
 
     public ArtistsFragment() {
     }
-
-    ArrayList<ArtistParcelable> artistsList;
-    ArtistsArrayAdapter adapter = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
