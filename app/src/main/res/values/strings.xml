@@ -7,6 +7,7 @@
     <string name="search_found_no_tracks">Sorry, search found no tracks.</string>
     <string name="ARTISTS_KEY" translatable="false">com.beepscore.android.spotifystreamer.artists</string>
     <string name="ARTIST_KEY" translatable="false">com.beepscore.android.spotifystreamer.artist</string>
+    <string name="TRACKS_KEY" translatable="false">com.beepscore.android.spotifystreamer.tracks</string>
     <string name="title_activity_tracks">Top 10 Tracks</string>
     <string name="tracks">tracks</string>
 </resources>
