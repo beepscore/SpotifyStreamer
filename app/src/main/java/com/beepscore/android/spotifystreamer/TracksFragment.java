@@ -18,6 +18,8 @@ import java.util.Map;
 
 import kaaes.spotify.webapi.android.SpotifyApi;
 import kaaes.spotify.webapi.android.SpotifyService;
+import kaaes.spotify.webapi.android.models.AlbumSimple;
+import kaaes.spotify.webapi.android.models.Image;
 import kaaes.spotify.webapi.android.models.Track;
 import kaaes.spotify.webapi.android.models.Tracks;
 
@@ -28,10 +30,38 @@ import kaaes.spotify.webapi.android.models.Tracks;
 public class TracksFragment extends Fragment {
 
     private String artistId = "";
+    ArrayList<TrackParcelable> tracksList;
     private String artistName = "";
     TracksArrayAdapter adapter = null;
 
     public TracksFragment() {
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // get the intent the activity was started with
+        // http://stackoverflow.com/questions/11387740/where-how-to-getintent-getextras-in-an-android-fragment
+        Intent intent = getActivity().getIntent();
+        configureArtistIdAndName(intent);
+
+        // When device is rotated fragment will be recreated.
+        // Google recommends using savedInstanceState to restore the fragment
+        final String TRACKS_KEY = getActivity().getString(R.string.TRACKS_KEY);
+        if (savedInstanceState == null
+                || !savedInstanceState.containsKey(TRACKS_KEY)) {
+            tracksList = new ArrayList<TrackParcelable>();
+            fetchTracks(artistId);
+        } else {
+            // We have a previously saved instance state, use it.
+            // This avoids having to make an extra network call to Spotify
+            // to repopulate tracksList
+            tracksList = savedInstanceState.getParcelableArrayList(TRACKS_KEY);
+        }
+
+        // adapter creates views for each list item
+        adapter = new TracksArrayAdapter(getActivity(), tracksList);
     }
 
     @Override
@@ -40,24 +70,21 @@ public class TracksFragment extends Fragment {
 
         View tracksView = inflater.inflate(R.layout.fragment_tracks, container, false);
 
-        // get the intent the activity was started with
-        // http://stackoverflow.com/questions/11387740/where-how-to-getintent-getextras-in-an-android-fragment
-        Intent intent = getActivity().getIntent();
-
-        configureArtistIdAndName(intent);
         configureActionBarSubtitle(artistName);
-
-        List<Track> list = new ArrayList<Track>();
-
-        // adapter creates views for each list item
-        adapter = new TracksArrayAdapter(getActivity(), list);
 
         ListView listView = (ListView) tracksView.findViewById(R.id.list_view);
         listView.setAdapter(adapter);
 
-        fetchTracks(artistId);
-
         return tracksView;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        // save fragment state using array of Parcelable objects.
+        final String TRACKS_KEY = getActivity().getString(R.string.TRACKS_KEY);
+        outState.putParcelableArrayList(TRACKS_KEY, tracksList);
+
+        super.onSaveInstanceState(outState);
     }
 
     private void configureArtistIdAndName(Intent intent) {
@@ -95,7 +122,7 @@ public class TracksFragment extends Fragment {
     // first parameter is doInBackground first argument params[0].
     // second is onProgressUpdate integer argument.
     // third is doInBackground return type and onPostExecute argument type.
-    private class FetchTracksTask extends AsyncTask<String, Void, Tracks> {
+    private class FetchTracksTask extends AsyncTask<String, Void, ArrayList<TrackParcelable>> {
 
         private final String LOG_TAG = FetchTracksTask.class.getSimpleName();
 
@@ -105,7 +132,7 @@ public class TracksFragment extends Fragment {
          * @return Tracks SpotifyApi Java object.
          */
         @Override
-        protected Tracks doInBackground(String... params) {
+        protected ArrayList<TrackParcelable> doInBackground(String... params) {
 
             String artistId = params[0];
 
@@ -120,18 +147,20 @@ public class TracksFragment extends Fragment {
             Map<String, Object> options = new HashMap<>();
             options.put("country", "US");
             Tracks tracks = spotifyService.getArtistTopTrack(artistId, options);
-            return tracks;
+
+            ArrayList<TrackParcelable> results = getTrackParcelables(tracks);
+            return results;
         }
 
         /**
          * Use to update UI. The system calls this on the UI thread.
-         * @param tracks is the result returned from doInBackground()
+         * @param tracksList is the result returned from doInBackground()
          */
         @Override
-        protected void onPostExecute(Tracks tracks) {
-            super.onPostExecute(tracks);
+        protected void onPostExecute(ArrayList<TrackParcelable> tracksList) {
+            super.onPostExecute(tracksList);
 
-            if (isTracksNullOrEmpty(tracks)) {
+            if (isTracksListNullOrEmpty(tracksList)) {
                 Toast toast = Toast.makeText(getActivity(),
                         getActivity().getString(R.string.search_found_no_tracks),
                         Toast.LENGTH_SHORT);
@@ -140,8 +169,25 @@ public class TracksFragment extends Fragment {
                 // https://developer.spotify.com/web-api/object-model
                 adapter.clear();
                 // addAll calls adapter.notifyDataSetChanged()
-                adapter.addAll(tracks.tracks);
+                adapter.addAll(tracksList);
             }
+        }
+
+        private ArrayList<TrackParcelable> getTrackParcelables(Tracks tracks) {
+            // https://developer.spotify.com/web-api/object-model
+            ArrayList<TrackParcelable> results = new ArrayList<>();
+
+            if (!isTracksNullOrEmpty(tracks)) {
+
+                for (Track track : tracks.tracks) {
+
+                    String imageUrl = getTrackImageUrl(track);
+                    TrackParcelable trackParcelable =
+                            new TrackParcelable(track.album.name, track.name, imageUrl);
+                    results.add(trackParcelable);
+                }
+            }
+            return results;
         }
 
         private boolean isTracksNullOrEmpty(Tracks tracks) {
@@ -149,5 +195,26 @@ public class TracksFragment extends Fragment {
                     || tracks.tracks == null
                     || tracks.tracks.size() == 0);
         }
+
+        private boolean isTracksListNullOrEmpty(ArrayList<TrackParcelable> tracksList) {
+            return (tracksList == null
+                    || tracksList.size() == 0);
+        }
+
+        private String getTrackImageUrl(Track track) {
+            String imageUrl = "";
+
+            // https://github.com/kaaes/spotify-web-api-android/blob/master/src/main/java/kaaes/spotify/webapi/android/models/Image.java
+            AlbumSimple album = track.album;
+            List<Image> images = album.images;
+
+            if (images.size() > 0) {
+                // get the last image because images is sorted decreasing size
+                Image lastImage = images.get(images.size() - 1);
+                imageUrl = lastImage.url;
+            }
+            return imageUrl;
+        }
+
     }
 }

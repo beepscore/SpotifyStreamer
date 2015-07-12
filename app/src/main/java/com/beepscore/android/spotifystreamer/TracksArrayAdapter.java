@@ -12,23 +12,19 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import kaaes.spotify.webapi.android.models.AlbumSimple;
-import kaaes.spotify.webapi.android.models.Image;
-import kaaes.spotify.webapi.android.models.Track;
-
 /**
  * Created by stevebaker on 7/7/15.
  * Reference
  * https://github.com/udacity/android-custom-arrayadapter
  */
-public class TracksArrayAdapter extends ArrayAdapter<Track> {
+public class TracksArrayAdapter extends ArrayAdapter<TrackParcelable> {
 
     /**
      * Custom constructor (it doesn't mirror a superclass constructor).
      * @param context The current context. Used to inflate the layout file.
-     * @param tracksList A List of Track objects to display
+     * @param tracksList A List of TrackParcelable objects to display
      */
-    public TracksArrayAdapter(Activity context, List<Track> tracksList) {
+    public TracksArrayAdapter(Activity context, List<TrackParcelable> tracksList) {
         // Initialize the ArrayAdapter's internal storage for the context and the list.
         // ArrayAdapter uses the second argument when populating a single TextView.
         // ArtistsArrayAdapter is not going to use the second argument, so it can be any value. Here, we used 0.
@@ -46,8 +42,8 @@ public class TracksArrayAdapter extends ArrayAdapter<Track> {
      */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        // Gets the Track object from the ArrayAdapter at the appropriate position
-        Track track = getItem(position);
+        // Gets the TrackParcelable object from the ArrayAdapter at the appropriate position
+        TrackParcelable trackParcelable = getItem(position);
 
         // Adapters recycle views to AdapterViews.
         // If this is a new View object we're getting, then inflate the layout.
@@ -58,28 +54,18 @@ public class TracksArrayAdapter extends ArrayAdapter<Track> {
         }
 
         ImageView imageView = (ImageView) convertView.findViewById(R.id.list_item_imageview);
-        loadTrackImageView(track, imageView);
+        if (trackParcelable.imageUrl != null
+                && !trackParcelable.imageUrl.equals("")) {
+            Picasso.with(getContext()).load(trackParcelable.imageUrl).into(imageView);
+        }
 
         TextView trackNameView = (TextView) convertView.findViewById(R.id.list_item_track);
-        trackNameView.setText(track.name);
+        trackNameView.setText(trackParcelable.name);
 
         TextView albumNameView = (TextView) convertView.findViewById(R.id.list_item_album);
-        albumNameView.setText(track.album.name);
+        albumNameView.setText(trackParcelable.albumName);
 
         return convertView;
-    }
-
-    private void loadTrackImageView(Track track, ImageView imageView) {
-        // https://github.com/kaaes/spotify-web-api-android/blob/master/src/main/java/kaaes/spotify/webapi/android/models/Image.java
-        AlbumSimple album = track.album;
-        List<Image> images = album.images;
-
-        if (images.size() > 0) {
-            // get the last image because images is sorted decreasing size
-            Image lastImage = images.get(images.size() - 1);
-            String lastImageUrlString = lastImage.url;
-            Picasso.with(getContext()).load(lastImageUrlString).into(imageView);
-        }
     }
 
 }
