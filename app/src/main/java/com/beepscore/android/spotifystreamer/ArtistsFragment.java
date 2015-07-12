@@ -64,6 +64,7 @@ public class ArtistsFragment extends Fragment {
         View artistsView = inflater.inflate(R.layout.fragment_artists, container, false);
 
         searchView = (SearchView) artistsView.findViewById(R.id.search_view);
+        searchView.setQueryHint(getActivity().getString(R.string.artists_fragment_search_view_hint));
         configureSearchViewListener(searchView);
 
         ListView listView = (ListView) artistsView.findViewById(R.id.list_view);
