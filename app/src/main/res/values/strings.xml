@@ -7,8 +7,8 @@
     <string name="artist">Artist</string>
     <string name="artists_fragment_search_view_hint">Artist Name</string>
     <string name="dash">-</string>
-    <string name="search_found_no_artists">Sorry, search found no artists.</string>
-    <string name="search_found_no_tracks">Sorry, search found no tracks.</string>
+    <string name="search_found_no_artists">Sorry, no artists found.\nPlease refine search.</string>
+    <string name="search_found_no_tracks">Sorry, no tracks found.</string>
     <string name="title_activity_tracks">Top 10 Tracks</string>
     <string name="tracks">tracks</string>
 </resources>
