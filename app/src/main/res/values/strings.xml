@@ -5,6 +5,7 @@
     <string name="artist">Artist</string>
     <string name="search_found_no_artists">Sorry, search found no artists.</string>
     <string name="search_found_no_tracks">Sorry, search found no tracks.</string>
+    <string name="ARTISTS_KEY" translatable="false">artists</string>
     <string name="title_activity_tracks">Top 10 Tracks</string>
     <string name="tracks">tracks</string>
 </resources>

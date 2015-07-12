@@ -12,22 +12,19 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import kaaes.spotify.webapi.android.models.Artist;
-import kaaes.spotify.webapi.android.models.Image;
-
 /**
  * Created by stevebaker on 7/6/15.
  * Reference
  * https://github.com/udacity/android-custom-arrayadapter
  */
-public class ArtistsArrayAdapter extends ArrayAdapter<Artist> {
+public class ArtistsArrayAdapter extends ArrayAdapter<ArtistParcelable> {
 
     /**
      * Custom constructor (it doesn't mirror a superclass constructor).
      * @param context The current context. Used to inflate the layout file.
      * @param artistsList A List of Artist objects to display
      */
-    public ArtistsArrayAdapter(Activity context, List<Artist> artistsList) {
+    public ArtistsArrayAdapter(Activity context, List<ArtistParcelable> artistsList) {
         // Initialize the ArrayAdapter's internal storage for the context and the list.
         // ArrayAdapter uses the second argument when populating a single TextView.
         // ArtistsArrayAdapter is not going to use the second argument, so it can be any value. Here, we used 0.
@@ -46,7 +43,7 @@ public class ArtistsArrayAdapter extends ArrayAdapter<Artist> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Gets the Artist object from the ArrayAdapter at the appropriate position
-        Artist artist = getItem(position);
+        ArtistParcelable artistParcelable = getItem(position);
 
         // Adapters recycle views to AdapterViews.
         // If this is a new View object we're getting, then inflate the layout.
@@ -57,22 +54,15 @@ public class ArtistsArrayAdapter extends ArrayAdapter<Artist> {
         }
 
         ImageView imageView = (ImageView) convertView.findViewById(R.id.list_item_imageview);
-        loadArtistImageView(artist, imageView);
+        if (artistParcelable.imageUrl != null
+                && !artistParcelable.imageUrl.equals("")) {
+            Picasso.with(getContext()).load(artistParcelable.imageUrl).into(imageView);
+        }
 
         TextView artistNameView = (TextView) convertView.findViewById(R.id.list_item_textview);
-        artistNameView.setText(artist.name);
+        artistNameView.setText(artistParcelable.name);
 
         return convertView;
-    }
-
-    private void loadArtistImageView(Artist artist, ImageView imageView) {
-        // https://github.com/kaaes/spotify-web-api-android/blob/master/src/main/java/kaaes/spotify/webapi/android/models/Image.java
-        if (artist.images.size() > 0) {
-            // get the last image because images is sorted decreasing size
-            Image artistLastImage = artist.images.get(artist.images.size() - 1);
-            String artistLastImageUrlString = artistLastImage.url;
-            Picasso.with(getContext()).load(artistLastImageUrlString).into(imageView);
-        }
     }
 
 }

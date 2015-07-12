@@ -19,6 +19,7 @@ import kaaes.spotify.webapi.android.SpotifyApi;
 import kaaes.spotify.webapi.android.SpotifyService;
 import kaaes.spotify.webapi.android.models.Artist;
 import kaaes.spotify.webapi.android.models.ArtistsPager;
+import kaaes.spotify.webapi.android.models.Image;
 
 
 /**
@@ -31,22 +32,30 @@ public class ArtistsFragment extends Fragment {
     public ArtistsFragment() {
     }
 
+    ArrayList<ArtistParcelable> artistsList;
     ArtistsArrayAdapter adapter = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        List<Artist> list = new ArrayList<Artist>();
+        // When device is rotated fragment will be recreated.
+        // Google recommends using savedInstanceState to restore the fragment
+        final String ARTISTS_KEY = getActivity().getString(R.string.ARTISTS_KEY);
+        if (savedInstanceState == null
+                || !savedInstanceState.containsKey(ARTISTS_KEY)) {
+            artistsList = new ArrayList<ArtistParcelable>();
+        } else {
+            // We have a previously saved instance state, use it.
+            // This avoids having to make an extra network call to Spotify
+            // to repopulate artistsList
+            artistsList = savedInstanceState.getParcelableArrayList(ARTISTS_KEY);
+        }
+
         // adapter creates views for each list item
-        adapter = new ArtistsArrayAdapter(getActivity(), list);
+        adapter = new ArtistsArrayAdapter(getActivity(), artistsList);
 
-        // retain fragment so if user rotates device, populated list remains visible
-        // setRetainInstance only affects fragments not added to the "back stack".
-        // http://developer.android.com/reference/android/app/Fragment.html#setRetainInstance%28boolean%29
         // TODO: Consider use fragmentManager to save fragment on back stack
-        setRetainInstance(true);
-
     }
 
     @Override
@@ -64,8 +73,8 @@ public class ArtistsFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Artist artist = adapter.getItem(i);
-                String artistIdName = getArtistIdName(artist);
+                ArtistParcelable artistParcelable = adapter.getItem(i);
+                String artistIdName = getArtistIdName(artistParcelable);
 
                 Intent intent = new Intent(getActivity(), TracksActivity.class);
                 // Use text extra, simpler to implement than Parcelable object
@@ -75,6 +84,15 @@ public class ArtistsFragment extends Fragment {
         });
 
         return artistsView;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        // save fragment state using array of Parcelable objects.
+        final String ARTISTS_KEY = getActivity().getString(R.string.ARTISTS_KEY);
+        outState.putParcelableArrayList(ARTISTS_KEY, artistsList);
+
+        super.onSaveInstanceState(outState);
     }
     
     private void configureSearchViewListener(final SearchView searchView) {
@@ -105,9 +123,9 @@ public class ArtistsFragment extends Fragment {
      * @return artistId and artistName in one string
      * separated by comma ","
      */
-    private String getArtistIdName(Artist artist) {
+    private String getArtistIdName(ArtistParcelable artistParcelable) {
         String separator = ",";
-        return artist.id + separator + artist.name;
+        return artistParcelable.id + separator + artistParcelable.name;
     }
 
     private void fetchArtists(String artistName) {
@@ -121,17 +139,17 @@ public class ArtistsFragment extends Fragment {
     // first parameter is doInBackground first argument params[0].
     // second is onProgressUpdate integer argument.
     // third is doInBackground return type and onPostExecute argument type.
-    private class FetchArtistsTask extends AsyncTask<String, Void, ArtistsPager> {
+    private class FetchArtistsTask extends AsyncTask<String, Void, ArrayList<ArtistParcelable>> {
 
         private final String LOG_TAG = FetchArtistsTask.class.getSimpleName();
 
         /**
          * The system calls doInBackground on a worker (background) thread
          * @param params first and only element is artistName to make request to Spotify
-         * @return ArtistsPager SpotifyApi Java object.
+         * @return ArrayList<ArtistParcelable>
          */
         @Override
-        protected ArtistsPager doInBackground(String... params) {
+        protected ArrayList<ArtistParcelable> doInBackground(String... params) {
 
             String artistName = params[0];
 
@@ -141,29 +159,46 @@ public class ArtistsFragment extends Fragment {
             SpotifyApi spotifyApi = new SpotifyApi();
             SpotifyService spotifyService = spotifyApi.getService();
             ArtistsPager artistsPager = spotifyService.searchArtists(artistName);
-            return artistsPager;
+
+            ArrayList<ArtistParcelable> results = getArtistParcelables(artistsPager);
+            return results;
         }
 
         /**
          * Use to update UI. The system calls this on the UI thread.
-         * @param artistsPager is the result returned from doInBackground()
+         * @param artistsList is the result returned from doInBackground()
          */
         @Override
-        protected void onPostExecute(ArtistsPager artistsPager) {
-            super.onPostExecute(artistsPager);
+        protected void onPostExecute(ArrayList<ArtistParcelable> artistsList) {
+            super.onPostExecute(artistsList);
 
-            if (isArtistsPagerArtistsNullOrEmpty(artistsPager)) {
+            if (isArtistsListsArtistsNullOrEmpty(artistsList)) {
                 Toast toast = Toast.makeText(getActivity(),
                         getActivity().getString(R.string.search_found_no_artists),
                         Toast.LENGTH_SHORT);
                 toast.show();
             } else {
-                // https://developer.spotify.com/web-api/object-model
-                List<Artist> artistsList = artistsPager.artists.items;
                 adapter.clear();
                 // addAll calls adapter.notifyDataSetChanged()
                 adapter.addAll(artistsList);
             }
+        }
+
+        private ArrayList<ArtistParcelable> getArtistParcelables(ArtistsPager artistsPager) {
+            // https://developer.spotify.com/web-api/object-model
+            ArrayList<ArtistParcelable> results = new ArrayList<>();
+
+            if (!isArtistsPagerArtistsNullOrEmpty(artistsPager)) {
+
+                for (Artist artist : artistsPager.artists.items) {
+
+                    String imageUrl = getArtistImageUrl(artist);
+                    ArtistParcelable artistParcelable =
+                            new ArtistParcelable(artist.id, artist.name, imageUrl);
+                    results.add(artistParcelable);
+                }
+            }
+            return results;
         }
 
         private boolean isArtistsPagerArtistsNullOrEmpty(ArtistsPager artistsPager) {
@@ -173,6 +208,25 @@ public class ArtistsFragment extends Fragment {
                     || artistsPager.artists == null
                     || artistsPager.artists.items == null
                     || artistsPager.artists.items.size() == 0;
+        }
+
+        private boolean isArtistsListsArtistsNullOrEmpty(ArrayList<ArtistParcelable> artistsList) {
+            // Note: In UI, searching for artistName space " "
+            // supplies artistsList that causes this method to return true
+            return (artistsList == null
+                    || artistsList.size() == 0);
+        }
+
+        private String getArtistImageUrl(Artist artist) {
+            String imageUrl = "";
+
+            // https://github.com/kaaes/spotify-web-api-android/blob/master/src/main/java/kaaes/spotify/webapi/android/models/Image.java
+            if (artist.images.size() > 0) {
+                // get the last image because images is sorted decreasing size
+                Image artistLastImage = artist.images.get(artist.images.size() - 1);
+                imageUrl = artistLastImage.url;
+            }
+            return imageUrl;
         }
 
     }
