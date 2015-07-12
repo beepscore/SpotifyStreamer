@@ -1,4 +1,4 @@
-package com.beepscore.androalbumName.spotifystreamer;
+package com.beepscore.android.spotifystreamer;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -8,7 +8,7 @@ import android.os.Parcelable;
  * Class TrackParcelable is similar to Track, but is Parcelable.
  * It has a subset of Track properties.
  * Can't have a property that is type Track??
- * https://developer.androalbumName.com/reference/androalbumName/os/Parcelable.html
+ * https://developer.android.com/reference/android/os/Parcelable.html
  * Created by stevebaker on 7/11/15.
  */
 public class TrackParcelable implements Parcelable {
