@@ -145,11 +145,27 @@ public class TracksFragment extends Fragment {
 
             //https://developer.spotify.com/web-api/get-artists-top-tracks/
             Map<String, Object> options = new HashMap<>();
-            options.put("country", "US");
+            options.put("country", countryCode());
             Tracks tracks = spotifyService.getArtistTopTrack(artistId, options);
 
             ArrayList<TrackParcelable> results = getTrackParcelables(tracks);
             return results;
+        }
+
+        private String countryCode() {
+            // Spotify tracks request takes country code as a parameter
+            // App can get user locale without manifest permission.
+            // Locale may sometimes give bad result - e.g. locale US but person is in China.
+            // http://stackoverflow.com/questions/3659809/where-am-i-get-country
+            // App could get user location, but this would require another permission and probably be too intrusive.
+            // App could ask user to specify a country, but this seems like it might annoy them.
+            String countryCode = getActivity().getResources().getConfiguration().locale.getCountry();
+            if (countryCode == null || countryCode.equals("")) {
+                // default. Can't use "", that gives "bad request"
+                return "US";
+            } else {
+                return countryCode;
+            }
         }
 
         /**
