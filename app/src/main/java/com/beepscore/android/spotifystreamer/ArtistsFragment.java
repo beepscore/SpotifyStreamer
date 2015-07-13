@@ -169,7 +169,7 @@ public class ArtistsFragment extends Fragment {
                 isRetrofitError = false;
             } catch(RetrofitError ex){
                 isRetrofitError = true;
-                showToastOnUiThread(getActivity(),
+                ToastUtils.showToastOnUiThread(getActivity(),
                         getActivity().getString(R.string.artists_retrofit_error));
             }
             return results;
@@ -239,16 +239,6 @@ public class ArtistsFragment extends Fragment {
                 imageUrl = artistLastImage.url;
             }
             return imageUrl;
-        }
-
-        private void showToastOnUiThread(final Activity activity, final String message) {
-            // http://stackoverflow.com/questions/3134683/android-toast-in-a-thread
-            activity.runOnUiThread(new Runnable() {
-                public void run() {
-                    Toast toast = Toast.makeText(activity, message, Toast.LENGTH_SHORT);
-                    toast.show();
-                }
-            });
         }
 
     }
