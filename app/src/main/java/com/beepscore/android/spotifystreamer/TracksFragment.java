@@ -181,12 +181,11 @@ public class TracksFragment extends Fragment {
                         getActivity().getString(R.string.search_found_no_tracks),
                         Toast.LENGTH_SHORT);
                 toast.show();
-            } else {
-                // https://developer.spotify.com/web-api/object-model
-                adapter.clear();
-                // addAll calls adapter.notifyDataSetChanged()
-                adapter.addAll(tracksList);
             }
+
+            adapter.clear();
+            // addAll calls adapter.notifyDataSetChanged()
+            adapter.addAll(tracksList);
         }
 
         private ArrayList<TrackParcelable> getTrackParcelables(Tracks tracks) {
