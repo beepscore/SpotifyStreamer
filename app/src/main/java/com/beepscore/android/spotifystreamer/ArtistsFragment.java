@@ -1,5 +1,6 @@
 package com.beepscore.android.spotifystreamer;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
@@ -19,6 +20,7 @@ import kaaes.spotify.webapi.android.SpotifyService;
 import kaaes.spotify.webapi.android.models.Artist;
 import kaaes.spotify.webapi.android.models.ArtistsPager;
 import kaaes.spotify.webapi.android.models.Image;
+import retrofit.RetrofitError;
 
 
 /**
@@ -30,6 +32,7 @@ public class ArtistsFragment extends Fragment {
     ArrayList<ArtistParcelable> artistsList;
     ArtistsArrayAdapter adapter = null;
     SearchView searchView = null;
+    boolean isRetrofitError = false;
 
     public ArtistsFragment() {
     }
@@ -154,14 +157,21 @@ public class ArtistsFragment extends Fragment {
 
             String artistName = params[0];
 
-            // don't use try/catch/finally here. Assume SpotifyAPI is handling it's errors.
-
             // https://docs.google.com/presentation/d/1Q8LwzD5ODqirWG7K_e4sklE3fEFY_dr4kH4hfoRa0BQ/pub?start=false&loop=false&delayms=15000#slide=id.ga25585343_0_137
             SpotifyApi spotifyApi = new SpotifyApi();
             SpotifyService spotifyService = spotifyApi.getService();
-            ArtistsPager artistsPager = spotifyService.searchArtists(artistName);
 
-            ArrayList<ArtistParcelable> results = getArtistParcelables(artistsPager);
+            ArrayList<ArtistParcelable> results = new ArrayList<>();
+            // Avoid crash if device isn't connected to internet
+            try {
+                ArtistsPager artistsPager = spotifyService.searchArtists(artistName);
+                results = getArtistParcelables(artistsPager);
+                isRetrofitError = false;
+            } catch(RetrofitError ex){
+                isRetrofitError = true;
+                showToastOnUiThread(getActivity(),
+                        getActivity().getString(R.string.artists_retrofit_error));
+            }
             return results;
         }
 
@@ -173,7 +183,8 @@ public class ArtistsFragment extends Fragment {
         protected void onPostExecute(ArrayList<ArtistParcelable> artistsList) {
             super.onPostExecute(artistsList);
 
-            if (isArtistsListsNullOrEmpty(artistsList)) {
+            if (!isRetrofitError
+                    && isArtistsListsNullOrEmpty(artistsList)) {
                 Toast toast = Toast.makeText(getActivity(),
                         getActivity().getString(R.string.search_found_no_artists),
                         Toast.LENGTH_SHORT);
@@ -228,6 +239,16 @@ public class ArtistsFragment extends Fragment {
                 imageUrl = artistLastImage.url;
             }
             return imageUrl;
+        }
+
+        private void showToastOnUiThread(final Activity activity, final String message) {
+            // http://stackoverflow.com/questions/3134683/android-toast-in-a-thread
+            activity.runOnUiThread(new Runnable() {
+                public void run() {
+                    Toast toast = Toast.makeText(activity, message, Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            });
         }
 
     }

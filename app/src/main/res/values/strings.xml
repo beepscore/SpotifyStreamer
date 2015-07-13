@@ -6,6 +6,7 @@
     <string name="app_name">Spotify Streamer</string>
     <string name="artist">Artist</string>
     <string name="artists_fragment_search_view_hint">Artist Name</string>
+    <string name="artists_retrofit_error">Network error.\nDevice may not have internet access.</string>
     <string name="dash">-</string>
     <string name="search_found_no_artists">Sorry, no artists found.\nPlease refine search.</string>
     <string name="search_found_no_tracks">Sorry, no tracks found.</string>
