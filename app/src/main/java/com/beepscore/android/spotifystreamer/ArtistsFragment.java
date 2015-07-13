@@ -178,11 +178,11 @@ public class ArtistsFragment extends Fragment {
                         getActivity().getString(R.string.search_found_no_artists),
                         Toast.LENGTH_SHORT);
                 toast.show();
-            } else {
-                adapter.clear();
-                // addAll calls adapter.notifyDataSetChanged()
-                adapter.addAll(artistsList);
             }
+            
+            adapter.clear();
+            // addAll calls adapter.notifyDataSetChanged()
+            adapter.addAll(artistsList);
         }
 
         private ArrayList<ArtistParcelable> getArtistParcelables(ArtistsPager artistsPager) {
