@@ -19,6 +19,8 @@ import java.util.List;
  */
 public class TracksArrayAdapter extends ArrayAdapter<TrackParcelable> {
 
+    TrackViewHolder trackViewHolder;
+
     /**
      * Custom constructor (it doesn't mirror a superclass constructor).
      * @param context The current context. Used to inflate the layout file.
@@ -45,30 +47,37 @@ public class TracksArrayAdapter extends ArrayAdapter<TrackParcelable> {
         // Gets the TrackParcelable object from the ArrayAdapter at the appropriate position
         TrackParcelable trackParcelable = getItem(position);
 
-        // Adapters recycle views to AdapterViews.
-        // If this is a new View object we're getting, then inflate the layout.
-        // If not, this view already has the layout inflated from a previous call to getView,
-        // and we modify the View widgets as usual.
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.tracks_list_item, parent, false);
+            trackViewHolder = getConfiguredTrackViewHolder(convertView);
+        } else {
+            // this convertView already has the layout inflated from a previous call to getView
+            trackViewHolder = (TrackViewHolder) convertView.getTag();
         }
 
-        ImageView imageView = (ImageView) convertView.findViewById(R.id.list_item_imageview);
         if (trackParcelable.imageUrl == null
                 || trackParcelable.imageUrl.equals("")) {
             // show placeholder image
-            Picasso.with(getContext()).load(R.mipmap.ic_launcher).into(imageView);
+            Picasso.with(getContext()).load(R.mipmap.ic_launcher).into(trackViewHolder.imageView);
         } else {
-            Picasso.with(getContext()).load(trackParcelable.imageUrl).into(imageView);
+            Picasso.with(getContext()).load(trackParcelable.imageUrl).into(trackViewHolder.imageView);
         }
 
-        TextView trackNameView = (TextView) convertView.findViewById(R.id.list_item_track);
-        trackNameView.setText(trackParcelable.name);
-
-        TextView albumNameView = (TextView) convertView.findViewById(R.id.list_item_album);
-        albumNameView.setText(trackParcelable.albumName);
+        trackViewHolder.trackNameView.setText(trackParcelable.name);
+        trackViewHolder.albumNameView.setText(trackParcelable.albumName);
 
         return convertView;
     }
 
+    private TrackViewHolder  getConfiguredTrackViewHolder(View convertView) {
+        // Use ViewHolder pattern to reduce repeated findViewById and make scrolling smoother.
+        // Based on snippet from Udacity reviewer
+        // http://developer.android.com/training/improving-layouts/smooth-scrolling.html
+        TrackViewHolder holder = new TrackViewHolder();
+        holder.imageView = (ImageView) convertView.findViewById(R.id.list_item_imageview);
+        holder.trackNameView = (TextView) convertView.findViewById(R.id.list_item_track);
+        holder.albumNameView = (TextView) convertView.findViewById(R.id.list_item_album);
+        convertView.setTag(holder);
+        return holder;
+    }
 }
