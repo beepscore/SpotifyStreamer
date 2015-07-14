@@ -95,6 +95,8 @@ public class ArtistsFragment extends Fragment {
         // big discussion but answers more complicated than above
         // http://stackoverflow.com/questions/1109022/close-hide-the-android-soft-keyboard?rq=1
         // this code didn't work when located in onCreateView
+        // I asked Udacity reviewer, they said alternatively could put in onQueryTextSubmit
+        // http://stackoverflow.com/questions/7409288/how-to-dismiss-keyboard-in-android-searchview
         searchView.clearFocus();
     }
 
