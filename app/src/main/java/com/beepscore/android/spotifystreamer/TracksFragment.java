@@ -22,6 +22,7 @@ import kaaes.spotify.webapi.android.models.AlbumSimple;
 import kaaes.spotify.webapi.android.models.Image;
 import kaaes.spotify.webapi.android.models.Track;
 import kaaes.spotify.webapi.android.models.Tracks;
+import retrofit.RetrofitError;
 
 
 /**
@@ -33,6 +34,7 @@ public class TracksFragment extends Fragment {
     ArrayList<TrackParcelable> tracksList;
     private String artistName = "";
     TracksArrayAdapter adapter = null;
+    boolean isRetrofitError = false;
 
     public TracksFragment() {
     }
@@ -146,9 +148,18 @@ public class TracksFragment extends Fragment {
             //https://developer.spotify.com/web-api/get-artists-top-tracks/
             Map<String, Object> options = new HashMap<>();
             options.put("country", countryCode());
-            Tracks tracks = spotifyService.getArtistTopTrack(artistId, options);
 
-            ArrayList<TrackParcelable> results = getTrackParcelables(tracks);
+            ArrayList<TrackParcelable> results = new ArrayList<>();
+            // Avoid crash if device isn't connected to internet
+            try {
+                Tracks tracks = spotifyService.getArtistTopTrack(artistId, options);
+                results = getTrackParcelables(tracks);
+                isRetrofitError = false;
+            } catch(RetrofitError ex){
+                isRetrofitError = true;
+                ToastUtils.showToastOnUiThread(getActivity(),
+                        getActivity().getString(R.string.artists_retrofit_error));
+            }
             return results;
         }
 
@@ -176,7 +187,8 @@ public class TracksFragment extends Fragment {
         protected void onPostExecute(ArrayList<TrackParcelable> tracksList) {
             super.onPostExecute(tracksList);
 
-            if (isTracksListNullOrEmpty(tracksList)) {
+            if (!isRetrofitError
+                    && isTracksListNullOrEmpty(tracksList)) {
                 Toast toast = Toast.makeText(getActivity(),
                         getActivity().getString(R.string.search_found_no_tracks),
                         Toast.LENGTH_SHORT);
