@@ -78,10 +78,14 @@ https://discussions.udacity.com/t/handling-device-rotation-the-easy-way/24344/1
 https://discussions.udacity.com/t/how-to-save-intent-extras/21024/4
 https://developer.android.com/reference/android/app/Activity.html
 
-### bug: Navigate from tracks "back" to artists re-shows keyboard
+### bug(mostly fixed): Navigate from tracks "back" to artists re-shows keyboard
 Navigate "back" shows previous search field and artists list as desired but re-shows keyboard.
 This used to happen every time.
 Added searchView.clearFocus. Bug still happens occasionally. Timing dependent?
 
 ### onCreate vs onCreateView
 Is it considered best practice to do as much work as possible in onCreate?
+Answer:
+Do non-view work in onCreate, view work in onCreateView.
+Reference from reviewer
+http://stackoverflow.com/questions/28929637/difference-and-uses-of-oncreate-oncreateview-and-onactivitycreated-in-fra
