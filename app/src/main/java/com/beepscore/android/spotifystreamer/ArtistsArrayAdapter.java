@@ -19,6 +19,8 @@ import java.util.List;
  */
 public class ArtistsArrayAdapter extends ArrayAdapter<ArtistParcelable> {
 
+    ArtistViewHolder artistViewHolder;
+
     /**
      * Custom constructor (it doesn't mirror a superclass constructor).
      * @param context The current context. Used to inflate the layout file.
@@ -45,27 +47,36 @@ public class ArtistsArrayAdapter extends ArrayAdapter<ArtistParcelable> {
         // Gets the ArtistParcelable object from the ArrayAdapter at the appropriate position
         ArtistParcelable artistParcelable = getItem(position);
 
-        // Adapters recycle views to AdapterViews.
-        // If this is a new View object we're getting, then inflate the layout.
-        // If not, this view already has the layout inflated from a previous call to getView,
-        // and we modify the View widgets as usual.
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.artists_list_item, parent, false);
+            artistViewHolder = getConfiguredArtistViewHolder(convertView);
+        } else {
+            // this convertView already has the layout inflated from a previous call to getView
+            artistViewHolder = (ArtistViewHolder) convertView.getTag();
         }
 
-        ImageView imageView = (ImageView) convertView.findViewById(R.id.list_item_imageview);
         if (artistParcelable.imageUrl == null
                 || artistParcelable.imageUrl.equals("")) {
             // show placeholder image
-            Picasso.with(getContext()).load(R.mipmap.ic_launcher).into(imageView);
+            Picasso.with(getContext()).load(R.mipmap.ic_launcher).into(artistViewHolder.imageView);
         } else {
-            Picasso.with(getContext()).load(artistParcelable.imageUrl).into(imageView);
+            Picasso.with(getContext()).load(artistParcelable.imageUrl).into(artistViewHolder.imageView);
         }
 
-        TextView artistNameView = (TextView) convertView.findViewById(R.id.list_item_textview);
-        artistNameView.setText(artistParcelable.name);
+        artistViewHolder.nameView.setText(artistParcelable.name);
 
         return convertView;
+    }
+
+    private ArtistViewHolder  getConfiguredArtistViewHolder(View convertView) {
+        // Use ViewHolder pattern to reduce repeated findViewById and make scrolling smoother.
+        // Based on snippet from Udacity reviewer
+        // http://developer.android.com/training/improving-layouts/smooth-scrolling.html
+        ArtistViewHolder holder = new ArtistViewHolder();
+        holder.imageView = (ImageView) convertView.findViewById(R.id.list_item_imageview);
+        holder.nameView = (TextView) convertView.findViewById(R.id.list_item_textview);
+        convertView.setTag(holder);
+        return holder;
     }
 
 }
