@@ -59,10 +59,8 @@ Tagged git commit for reference uri building example.
 Note: Normally record/manage issues into bug tracker like jira or github issues.
 For Udacity class, put them in README.md so they will survive cloning repo and be easily visible to others.
 
-### bug: Navigate from tracks "up" to artists loses artist list
-Navigate "up" showed empty search field and empty artists list.
-How to save/restore artists activity/fragment?
-Use fragment transaction manager?
+### bug(fixed): Navigate from tracks "up" to artists loses artist list
+Navigate "up" correctly navigated to artists, but artists list was empty.
 Fixed by setting ArtistsActivity launchmode singleTop.
 I don't know if this is considered ok practice or a hack.
 
