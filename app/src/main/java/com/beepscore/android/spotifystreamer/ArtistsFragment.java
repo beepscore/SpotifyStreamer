@@ -1,6 +1,5 @@
 package com.beepscore.android.spotifystreamer;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
