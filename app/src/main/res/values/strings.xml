@@ -2,6 +2,7 @@
     <string name="ARTISTS_KEY" translatable="false">com.beepscore.android.spotifystreamer.artists</string>
     <string name="ARTIST_KEY" translatable="false">com.beepscore.android.spotifystreamer.artist</string>
     <string name="TRACKS_KEY" translatable="false">com.beepscore.android.spotifystreamer.tracks</string>
+    <string name="TRACK_KEY" translatable="false">com.beepscore.android.spotifystreamer.track</string>
     <string name="action_settings">Settings</string>
     <string name="app_name">Spotify Streamer</string>
     <string name="artist">Artist</string>

@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -76,6 +77,17 @@ public class TracksFragment extends Fragment {
 
         ListView listView = (ListView) tracksView.findViewById(R.id.list_view);
         listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                TrackParcelable trackParcelable = adapter.getItem(i);
+
+                Intent intent = new Intent(getActivity(), PlayerActivity.class);
+                intent.putExtra(getActivity().getString(R.string.TRACK_KEY), trackParcelable);
+                startActivity(intent);
+            }
+        });
 
         return tracksView;
     }
