@@ -12,4 +12,6 @@
     <string name="search_found_no_tracks">Sorry, no tracks found.</string>
     <string name="title_activity_tracks">Top 10 Tracks</string>
     <string name="tracks">tracks</string>
+    <string name="title_activity_player">PlayerActivity</string>
+    <string name="hello_world">Hello world!</string>
 </resources>
