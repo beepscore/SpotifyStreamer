@@ -7,7 +7,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 /**
  *
@@ -44,6 +47,15 @@ public class PlayerFragment extends Fragment {
 
             TextView albumView = (TextView)playerView.findViewById(R.id.album_view);
             albumView.setText(trackParcelable.albumName);
+
+            ImageView imageView = (ImageView)playerView.findViewById(R.id.image_view);
+            if (trackParcelable.imageUrl == null
+                    || trackParcelable.imageUrl.equals("")) {
+                // show placeholder image
+                Picasso.with(getActivity()).load(R.mipmap.ic_launcher).into(imageView);
+            } else {
+                Picasso.with(getActivity()).load(trackParcelable.imageUrl).into(imageView);
+            }
 
             TextView trackView = (TextView)playerView.findViewById(R.id.track_view);
             trackView.setText(trackParcelable.name);
