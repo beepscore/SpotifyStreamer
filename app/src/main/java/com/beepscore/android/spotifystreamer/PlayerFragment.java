@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 /**
  *
@@ -38,7 +39,12 @@ public class PlayerFragment extends Fragment {
 
         if (trackParcelable != null
                 && trackParcelable.albumName != null) {
-            // set name
+            
+            TextView albumView = (TextView)playerView.findViewById(R.id.album_view);
+            albumView.setText(trackParcelable.albumName);
+
+            TextView trackView = (TextView)playerView.findViewById(R.id.track_view);
+            trackView.setText(trackParcelable.name);
         }
 
         return playerView;
