@@ -55,12 +55,12 @@ public class TracksArrayAdapter extends ArrayAdapter<TrackParcelable> {
             trackViewHolder = (TrackViewHolder) convertView.getTag();
         }
 
-        if (trackParcelable.imageUrl == null
-                || trackParcelable.imageUrl.equals("")) {
+        if (trackParcelable.imageNarrowestUrl == null
+                || trackParcelable.imageNarrowestUrl.equals("")) {
             // show placeholder image
             Picasso.with(getContext()).load(R.mipmap.ic_launcher).into(trackViewHolder.imageView);
         } else {
-            Picasso.with(getContext()).load(trackParcelable.imageUrl).into(trackViewHolder.imageView);
+            Picasso.with(getContext()).load(trackParcelable.imageNarrowestUrl).into(trackViewHolder.imageView);
         }
 
         trackViewHolder.trackNameView.setText(trackParcelable.name);

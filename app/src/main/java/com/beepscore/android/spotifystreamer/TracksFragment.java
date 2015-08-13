@@ -220,10 +220,14 @@ public class TracksFragment extends Fragment {
 
                 for (Track track : tracks.tracks) {
 
-                    String imageUrl = getTrackImageUrl(track);
+                    String imageNarrowestUrl = getTrackImageNarrowestUrl(track);
+                    String imageWidestUrl = getTrackImageWidestUrl(track);
                     TrackParcelable trackParcelable =
                             new TrackParcelable(artistName,
-                                    track.album.name, track.name, imageUrl);
+                                    track.album.name,
+                                    track.name,
+                                    imageNarrowestUrl,
+                                    imageWidestUrl);
                     results.add(trackParcelable);
                 }
             }
@@ -241,7 +245,37 @@ public class TracksFragment extends Fragment {
                     || tracksList.size() == 0);
         }
 
-        private String getTrackImageUrl(Track track) {
+        /**
+         * track album images is sorted by width decreasing
+         * @return imageUrl String for the narrowest (i.e. last) image.
+         */
+        private String getTrackImageNarrowestUrl(Track track) {
+            List<Image> images = getTrackImages(track);
+            int indexLast = images.size() - 1;
+            return getTrackImageAtIndex(track, indexLast);
+        }
+
+        /**
+         * track album images is sorted by width decreasing
+         * @return imageUrl String for the widest (i.e. first) image.
+         */
+        private String getTrackImageWidestUrl(Track track) {
+            final int indexFirst = 0;
+            return getTrackImageAtIndex(track, indexFirst);
+        }
+
+        private List<Image> getTrackImages(Track track) {
+            // https://github.com/kaaes/spotify-web-api-android/blob/master/src/main/java/kaaes/spotify/webapi/android/models/Image.java
+            AlbumSimple album = track.album;
+            return album.images;
+        }
+
+        /**
+         * @param index track album.images index
+         * track album images is sorted by width decreasing
+         * @return imageUrl String
+         */
+        private String getTrackImageAtIndex(Track track, int index) {
             String imageUrl = "";
 
             // https://github.com/kaaes/spotify-web-api-android/blob/master/src/main/java/kaaes/spotify/webapi/android/models/Image.java
@@ -249,12 +283,10 @@ public class TracksFragment extends Fragment {
             List<Image> images = album.images;
 
             if (images.size() > 0) {
-                // get the last image because images is sorted decreasing size
-                Image lastImage = images.get(images.size() - 1);
-                imageUrl = lastImage.url;
+                Image image = images.get(index);
+                imageUrl = image.url;
             }
             return imageUrl;
         }
-
     }
 }

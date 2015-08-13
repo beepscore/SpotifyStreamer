@@ -49,12 +49,12 @@ public class PlayerFragment extends Fragment {
             albumView.setText(trackParcelable.albumName);
 
             ImageView imageView = (ImageView)playerView.findViewById(R.id.image_view);
-            if (trackParcelable.imageUrl == null
-                    || trackParcelable.imageUrl.equals("")) {
+            if (trackParcelable.imageWidestUrl == null
+                    || trackParcelable.imageWidestUrl.equals("")) {
                 // show placeholder image
                 Picasso.with(getActivity()).load(R.mipmap.ic_launcher).into(imageView);
             } else {
-                Picasso.with(getActivity()).load(trackParcelable.imageUrl).into(imageView);
+                Picasso.with(getActivity()).load(trackParcelable.imageWidestUrl).into(imageView);
             }
 
             TextView trackView = (TextView)playerView.findViewById(R.id.track_view);
