@@ -15,6 +15,7 @@ Nexus 4 running Android 5.1.1
 ## Spotify Web API for Android
 "This project is a wrapper for the Spotify Web API.
 It uses Retrofit to create Java interfaces from API endpoints."
+<https://github.com/kaaes/spotify-web-api-android>
 <https://github.com/kaaes/spotify-web-api-android.git>
 
 ## Picasso
