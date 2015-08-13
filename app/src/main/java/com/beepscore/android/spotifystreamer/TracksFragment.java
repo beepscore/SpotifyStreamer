@@ -222,7 +222,8 @@ public class TracksFragment extends Fragment {
 
                     String imageUrl = getTrackImageUrl(track);
                     TrackParcelable trackParcelable =
-                            new TrackParcelable(track.album.name, track.name, imageUrl);
+                            new TrackParcelable(artistName,
+                                    track.album.name, track.name, imageUrl);
                     results.add(trackParcelable);
                 }
             }

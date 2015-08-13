@@ -37,9 +37,11 @@ public class PlayerFragment extends Fragment {
 
         configureActionBarTitle(getString(R.string.app_name));
 
-        if (trackParcelable != null
-                && trackParcelable.albumName != null) {
-            
+        if (trackParcelable != null) {
+
+            TextView artistView = (TextView)playerView.findViewById(R.id.artist_view);
+            artistView.setText(trackParcelable.artistName);
+
             TextView albumView = (TextView)playerView.findViewById(R.id.album_view);
             albumView.setText(trackParcelable.albumName);
 
