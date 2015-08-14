@@ -227,7 +227,8 @@ public class TracksFragment extends Fragment {
                                     track.album.name,
                                     track.name,
                                     imageNarrowestUrl,
-                                    imageWidestUrl);
+                                    imageWidestUrl,
+                                    track.preview_url);
                     results.add(trackParcelable);
                 }
             }

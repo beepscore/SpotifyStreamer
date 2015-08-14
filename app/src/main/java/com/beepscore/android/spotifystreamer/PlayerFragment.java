@@ -4,20 +4,32 @@ import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+
+import java.io.IOException;
 
 /**
  *
  */
 public class PlayerFragment extends Fragment {
 
+    private final String LOG_TAG = PlayerFragment.class.getSimpleName();
+
     private TrackParcelable trackParcelable;
+
+    private AudioPlayer mPlayer = new AudioPlayer();
+
+    private ImageButton mNextButton;
+    private ImageButton mPlayButton;
+    private ImageButton mPreviousButton;
 
     public PlayerFragment() {
     }
@@ -30,6 +42,11 @@ public class PlayerFragment extends Fragment {
         // http://stackoverflow.com/questions/11387740/where-how-to-getintent-getextras-in-an-android-fragment
         Intent intent = getActivity().getIntent();
         configureTrackParcelable(intent);
+
+        // TODO: Use setRetainInstance to avoid interrupting audio during rotation?
+        // retain fragment. When user rotates device, activity will be destroyed
+        // but fragment instance with audio player will be passed to new activity.
+        // setRetainInstance(true);
     }
 
     @Override
@@ -57,10 +74,26 @@ public class PlayerFragment extends Fragment {
                 Picasso.with(getActivity()).load(trackParcelable.imageWidestUrl).into(imageView);
             }
 
-            TextView trackView = (TextView)playerView.findViewById(R.id.track_view);
+            final TextView trackView = (TextView)playerView.findViewById(R.id.track_view);
             trackView.setText(trackParcelable.name);
 
-            ImageView playButtonImageView = (ImageView)playerView.findViewById(R.id.play_button);
+            mPlayButton = (ImageButton)playerView.findViewById(R.id.play_button);
+            mPlayButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    // TODO: Toggle button between play and pause or play and stop
+                    // toggle image and action
+                    // alternatively put 2 buttons on top of each other and show/hide them
+                    // TODO: get url for entire track, not just previewUrl
+                    try {
+                        mPlayer.play(getActivity(), trackParcelable.previewUrl);
+                    } catch (IllegalArgumentException e) {
+                        Log.e(LOG_TAG, e.getLocalizedMessage());
+                    } catch (IOException e) {
+                        Log.e(LOG_TAG, e.getLocalizedMessage());
+                    }
+                }
+            });
+
         }
 
         return playerView;
@@ -79,5 +112,11 @@ public class PlayerFragment extends Fragment {
                 && activity.getSupportActionBar() != null) {
             activity.getSupportActionBar().setTitle(title);
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mPlayer.stop();
     }
 }

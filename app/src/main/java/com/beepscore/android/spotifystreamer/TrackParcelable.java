@@ -18,17 +18,20 @@ public class TrackParcelable implements Parcelable {
     String name;
     String imageNarrowestUrl;
     String imageWidestUrl;
+    String previewUrl;
 
     // constructor
     public TrackParcelable(String artistName,
                            String albumName, String name,
                            String imageNarrowestUrl,
-                           String imageWidestUrl) {
+                           String imageWidestUrl,
+                           String previewUrl) {
         this.artistName = artistName;
         this.albumName = albumName;
         this.name = name;
         this.imageNarrowestUrl = imageNarrowestUrl;
         this.imageWidestUrl = imageWidestUrl;
+        this.previewUrl = previewUrl;
     }
 
     // private constructor
@@ -38,6 +41,7 @@ public class TrackParcelable implements Parcelable {
         name = in.readString();
         imageNarrowestUrl = in.readString();
         imageWidestUrl = in.readString();
+        previewUrl = in.readString();
     }
 
     @Override
@@ -51,7 +55,8 @@ public class TrackParcelable implements Parcelable {
                 + separator + albumName
                 + separator + name
                 + separator + imageNarrowestUrl
-                + separator + imageWidestUrl;
+                + separator + imageWidestUrl
+                + separator + previewUrl;
     }
 
     @Override
@@ -63,6 +68,7 @@ public class TrackParcelable implements Parcelable {
         parcel.writeString(name);
         parcel.writeString(imageNarrowestUrl);
         parcel.writeString(imageWidestUrl);
+        parcel.writeString(previewUrl);
     }
 
     public static final Parcelable.Creator<TrackParcelable> CREATOR =
