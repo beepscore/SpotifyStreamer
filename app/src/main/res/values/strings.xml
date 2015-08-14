@@ -14,4 +14,8 @@
     <string name="title_activity_tracks">Top 10 Tracks</string>
     <string name="tracks">tracks</string>
     <string name="title_activity_player">PlayerActivity</string>
+    <string name="album_image">album image</string>
+    <string name="previous_button">previous button</string>
+    <string name="play_button">play button</string>
+    <string name="next_button">next button</string>
 </resources>

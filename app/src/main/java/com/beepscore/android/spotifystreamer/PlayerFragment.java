@@ -59,6 +59,8 @@ public class PlayerFragment extends Fragment {
 
             TextView trackView = (TextView)playerView.findViewById(R.id.track_view);
             trackView.setText(trackParcelable.name);
+
+            ImageView playButtonImageView = (ImageView)playerView.findViewById(R.id.play_button);
         }
 
         return playerView;
