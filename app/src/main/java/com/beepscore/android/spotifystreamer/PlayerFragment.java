@@ -21,7 +21,8 @@ import java.io.IOException;
 /**
  *
  */
-public class PlayerFragment extends Fragment {
+public class PlayerFragment extends Fragment
+        implements SeekBar.OnSeekBarChangeListener {
 
     private final String LOG_TAG = PlayerFragment.class.getSimpleName();
 
@@ -86,6 +87,8 @@ public class PlayerFragment extends Fragment {
             mSeekBar = (SeekBar)playerView.findViewById(R.id.seek_bar);
             mTimeElapsed = (TextView)playerView.findViewById(R.id.time_elapsed);
             mTimeRemaining = (TextView)playerView.findViewById(R.id.time_remaining);
+
+            mSeekBar.setOnSeekBarChangeListener(this);
 
             mPlayButton = (ImageButton)playerView.findViewById(R.id.play_button);
             mPlayButton.setOnClickListener(new View.OnClickListener() {
@@ -162,4 +165,23 @@ public class PlayerFragment extends Fragment {
         }
         return durationString;
     }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // OnSeekBarChangeListener
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+        // TODO: get seekbar value
+        mPlayer.seekTo(5000);
+    }
+    ///////////////////////////////////////////////////////////////////////////
 }
