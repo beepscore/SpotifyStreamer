@@ -22,6 +22,7 @@ import java.io.IOException;
 public class AudioPlayer
         implements MediaPlayer.OnErrorListener, MediaPlayer.OnPreparedListener,
         MediaPlayer.OnCompletionListener {
+        //, MediaPlayer.OnInfoListener {
 
     private final String LOG_TAG = AudioPlayer.class.getSimpleName();
 
@@ -50,6 +51,7 @@ public class AudioPlayer
             mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 
             mMediaPlayer.setOnErrorListener(this);
+            //mMediaPlayer.setOnInfoListener(this);
             mMediaPlayer.setDataSource(url);
 
             mMediaPlayer.setOnPreparedListener(this);
@@ -79,6 +81,19 @@ public class AudioPlayer
         return true;
     }
 
+    /** Note for Spotify onInfo may not be called
+     * generally (at least when successful) MediaPlayer calls onPrepared
+     * without any prior or subsequent call to onInfo
+     * So don't override, to avoid improper handling/discarding info for onError
+     */
+    /*
+    @Override
+    public boolean onInfo(MediaPlayer mp, int what, int extra) {
+        // return false to indicate method didn't handle the info
+        return false;
+    }
+    */
+
     /** Called when MediaPlayer is ready
      * http://developer.android.com/reference/android/media/MediaPlayer.OnPreparedListener.html
      */
@@ -93,7 +108,6 @@ public class AudioPlayer
     public void onCompletion(MediaPlayer mp) {
         // as soon as playback is done, call stop to release media player
         stop();
-
     }
 
     ///////////////////////////////////////////////////////////////////////////
