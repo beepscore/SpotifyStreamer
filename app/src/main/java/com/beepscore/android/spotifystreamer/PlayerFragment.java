@@ -100,7 +100,7 @@ public class PlayerFragment extends Fragment {
                         mPlayButton.setImageResource(android.R.drawable.ic_media_pause);
 
                         try {
-                            // Use Android’s Mediaplayer API to stream the track preview of a currently selected track.
+                            // Use Android’s MediaPlayer API to stream the track preview of a currently selected track.
                             // Apparently full song uri requires Spotify sdk player.
                             // References
                             // Spotify Streamer implementation guide, task 2
