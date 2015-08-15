@@ -25,8 +25,8 @@ public class AudioPlayer
 
     private final String LOG_TAG = AudioPlayer.class.getSimpleName();
 
-    protected MediaPlayer mMediaPlayer;
-    private boolean isPrepared = false;
+    private MediaPlayer mMediaPlayer;
+    public boolean isPrepared = false;
 
     public void play(Context c, String url) throws IllegalArgumentException, IOException {
 
@@ -84,6 +84,10 @@ public class AudioPlayer
             mMediaPlayer = null;
         }
         isPrepared = false;
+    }
+
+    public boolean isPlaying() {
+        return mMediaPlayer.isPlaying();
     }
 
     @Override

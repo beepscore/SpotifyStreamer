@@ -86,15 +86,14 @@ public class PlayerFragment extends Fragment {
             mTimeElapsed = (TextView)playerView.findViewById(R.id.time_elapsed);
             mTimeRemaining = (TextView)playerView.findViewById(R.id.time_remaining);
 
-
             mPlayButton = (ImageButton)playerView.findViewById(R.id.play_button);
             mPlayButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
 
                     // Toggle between play and pause
                     if (mPlayer != null
-                    && mPlayer.mMediaPlayer != null
-                    && mPlayer.mMediaPlayer.isPlaying()) {
+                    && mPlayer.isPrepared
+                    && mPlayer.isPlaying()) {
                         mPlayButton.setImageResource(android.R.drawable.ic_media_play);
                         mPlayer.pause();
                     } else {
