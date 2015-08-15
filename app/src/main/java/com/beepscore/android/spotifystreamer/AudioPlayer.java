@@ -62,6 +62,9 @@ public class AudioPlayer
         }
     }
 
+    ///////////////////////////////////////////////////////////////////////////
+    // MediaPlayer listeners
+
     @Override
     // Caution: You must either catch or pass IllegalArgumentException and IOException when using setDataSource(),
     // because the file you are referencing might not exist.
@@ -86,6 +89,15 @@ public class AudioPlayer
         player.start();
     }
 
+    @Override
+    public void onCompletion(MediaPlayer mp) {
+        // as soon as playback is done, call stop to release media player
+        stop();
+
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+
     public void start() {
         mMediaPlayer.start();
     }
@@ -102,10 +114,4 @@ public class AudioPlayer
         isPrepared = false;
     }
 
-    @Override
-    public void onCompletion(MediaPlayer mp) {
-        // as soon as playback is done, call stop to release media player
-        stop();
-
-    }
 }
