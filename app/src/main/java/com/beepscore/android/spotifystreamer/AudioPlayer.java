@@ -27,6 +27,7 @@ public class AudioPlayer
 
     private MediaPlayer mMediaPlayer;
     public boolean isPrepared = false;
+    public int durationMilliseconds = 0;
 
     public void play(Context c, String url) throws IllegalArgumentException, IOException {
 
@@ -67,6 +68,8 @@ public class AudioPlayer
      */
     public void onPrepared(MediaPlayer player) {
         isPrepared = true;
+        // https://discussions.udacity.com/t/duration-of-the-track/25936
+        durationMilliseconds = player.getDuration();
         player.start();
     }
 

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -90,6 +91,12 @@ public class PlayerFragment extends Fragment {
             mPlayButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
 
+                    if (mPlayer != null
+                            && mPlayer.isPrepared) {
+                        // TODO: set duration before onClick, as soon as player isPrepared
+                        mTimeRemaining.setText(formattedDuration((long) mPlayer.durationMilliseconds));
+                    }
+
                     // Toggle between play and pause
                     if (mPlayer != null
                     && mPlayer.isPrepared
@@ -141,5 +148,18 @@ public class PlayerFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         mPlayer.stop();
+    }
+
+    private String formattedDuration(long milliSeconds) {
+        final int MILLISECONDS_PER_SECOND = 1000;
+        final int SECONDS_PER_MINUTE = 60;
+        long seconds = milliSeconds/MILLISECONDS_PER_SECOND;
+        long minutes = seconds/SECONDS_PER_MINUTE;
+        String durationString = DateUtils.formatElapsedTime(seconds);
+        if (minutes < 10) {
+            // remove leading 0
+            durationString = durationString.substring(1);
+        }
+        return durationString;
     }
 }
