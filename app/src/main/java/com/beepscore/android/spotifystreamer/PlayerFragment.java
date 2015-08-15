@@ -83,9 +83,14 @@ public class PlayerFragment extends Fragment {
                     // TODO: Toggle button between play and pause or play and stop
                     // toggle image and action
                     // alternatively put 2 buttons on top of each other and show/hide them
-                    // TODO: get url for entire track, not just previewUrl
                     try {
+                        // Use Android’s Mediaplayer API to stream the track preview of a currently selected track.
+                        // Apparently full song uri requires Spotify sdk player.
+                        // References
+                        // Spotify Streamer implementation guide, task 2
+                        // https://discussions.udacity.com/t/spotify-track-url/21127
                         mPlayer.play(getActivity(), trackParcelable.previewUrl);
+
                     } catch (IllegalArgumentException e) {
                         Log.e(LOG_TAG, e.getLocalizedMessage());
                     } catch (IOException e) {
