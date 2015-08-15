@@ -19,13 +19,14 @@ import java.io.IOException;
  * HelloMoon
  * https://github.com/beepscore/HelloMoon.git
  */
-//public class AudioPlayer {
 public class AudioPlayer
-        implements MediaPlayer.OnErrorListener, MediaPlayer.OnPreparedListener {
+        implements MediaPlayer.OnErrorListener, MediaPlayer.OnPreparedListener,
+        MediaPlayer.OnCompletionListener {
 
     private final String LOG_TAG = AudioPlayer.class.getSimpleName();
 
     protected MediaPlayer mMediaPlayer;
+    private boolean isPrepared = false;
 
     public void play(Context c, String url) throws IllegalArgumentException, IOException {
 
@@ -35,24 +36,21 @@ public class AudioPlayer
             mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 
             mMediaPlayer.setOnErrorListener(this);
-            // Caution: You must either catch or pass IllegalArgumentException and IOException when using setDataSource(),
-            // because the file you are referencing might not exist.
             mMediaPlayer.setDataSource(url);
 
-            // as soon as playback is done, call stop to release media player
-            mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mMediaPlayer) {
-                    stop();
-                }
-            });
-
             mMediaPlayer.setOnPreparedListener(this);
+            mMediaPlayer.setOnCompletionListener(this);
             mMediaPlayer.prepareAsync();
+        } else {
+            if (isPrepared) {
+                start();
+            }
         }
     }
 
     @Override
+    // Caution: You must either catch or pass IllegalArgumentException and IOException when using setDataSource(),
+    // because the file you are referencing might not exist.
     // http://developer.android.com/reference/android/media/MediaPlayer.OnErrorListener.html
     public boolean onError(MediaPlayer player, int what, int extra) {
         // ... react appropriately ...
@@ -68,8 +66,12 @@ public class AudioPlayer
      * http://developer.android.com/reference/android/media/MediaPlayer.OnPreparedListener.html
      */
     public void onPrepared(MediaPlayer player) {
-
+        isPrepared = true;
         player.start();
+    }
+
+    public void start() {
+        mMediaPlayer.start();
     }
 
     public void pause() {
@@ -81,7 +83,13 @@ public class AudioPlayer
             mMediaPlayer.release();
             mMediaPlayer = null;
         }
-
+        isPrepared = false;
     }
 
+    @Override
+    public void onCompletion(MediaPlayer mp) {
+        // as soon as playback is done, call stop to release media player
+        stop();
+
+    }
 }
