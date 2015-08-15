@@ -21,7 +21,7 @@ import java.io.IOException;
  */
 public class AudioPlayer
         implements MediaPlayer.OnErrorListener, MediaPlayer.OnPreparedListener,
-        MediaPlayer.OnCompletionListener {
+        MediaPlayer.OnCompletionListener, MediaPlayer.OnSeekCompleteListener {
         //, MediaPlayer.OnInfoListener {
 
     private final String LOG_TAG = AudioPlayer.class.getSimpleName();
@@ -50,18 +50,24 @@ public class AudioPlayer
             mMediaPlayer = new MediaPlayer();
             mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 
-            mMediaPlayer.setOnErrorListener(this);
-            //mMediaPlayer.setOnInfoListener(this);
             mMediaPlayer.setDataSource(url);
-
-            mMediaPlayer.setOnPreparedListener(this);
-            mMediaPlayer.setOnCompletionListener(this);
+            configureMediaPlayerListeners(mMediaPlayer);
+            
             mMediaPlayer.prepareAsync();
+
         } else {
             if (isPrepared) {
                 start();
             }
         }
+    }
+
+    private void configureMediaPlayerListeners(MediaPlayer player) {
+        player.setOnErrorListener(this);
+        //player.setOnInfoListener(this);
+        player.setOnPreparedListener(this);
+        player.setOnSeekCompleteListener(this);
+        player.setOnCompletionListener(this);
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -105,9 +111,14 @@ public class AudioPlayer
     }
 
     @Override
-    public void onCompletion(MediaPlayer mp) {
+    public void onCompletion(MediaPlayer player) {
         // as soon as playback is done, call stop to release media player
         stop();
+    }
+
+    @Override
+    public void onSeekComplete(MediaPlayer player) {
+        player.start();
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -126,6 +137,10 @@ public class AudioPlayer
             mMediaPlayer = null;
         }
         isPrepared = false;
+    }
+
+    public void seekTo(int msec) {
+        mMediaPlayer.seekTo(msec);
     }
 
 }
