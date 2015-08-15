@@ -26,8 +26,21 @@ public class AudioPlayer
     private final String LOG_TAG = AudioPlayer.class.getSimpleName();
 
     private MediaPlayer mMediaPlayer;
-    public boolean isPrepared = false;
     public int durationMilliseconds = 0;
+
+    private boolean isPrepared = false;
+    /**
+     * accessor/getter method, provides Java equivalent of "read only" access
+     * http://stackoverflow.com/questions/8151342/do-we-have-a-readonly-field-in-java-which-is-set-able-within-the-scope-of-the-c
+     * @return true if player is prepared to play
+     */
+    public boolean isPrepared() {
+        return isPrepared;
+    }
+
+    public boolean isPlaying() {
+        return mMediaPlayer.isPlaying();
+    }
 
     public void play(Context c, String url) throws IllegalArgumentException, IOException {
 
@@ -87,10 +100,6 @@ public class AudioPlayer
             mMediaPlayer = null;
         }
         isPrepared = false;
-    }
-
-    public boolean isPlaying() {
-        return mMediaPlayer.isPlaying();
     }
 
     @Override

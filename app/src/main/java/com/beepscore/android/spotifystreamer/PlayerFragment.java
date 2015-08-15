@@ -92,14 +92,14 @@ public class PlayerFragment extends Fragment {
                 public void onClick(View v) {
 
                     if (mPlayer != null
-                            && mPlayer.isPrepared) {
+                            && mPlayer.isPrepared()) {
                         // TODO: set duration before onClick, as soon as player isPrepared
                         mTimeRemaining.setText(formattedDuration((long) mPlayer.durationMilliseconds));
                     }
 
                     // Toggle between play and pause
                     if (mPlayer != null
-                    && mPlayer.isPrepared
+                    && mPlayer.isPrepared()
                     && mPlayer.isPlaying()) {
                         mPlayButton.setImageResource(android.R.drawable.ic_media_play);
                         mPlayer.pause();
