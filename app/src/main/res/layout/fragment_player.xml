@@ -37,9 +37,31 @@
             android:layout_height="wrap_content"/>
 
         <SeekBar
-            android:id="@+id/seekBar"
+            android:id="@+id/seek_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/time_elapsed"
+                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:text="@string/zero_seconds"/>
+
+            <TextView
+                android:id="@+id/time_remaining"
+                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:text="@string/thirty_seconds"
+                android:gravity="right"/>
+
+        </LinearLayout>
 
         <LinearLayout
             android:orientation="horizontal"

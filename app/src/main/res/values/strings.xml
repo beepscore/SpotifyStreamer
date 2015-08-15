@@ -18,4 +18,6 @@
     <string name="previous_button">previous button</string>
     <string name="play_button">play button</string>
     <string name="next_button">next button</string>
+    <string name="zero_seconds">0:00</string>
+    <string name="thirty_seconds">0:30</string>
 </resources>
