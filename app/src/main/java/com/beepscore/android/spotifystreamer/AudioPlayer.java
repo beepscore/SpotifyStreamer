@@ -25,7 +25,7 @@ public class AudioPlayer
 
     private final String LOG_TAG = AudioPlayer.class.getSimpleName();
 
-    private MediaPlayer mMediaPlayer;
+    protected MediaPlayer mMediaPlayer;
 
     public void play(Context c, String url) throws IllegalArgumentException, IOException {
 

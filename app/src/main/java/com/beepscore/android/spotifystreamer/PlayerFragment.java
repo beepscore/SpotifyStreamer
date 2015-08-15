@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -26,6 +27,10 @@ public class PlayerFragment extends Fragment {
     private TrackParcelable trackParcelable;
 
     private AudioPlayer mPlayer = new AudioPlayer();
+
+    private SeekBar mSeekBar;
+    private TextView mTimeElapsed;
+    private TextView mTimeRemaining;
 
     private ImageButton mNextButton;
     private ImageButton mPlayButton;
@@ -77,24 +82,38 @@ public class PlayerFragment extends Fragment {
             final TextView trackView = (TextView)playerView.findViewById(R.id.track_view);
             trackView.setText(trackParcelable.name);
 
+            mSeekBar = (SeekBar)playerView.findViewById(R.id.seek_bar);
+            mTimeElapsed = (TextView)playerView.findViewById(R.id.time_elapsed);
+            mTimeRemaining = (TextView)playerView.findViewById(R.id.time_remaining);
+
+
             mPlayButton = (ImageButton)playerView.findViewById(R.id.play_button);
             mPlayButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    // TODO: Toggle button between play and pause or play and stop
-                    // toggle image and action
-                    // alternatively put 2 buttons on top of each other and show/hide them
-                    try {
-                        // Use Android’s Mediaplayer API to stream the track preview of a currently selected track.
-                        // Apparently full song uri requires Spotify sdk player.
-                        // References
-                        // Spotify Streamer implementation guide, task 2
-                        // https://discussions.udacity.com/t/spotify-track-url/21127
-                        mPlayer.play(getActivity(), trackParcelable.previewUrl);
 
-                    } catch (IllegalArgumentException e) {
-                        Log.e(LOG_TAG, e.getLocalizedMessage());
-                    } catch (IOException e) {
-                        Log.e(LOG_TAG, e.getLocalizedMessage());
+                    // Toggle between play and pause
+                    if (mPlayer != null
+                    && mPlayer.mMediaPlayer != null
+                    && mPlayer.mMediaPlayer.isPlaying()) {
+                        mPlayButton.setImageResource(android.R.drawable.ic_media_play);
+                        mPlayer.pause();
+                    } else {
+                        mPlayButton.setImageResource(android.R.drawable.ic_media_pause);
+
+                        try {
+                            // Use Android’s Mediaplayer API to stream the track preview of a currently selected track.
+                            // Apparently full song uri requires Spotify sdk player.
+                            // References
+                            // Spotify Streamer implementation guide, task 2
+                            // https://discussions.udacity.com/t/spotify-track-url/21127
+                            // http://stackoverflow.com/questions/20087804/should-have-subtitle-controller-already-set-mediaplayer-error-android
+                            mPlayer.play(getActivity(), trackParcelable.previewUrl);
+
+                        } catch (IllegalArgumentException e) {
+                            Log.e(LOG_TAG, e.getLocalizedMessage());
+                        } catch (IOException e) {
+                            Log.e(LOG_TAG, e.getLocalizedMessage());
+                        }
                     }
                 }
             });
