@@ -57,15 +57,17 @@ Tagged git commit for reference uri building example.
 ---
 
 ## Issues/Questions
-Note: Normally record/manage issues into bug tracker like jira or github issues.
+Note: Normally I record/manage issues into bug tracker like jira or github issues.
 For Udacity class, put them in README.md so they will survive cloning repo and be easily visible to others.
 
-### bug(fixed): Navigate from tracks "up" to artists loses artist list
+### Stage 1 Issues/Questions
+
+#### bug(fixed): Navigate from tracks "up" to artists loses artist list
 Navigate "up" correctly navigated to artists, but artists list was empty.
 Fixed by setting ArtistsActivity launchmode singleTop.
 I don't know if this is considered ok practice or a hack.
 
-#### References
+##### References
 http://developer.android.com/guide/topics/resources/runtime-changes.html#RetainingAnObject
 http://www.androiddesignpatterns.com/2013/04/retaining-objects-across-config-changes.html
 
@@ -75,18 +77,23 @@ https://discussions.udacity.com/t/how-to-save-intent-extras/21024
 https://discussions.udacity.com/t/handling-rotation/22391/13
 https://discussions.udacity.com/t/handling-device-rotation-the-easy-way/24344/1
 
-##### singleTop
+###### singleTop
 https://discussions.udacity.com/t/how-to-save-intent-extras/21024/4
 https://developer.android.com/reference/android/app/Activity.html
 
-### bug(mostly fixed): Navigate from tracks "back" to artists re-shows keyboard
+#### bug(mostly fixed): Navigate from tracks "back" to artists re-shows keyboard
 Navigate "back" shows previous search field and artists list as desired but re-shows keyboard.
 This used to happen every time.
 Added searchView.clearFocus. Bug still happens occasionally. Timing dependent?
 
-### onCreate vs onCreateView
+#### onCreate vs onCreateView
 Is it considered best practice to do as much work as possible in onCreate?
 Answer:
 Do non-view work in onCreate, view work in onCreateView.
 Reference from reviewer
 http://stackoverflow.com/questions/28929637/difference-and-uses-of-oncreate-oncreateview-and-onactivitycreated-in-fra
+
+---
+
+### Stage 2 Issues/Questions
+If user rotates device, don't stop music playback
