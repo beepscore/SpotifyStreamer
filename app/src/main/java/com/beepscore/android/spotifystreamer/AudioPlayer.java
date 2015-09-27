@@ -52,7 +52,7 @@ public class AudioPlayer
 
             mMediaPlayer.setDataSource(url);
             configureMediaPlayerListeners(mMediaPlayer);
-            
+
             mMediaPlayer.prepareAsync();
 
         } else {
