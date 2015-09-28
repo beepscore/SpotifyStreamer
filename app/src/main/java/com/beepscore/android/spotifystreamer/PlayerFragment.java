@@ -1,6 +1,10 @@
 package com.beepscore.android.spotifystreamer;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +17,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -28,7 +33,9 @@ public class PlayerFragment extends Fragment
 
     private TrackParcelable trackParcelable;
 
-    private AudioPlayer mPlayer = new AudioPlayer();
+    private AudioService mAudioService;
+    /** Flag indicating whether we have called bind on the service. */
+    private boolean mIsBound;
 
     private SeekBar mSeekBar;
     private TextView mTimeElapsed;
@@ -50,10 +57,17 @@ public class PlayerFragment extends Fragment
         Intent intent = getActivity().getIntent();
         configureTrackParcelable(intent);
 
-        // TODO: Use setRetainInstance to avoid interrupting audio during rotation?
-        // retain fragment. When user rotates device, activity will be destroyed
-        // but fragment instance with audio player will be passed to new activity.
-        // setRetainInstance(true);
+        // Use setRetainInstance to avoid interrupting audio during rotation.
+        // When user rotates device, activity will be destroyed
+        // but fragment instance with audio player will be retained and passed to new activity.
+        setRetainInstance(true);
+
+        //Intent mPlayIntent = new Intent(getActivity().getApplicationContext(), AudioService.class);
+        // use startService instead of only bindService so service persists upon rotation??
+        // http://stackoverflow.com/questions/3514287/android-service-startservice-and-bindservice
+        //getActivity().getApplicationContext().startService(mPlayIntent);
+
+        doBindService();
     }
 
     @Override
@@ -94,34 +108,38 @@ public class PlayerFragment extends Fragment
             mPlayButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
 
-                    if (mPlayer != null
-                            && mPlayer.isPrepared()) {
+                    if (mAudioService != null
+                            && mIsBound
+                            && mAudioService.isPrepared()) {
                         // TODO: set duration before onClick, as soon as player isPrepared
-                        mTimeRemaining.setText(formattedDuration((long) mPlayer.durationMilliseconds));
+                        //mTimeRemaining.setText(formattedDuration((long) mAudioService.durationMilliseconds));
                     }
 
                     // Toggle between play and pause
-                    if (mPlayer != null
-                    && mPlayer.isPrepared()
-                    && mPlayer.isPlaying()) {
+                    if (mAudioService != null
+                    && mAudioService.isPrepared()
+                    && mAudioService.isPlaying()) {
                         mPlayButton.setImageResource(android.R.drawable.ic_media_play);
-                        mPlayer.pause();
+                        mAudioService.pause();
                     } else {
                         mPlayButton.setImageResource(android.R.drawable.ic_media_pause);
+                        if (mAudioService != null
+                                && mIsBound) {
+                            try {
+                                // Use Android’s MediaPlayer API to stream the track preview of a currently selected track.
+                                // Apparently full song uri requires Spotify sdk player.
+                                // References
+                                // Spotify Streamer implementation guide, task 2
+                                // https://discussions.udacity.com/t/spotify-track-url/21127
+                                // http://stackoverflow.com/questions/20087804/should-have-subtitle-controller-already-set-mediaplayer-error-android
+                                mAudioService.play(getActivity(), trackParcelable.previewUrl);
 
-                        try {
-                            // Use Android’s MediaPlayer API to stream the track preview of a currently selected track.
-                            // Apparently full song uri requires Spotify sdk player.
-                            // References
-                            // Spotify Streamer implementation guide, task 2
-                            // https://discussions.udacity.com/t/spotify-track-url/21127
-                            // http://stackoverflow.com/questions/20087804/should-have-subtitle-controller-already-set-mediaplayer-error-android
-                            mPlayer.play(getActivity(), trackParcelable.previewUrl);
 
-                        } catch (IllegalArgumentException e) {
-                            Log.e(LOG_TAG, e.getLocalizedMessage());
-                        } catch (IOException e) {
-                            Log.e(LOG_TAG, e.getLocalizedMessage());
+                            } catch (IllegalArgumentException e) {
+                                Log.e(LOG_TAG, e.getLocalizedMessage());
+                            } catch (IOException e) {
+                                Log.e(LOG_TAG, e.getLocalizedMessage());
+                            }
                         }
                     }
                 }
@@ -149,8 +167,8 @@ public class PlayerFragment extends Fragment
 
     @Override
     public void onDestroy() {
+        doUnbindService();
         super.onDestroy();
-        mPlayer.stop();
     }
 
     private String formattedDuration(long milliSeconds) {
@@ -181,7 +199,58 @@ public class PlayerFragment extends Fragment
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
         // TODO: get seekbar value
-        mPlayer.seekTo(5000);
+        mAudioService.seekTo(5000);
     }
     ///////////////////////////////////////////////////////////////////////////
+
+    private ServiceConnection mConnection = new ServiceConnection() {
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            // This is called when the connection with the service has been
+            // established, giving us the service object we can use to
+            // interact with the service.  Because we have bound to a explicit
+            // service that we know is running in our own process, we can
+            // cast its IBinder to a concrete class and directly access it.
+            mAudioService = ((AudioService.LocalBinder)service).getService();
+
+            // Tell the user about this for our demo.
+            Toast.makeText(getActivity(), R.string.audio_service_connected,
+                    Toast.LENGTH_SHORT).show();
+        }
+
+        public void onServiceDisconnected(ComponentName className) {
+            // This is called when the connection with the service has been
+            // unexpectedly disconnected -- that is, its process crashed.
+            // Because it is running in our same process, we should never
+            // see this happen.
+            mAudioService = null;
+            Toast.makeText(getActivity(), R.string.audio_service_disconnected,
+                    Toast.LENGTH_SHORT).show();
+        }
+    };
+
+    void doBindService() {
+        // Establish a connection with the service.  We use an explicit
+        // class name because we want a specific service implementation that
+        // we know will be running in our own process (and thus won't be
+        // supporting component replacement by other applications).
+
+        // To ensure your app is secure, always use an explicit intent when starting a Service
+        // and do not declare intent filters for your services.
+        // https://developer.android.com/guide/components/intents-filters.html
+        Intent intent = new Intent(getActivity(), AudioService.class);
+
+        getActivity().getApplicationContext().bindService(intent,
+                mConnection,
+                Context.BIND_AUTO_CREATE);
+        mIsBound = true;
+    }
+
+    void doUnbindService() {
+        if (mIsBound) {
+            // Detach our existing connection.
+            getActivity().getApplicationContext().unbindService(mConnection);
+            mIsBound = false;
+        }
+    }
+
 }

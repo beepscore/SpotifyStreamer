@@ -19,4 +19,6 @@
     <string name="play_button">play button</string>
     <string name="next_button">next button</string>
     <string name="zero_seconds">0:00</string>
+    <string name="audio_service_disconnected">audio service disconnected</string>
+    <string name="audio_service_connected">audio service connected</string>
 </resources>
