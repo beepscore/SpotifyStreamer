@@ -54,6 +54,10 @@ Instead of using SpotifyHelper, app uses Spotify api wrapper library methods.
 Deleted unused SpotifyHelper and SpotifyHelperTest.
 Tagged git commit for reference uri building example.
 
+## 2 pane master/detail layout for tablet
+Use layout-sw400dp to show 2 panes on Nexus 7.
+On Nexus 7, naming directory layout-sw600dp shows only 1 pane.
+
 ---
 
 ## Issues/Questions
