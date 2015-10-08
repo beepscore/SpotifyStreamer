@@ -1,6 +1,5 @@
 package com.beepscore.android.spotifystreamer;
 
-//import android.app.Fragment;
 import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -45,11 +44,6 @@ public class TracksFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // get the intent the activity was started with
-        // http://stackoverflow.com/questions/11387740/where-how-to-getintent-getextras-in-an-android-fragment
-        // Intent intent = getActivity().getIntent();
-        // configureArtistIdAndName(intent);
 
         if (getArguments() == null) {
             return;
@@ -113,15 +107,6 @@ public class TracksFragment extends Fragment {
         outState.putParcelableArrayList(TRACKS_KEY, tracksList);
 
         super.onSaveInstanceState(outState);
-    }
-
-    private void configureArtistIdAndName(Intent intent) {
-        String ARTIST_KEY = getActivity().getString(R.string.ARTIST_KEY);
-        if (intent != null && intent.hasExtra(ARTIST_KEY)) {
-            ArtistParcelable artistParcelable = intent.getParcelableExtra(ARTIST_KEY);
-
-            configureArtistIdAndNameFromArtistParcelable(artistParcelable);
-        }
     }
 
     private void configureArtistIdAndNameFromArtistParcelable(ArtistParcelable artistParcelable) {
