@@ -1,7 +1,6 @@
 package com.beepscore.android.spotifystreamer;
 
 import android.app.Fragment;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -32,6 +31,21 @@ public class ArtistsFragment extends Fragment {
     ArtistsArrayAdapter adapter = null;
     SearchView searchView = null;
     boolean isRetrofitError = false;
+
+    /**
+     * A callback interface that all activities containing this fragment must implement.
+     * This mechanism allows activities to be notified of item selections.
+     * This mechanism enables passing information from this fragment to
+     * the activity that has implemented the Callback interface.
+     * This decouples the fragment from a particular activity (e.g. ArtistsActivity).
+     * This also decouples the fragment from other fragments (e.g. TracksFragment).
+     */
+    public interface Callback {
+        /**
+         * DetailFragmentCallback for when an item has been selected.
+         */
+        public void onItemSelected(ArtistParcelable artistParcelable);
+    }
 
     public ArtistsFragment() {
     }
@@ -77,9 +91,9 @@ public class ArtistsFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 ArtistParcelable artistParcelable = adapter.getItem(i);
 
-                Intent intent = new Intent(getActivity(), TracksActivity.class);
-                intent.putExtra(getActivity().getString(R.string.ARTIST_KEY), artistParcelable);
-                startActivity(intent);
+                // Use callback to pass information from fragment
+                // to Callback implementing Activity
+                ((Callback)getActivity()).onItemSelected(artistParcelable);
             }
         });
 

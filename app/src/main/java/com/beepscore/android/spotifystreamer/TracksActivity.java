@@ -6,6 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+// Only used in 1 pane mode
+// References:
+// Sunshine / DetailActivity
+// https://github.com/udacity/Sunshine-Version-2/blob/3.02_create_detail_activity/app/src/main/java/com/example/android/sunshine/app/DetailActivity.java
 
 public class TracksActivity extends AppCompatActivity {
 
@@ -13,6 +17,25 @@ public class TracksActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tracks);
+
+        if (savedInstanceState == null) {
+
+            // get extra from the intent that started TracksActivity
+            ArtistParcelable artistParcelable = getIntent().getParcelableExtra(this.getString(R.string.ARTIST_KEY));
+
+            TracksFragment tracksFragment = new TracksFragment();
+
+            // Pass info to fragment via fragment.setArguments
+            Bundle arguments = new Bundle();
+            arguments.putParcelable(getString(R.string.ARTIST_KEY), artistParcelable);
+
+            tracksFragment.setArguments(arguments);
+
+            // Dynamically add TracksFragment to tracks_detail_container using a fragment transaction.
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.tracks_detail_container, tracksFragment)
+                    .commit();
+        }
     }
 
     @Override

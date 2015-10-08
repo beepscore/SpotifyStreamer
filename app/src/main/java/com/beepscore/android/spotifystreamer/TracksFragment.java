@@ -1,6 +1,7 @@
 package com.beepscore.android.spotifystreamer;
 
-import android.app.Fragment;
+//import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import java.util.Map;
 import kaaes.spotify.webapi.android.SpotifyApi;
 import kaaes.spotify.webapi.android.SpotifyService;
 import kaaes.spotify.webapi.android.models.AlbumSimple;
+import kaaes.spotify.webapi.android.models.Artist;
 import kaaes.spotify.webapi.android.models.Image;
 import kaaes.spotify.webapi.android.models.Track;
 import kaaes.spotify.webapi.android.models.Tracks;
@@ -46,8 +48,20 @@ public class TracksFragment extends Fragment {
 
         // get the intent the activity was started with
         // http://stackoverflow.com/questions/11387740/where-how-to-getintent-getextras-in-an-android-fragment
-        Intent intent = getActivity().getIntent();
-        configureArtistIdAndName(intent);
+        // Intent intent = getActivity().getIntent();
+        // configureArtistIdAndName(intent);
+
+        if (getArguments() == null) {
+            return;
+        }
+        // get info passed to the fragment by whoever called setArguments (e.g. ArtistsActivity, TracksActivity)
+        ArtistParcelable artistParcelable = getArguments().getParcelable(getString(R.string.ARTIST_KEY));
+
+        if (artistParcelable == null) {
+            return;
+        }
+
+        configureArtistIdAndNameFromArtistParcelable(artistParcelable);
 
         // When device is rotated fragment will be recreated.
         // Google recommends using savedInstanceState to restore the fragment
@@ -106,13 +120,17 @@ public class TracksFragment extends Fragment {
         if (intent != null && intent.hasExtra(ARTIST_KEY)) {
             ArtistParcelable artistParcelable = intent.getParcelableExtra(ARTIST_KEY);
 
-            if (artistParcelable != null) {
-                if (artistParcelable.id != null) {
-                    artistId = artistParcelable.id;
-                }
-                if (artistParcelable.name != null) {
-                    artistName = artistParcelable.name;
-                }
+            configureArtistIdAndNameFromArtistParcelable(artistParcelable);
+        }
+    }
+
+    private void configureArtistIdAndNameFromArtistParcelable(ArtistParcelable artistParcelable) {
+        if (artistParcelable != null) {
+            if (artistParcelable.id != null) {
+                artistId = artistParcelable.id;
+            }
+            if (artistParcelable.name != null) {
+                artistName = artistParcelable.name;
             }
         }
     }
