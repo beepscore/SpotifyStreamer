@@ -23,7 +23,6 @@ public class AudioService extends Service {
     private final String LOG_TAG = AudioService.class.getSimpleName();
 
     private AudioPlayer mAudioPlayer;
-    private boolean isPrepared = false;
 
     /**
      * Class for clients to access.
