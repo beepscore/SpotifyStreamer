@@ -62,6 +62,13 @@ public class BSMediaPlayer
         }
     }
 
+    /**
+     * @return duration in msec
+     */
+    int getDuration() {
+        return mMediaPlayer.getDuration();
+    }
+
     private void configureMediaPlayerListeners(MediaPlayer player) {
         player.setOnErrorListener(this);
         //player.setOnInfoListener(this);

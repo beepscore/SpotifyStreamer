@@ -85,6 +85,13 @@ public class AudioService extends Service {
         return mBSMediaPlayer.isPlaying();
     }
 
+    /**
+     * @return duration in msec
+     */
+    public int getDuration() {
+        return mBSMediaPlayer.getDuration();
+    }
+
     ///////////////////////////////////////////////////////////////////////////
 
     public void start() {
