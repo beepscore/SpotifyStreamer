@@ -22,7 +22,7 @@ public class AudioService extends Service {
 
     private final String LOG_TAG = AudioService.class.getSimpleName();
 
-    private BSMediaPlayer mAudioPlayer;
+    private BSMediaPlayer mBSMediaPlayer;
 
     /**
      * Class for clients to access.
@@ -42,7 +42,7 @@ public class AudioService extends Service {
     public void onCreate() {
         Toast.makeText(this, LOG_TAG + " onCreate", Toast.LENGTH_SHORT).show();
         super.onCreate();
-        mAudioPlayer = new BSMediaPlayer();
+        mBSMediaPlayer = new BSMediaPlayer();
     }
 
     @Override
@@ -54,7 +54,7 @@ public class AudioService extends Service {
     @Override
     public void onDestroy() {
         Toast.makeText(this, LOG_TAG + " onDestroy", Toast.LENGTH_SHORT).show();
-        mAudioPlayer.stop();
+        mBSMediaPlayer.stop();
         super.onDestroy();
     }
 
@@ -78,32 +78,32 @@ public class AudioService extends Service {
      * @return true if player is prepared to play
      */
     public boolean isPrepared() {
-        return mAudioPlayer.isPrepared();
+        return mBSMediaPlayer.isPrepared();
     }
 
     public boolean isPlaying() {
-        return mAudioPlayer.isPlaying();
+        return mBSMediaPlayer.isPlaying();
     }
 
     ///////////////////////////////////////////////////////////////////////////
 
     public void start() {
-        mAudioPlayer.start();
+        mBSMediaPlayer.start();
     }
 
     public void play(Context context, String url) throws IOException {
-        mAudioPlayer.play(context, url);
+        mBSMediaPlayer.play(context, url);
     }
 
     public void pause() {
-        mAudioPlayer.pause();
+        mBSMediaPlayer.pause();
     }
 
     public void stop() {
-        mAudioPlayer.stop();
+        mBSMediaPlayer.stop();
     }
 
     public void seekTo(int msec) {
-        mAudioPlayer.seekTo(msec);
+        mBSMediaPlayer.seekTo(msec);
     }
 }
