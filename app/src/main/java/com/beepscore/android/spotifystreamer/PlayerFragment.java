@@ -100,6 +100,7 @@ public class PlayerFragment extends Fragment
 
             mSeekBar = (SeekBar)playerView.findViewById(R.id.seek_bar);
             mTimeElapsed = (TextView)playerView.findViewById(R.id.time_elapsed);
+
             mTimeRemaining = (TextView)playerView.findViewById(R.id.time_remaining);
 
             mSeekBar.setOnSeekBarChangeListener(this);
@@ -112,7 +113,7 @@ public class PlayerFragment extends Fragment
                             && mIsBound
                             && mAudioService.isPrepared()) {
                         // TODO: set duration before onClick, as soon as player isPrepared
-                        //mTimeRemaining.setText(formattedDuration((long) mAudioService.durationMilliseconds));
+                        mTimeRemaining.setText(formattedDuration(mAudioService.getDuration()));
                     }
 
                     // Toggle between play and pause
@@ -171,12 +172,12 @@ public class PlayerFragment extends Fragment
         super.onDestroy();
     }
 
-    private String formattedDuration(long milliSeconds) {
+    private String formattedDuration(double milliSeconds) {
         final int MILLISECONDS_PER_SECOND = 1000;
         final int SECONDS_PER_MINUTE = 60;
-        long seconds = milliSeconds/MILLISECONDS_PER_SECOND;
-        long minutes = seconds/SECONDS_PER_MINUTE;
-        String durationString = DateUtils.formatElapsedTime(seconds);
+        double seconds = milliSeconds/MILLISECONDS_PER_SECOND;
+        double minutes = seconds/SECONDS_PER_MINUTE;
+        String durationString = DateUtils.formatElapsedTime((long)seconds);
         if (minutes < 10) {
             // remove leading 0
             durationString = durationString.substring(1);
@@ -186,9 +187,17 @@ public class PlayerFragment extends Fragment
 
     ///////////////////////////////////////////////////////////////////////////
     // OnSeekBarChangeListener
+    // https://developer.android.com/reference/android/widget/SeekBar.OnSeekBarChangeListener.html
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        // by default progress range is 0-100
+        Log.d(LOG_TAG, "progress " + String.valueOf(progress));
 
+        double timeElapsedMsec = (progress/100.) * mAudioService.getDuration();
+        mTimeElapsed.setText(formattedDuration(timeElapsedMsec));
+
+        double timeRemainingMsec = mAudioService.getDuration() - timeElapsedMsec;
+        mTimeRemaining.setText(formattedDuration(timeRemainingMsec));
     }
 
     @Override
