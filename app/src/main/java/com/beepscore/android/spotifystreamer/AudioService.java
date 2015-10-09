@@ -79,7 +79,7 @@ public class AudioService extends Service {
      * @return true if player is prepared to play
      */
     public boolean isPrepared() {
-        return isPrepared;
+        return mAudioPlayer.isPrepared();
     }
 
     public boolean isPlaying() {
