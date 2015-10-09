@@ -19,12 +19,12 @@ import java.io.IOException;
  * HelloMoon
  * https://github.com/beepscore/HelloMoon.git
  */
-public class AudioPlayer
+public class BSMediaPlayer
         implements MediaPlayer.OnErrorListener, MediaPlayer.OnPreparedListener,
         MediaPlayer.OnCompletionListener, MediaPlayer.OnSeekCompleteListener {
         //, MediaPlayer.OnInfoListener {
 
-    private final String LOG_TAG = AudioPlayer.class.getSimpleName();
+    private final String LOG_TAG = BSMediaPlayer.class.getSimpleName();
 
     private MediaPlayer mMediaPlayer;
     public int durationMilliseconds = 0;

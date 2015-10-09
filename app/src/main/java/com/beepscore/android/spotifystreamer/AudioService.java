@@ -22,7 +22,7 @@ public class AudioService extends Service {
 
     private final String LOG_TAG = AudioService.class.getSimpleName();
 
-    private AudioPlayer mAudioPlayer;
+    private BSMediaPlayer mAudioPlayer;
 
     /**
      * Class for clients to access.
@@ -42,7 +42,7 @@ public class AudioService extends Service {
     public void onCreate() {
         Toast.makeText(this, LOG_TAG + " onCreate", Toast.LENGTH_SHORT).show();
         super.onCreate();
-        mAudioPlayer = new AudioPlayer();
+        mAudioPlayer = new BSMediaPlayer();
     }
 
     @Override
