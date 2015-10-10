@@ -73,7 +73,11 @@ public class BSMediaPlayer
      * @return current position in msec
      */
     public int getCurrentPosition() {
-        return mMediaPlayer.getCurrentPosition();
+        if (mMediaPlayer == null) {
+            return 0;
+        } else {
+            return mMediaPlayer.getCurrentPosition();
+        }
     }
 
     private void configureMediaPlayerListeners(MediaPlayer player) {
