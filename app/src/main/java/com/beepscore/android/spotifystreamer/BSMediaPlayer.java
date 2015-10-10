@@ -64,13 +64,19 @@ public class BSMediaPlayer
 
     /**
      * @return duration in msec
+     * return 0 if internal media player is null
      */
     int getDuration() {
-        return mMediaPlayer.getDuration();
+        if (mMediaPlayer == null) {
+            return 0;
+        } else {
+            return mMediaPlayer.getDuration();
+        }
     }
 
     /**
      * @return current position in msec
+     * return 0 if internal media player is null
      */
     public int getCurrentPosition() {
         if (mMediaPlayer == null) {
