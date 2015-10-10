@@ -34,7 +34,9 @@ public class PlayerFragment extends Fragment
     private TrackParcelable trackParcelable;
 
     private AudioService mAudioService;
-    /** Flag indicating whether we have called bind on the service. */
+    /**
+     * Flag indicating whether we have called bind on the service.
+     */
     private boolean mIsBound;
 
     private SeekBar mSeekBar;
