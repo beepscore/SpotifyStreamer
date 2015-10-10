@@ -69,6 +69,13 @@ public class BSMediaPlayer
         return mMediaPlayer.getDuration();
     }
 
+    /**
+     * @return current position in msec
+     */
+    public int getCurrentPosition() {
+        return mMediaPlayer.getCurrentPosition();
+    }
+
     private void configureMediaPlayerListeners(MediaPlayer player) {
         player.setOnErrorListener(this);
         //player.setOnInfoListener(this);
