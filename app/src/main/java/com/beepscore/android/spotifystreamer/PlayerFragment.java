@@ -4,6 +4,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -47,6 +48,8 @@ public class PlayerFragment extends Fragment
     private ImageButton mPlayButton;
     private ImageButton mPreviousButton;
 
+    private Handler mHandler;
+
     public PlayerFragment() {
     }
 
@@ -82,13 +85,13 @@ public class PlayerFragment extends Fragment
 
         if (trackParcelable != null) {
 
-            TextView artistView = (TextView)playerView.findViewById(R.id.artist_view);
+            TextView artistView = (TextView) playerView.findViewById(R.id.artist_view);
             artistView.setText(trackParcelable.artistName);
 
-            TextView albumView = (TextView)playerView.findViewById(R.id.album_view);
+            TextView albumView = (TextView) playerView.findViewById(R.id.album_view);
             albumView.setText(trackParcelable.albumName);
 
-            ImageView imageView = (ImageView)playerView.findViewById(R.id.image_view);
+            ImageView imageView = (ImageView) playerView.findViewById(R.id.image_view);
             if (trackParcelable.imageWidestUrl == null
                     || trackParcelable.imageWidestUrl.equals("")) {
                 // show placeholder image
@@ -97,17 +100,17 @@ public class PlayerFragment extends Fragment
                 Picasso.with(getActivity()).load(trackParcelable.imageWidestUrl).into(imageView);
             }
 
-            final TextView trackView = (TextView)playerView.findViewById(R.id.track_view);
+            final TextView trackView = (TextView) playerView.findViewById(R.id.track_view);
             trackView.setText(trackParcelable.name);
 
-            mSeekBar = (SeekBar)playerView.findViewById(R.id.seek_bar);
-            mTimeElapsed = (TextView)playerView.findViewById(R.id.time_elapsed);
+            mSeekBar = (SeekBar) playerView.findViewById(R.id.seek_bar);
+            mTimeElapsed = (TextView) playerView.findViewById(R.id.time_elapsed);
 
-            mTimeRemaining = (TextView)playerView.findViewById(R.id.time_remaining);
+            mTimeRemaining = (TextView) playerView.findViewById(R.id.time_remaining);
 
             mSeekBar.setOnSeekBarChangeListener(this);
 
-            mPlayButton = (ImageButton)playerView.findViewById(R.id.play_button);
+            mPlayButton = (ImageButton) playerView.findViewById(R.id.play_button);
             mPlayButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
 
@@ -115,13 +118,14 @@ public class PlayerFragment extends Fragment
                             && mIsBound
                             && mAudioService.isPrepared()) {
                         // TODO: set duration before onClick, as soon as player isPrepared
+                        mSeekBar.setMax(mAudioService.getDuration());
                         mTimeRemaining.setText(formattedDuration(mAudioService.getDuration()));
                     }
 
                     // Toggle between play and pause
                     if (mAudioService != null
-                    && mAudioService.isPrepared()
-                    && mAudioService.isPlaying()) {
+                            && mAudioService.isPrepared()
+                            && mAudioService.isPlaying()) {
                         mPlayButton.setImageResource(android.R.drawable.ic_media_play);
                         mAudioService.pause();
                     } else {
@@ -149,6 +153,29 @@ public class PlayerFragment extends Fragment
             });
 
         }
+
+        // http://stackoverflow.com/questions/31286196/how-do-i-update-seekbar-mp3-progress-every-second-with-a-threadcode-pics-inclu?lq=1
+        // http://stackoverflow.com/questions/5242918/android-media-player-and-seekbar-sync-issue?lq=1
+        // http://stackoverflow.com/questions/17168215/seekbar-and-media-player-in-android?lq=1
+        mHandler = new Handler();
+
+        Runnable runnable = new Runnable() {
+
+            @Override
+            public void run() {
+                if (mAudioService != null) {
+                    int mCurrentPosition = mAudioService.getCurrentPosition() / 1000;
+                    mSeekBar.setProgress(mCurrentPosition);
+                    //mHandler.postDelayed(this, 1000);
+                    mHandler.postDelayed(this, 1000);
+                }
+            }
+        };
+
+        // Make sure you update Seekbar on UI thread
+        //PlayerActivity.this.runOnUiThread(runnable);
+        //PlayerActivity.this.post(runnable);
+        mHandler.post(runnable);
 
         return playerView;
     }
