@@ -92,7 +92,7 @@ public class BSMediaPlayer
     // because the file you are referencing might not exist.
     // http://developer.android.com/reference/android/media/MediaPlayer.OnErrorListener.html
     public boolean onError(MediaPlayer player, int what, int extra) {
-        // ... react appropriately ...
+        // react appropriately
         // The MediaPlayer has moved to the Error state, must be reset!
         Log.e(LOG_TAG, "MediaPlayer error, resetting");
         player.reset();
