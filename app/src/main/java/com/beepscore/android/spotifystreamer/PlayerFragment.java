@@ -177,9 +177,9 @@ public class PlayerFragment extends Fragment
     private String formattedDuration(double milliSeconds) {
         final int MILLISECONDS_PER_SECOND = 1000;
         final int SECONDS_PER_MINUTE = 60;
-        double seconds = milliSeconds/MILLISECONDS_PER_SECOND;
-        double minutes = seconds/SECONDS_PER_MINUTE;
-        String durationString = DateUtils.formatElapsedTime((long)seconds);
+        double seconds = milliSeconds / MILLISECONDS_PER_SECOND;
+        double minutes = seconds / SECONDS_PER_MINUTE;
+        String durationString = DateUtils.formatElapsedTime((long) seconds);
         if (minutes < 10) {
             // remove leading 0
             durationString = durationString.substring(1);
