@@ -148,11 +148,15 @@ public class BSMediaPlayer
     ///////////////////////////////////////////////////////////////////////////
 
     public void start() {
-        mMediaPlayer.start();
+        if (mMediaPlayer != null) {
+            mMediaPlayer.start();
+        }
     }
 
     public void pause() {
-        mMediaPlayer.pause();
+        if (mMediaPlayer != null) {
+            mMediaPlayer.pause();
+        }
     }
 
     public void stop() {
@@ -164,7 +168,9 @@ public class BSMediaPlayer
     }
 
     public void seekTo(int msec) {
-        mMediaPlayer.seekTo(msec);
+        if (mMediaPlayer != null) {
+            mMediaPlayer.seekTo(msec);
+        }
     }
 
 }
