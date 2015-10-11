@@ -72,6 +72,14 @@ public class PlayerFragment extends Fragment
         // http://stackoverflow.com/questions/3514287/android-service-startservice-and-bindservice
         //getActivity().getApplicationContext().startService(mPlayIntent);
 
+        // Handler runs on the thread it was created in.
+        // https://www.youtube.com/watch?v=GaO1uHeIcj0
+        // http://www.vogella.com/tutorials/AndroidBackgroundProcessing/article.html#concurrency_handler2
+        // http://stackoverflow.com/questions/31286196/how-do-i-update-seekbar-mp3-progress-every-second-with-a-threadcode-pics-inclu?lq=1
+        // http://stackoverflow.com/questions/5242918/android-media-player-and-seekbar-sync-issue?lq=1
+        // http://stackoverflow.com/questions/17168215/seekbar-and-media-player-in-android?lq=1
+        mHandler = new Handler();
+
         doBindService();
     }
 
@@ -153,11 +161,6 @@ public class PlayerFragment extends Fragment
             });
 
         }
-
-        // http://stackoverflow.com/questions/31286196/how-do-i-update-seekbar-mp3-progress-every-second-with-a-threadcode-pics-inclu?lq=1
-        // http://stackoverflow.com/questions/5242918/android-media-player-and-seekbar-sync-issue?lq=1
-        // http://stackoverflow.com/questions/17168215/seekbar-and-media-player-in-android?lq=1
-        mHandler = new Handler();
 
         Runnable runnable = new Runnable() {
 
