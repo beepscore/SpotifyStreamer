@@ -157,6 +157,33 @@ public class PlayerFragment extends Fragment
                 }
             });
 
+            mPreviousButton = (ImageButton) playerView.findViewById(R.id.previous_button);
+            mPreviousButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+
+                    if (mAudioService != null
+                            && mIsBound
+                            && mAudioService.isPrepared()) {
+                        // TODO go to previous track, if it exists (else wrap around to last track?)
+                        Toast.makeText(getActivity(), "TODO go to previous track",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+            mNextButton = (ImageButton) playerView.findViewById(R.id.next_button);
+            mNextButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+
+                    if (mAudioService != null
+                            && mIsBound
+                            && mAudioService.isPrepared()) {
+                        // TODO go to next track, if it exists (else wrap around to track 0?)
+                        Toast.makeText(getActivity(), "TODO go to next track",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
         }
 
         Runnable runnable = new Runnable() {
