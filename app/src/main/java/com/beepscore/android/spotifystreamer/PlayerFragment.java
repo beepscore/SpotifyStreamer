@@ -229,7 +229,10 @@ public class PlayerFragment extends Fragment
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
-        mAudioService.seekTo(seekBar.getProgress());
+        double seekBarProgressFraction = seekBar.getProgress()/100.;
+        int seekTimeMsec = (int)(seekBarProgressFraction * mAudioService.getDurationMsec());
+        Log.d(LOG_TAG, "onStopTrackingTouch seekTo " + String.valueOf(seekTimeMsec));
+        mAudioService.seekTo(seekTimeMsec);
     }
 
     ///////////////////////////////////////////////////////////////////////////
