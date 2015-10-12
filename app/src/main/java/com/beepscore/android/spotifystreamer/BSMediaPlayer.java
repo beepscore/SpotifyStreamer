@@ -167,6 +167,13 @@ public class BSMediaPlayer
         isPrepared = false;
     }
 
+    /**
+     * Note: seekTo may not work for some streams
+     * http://stackoverflow.com/questions/25656102/why-doesnt-mediaplayer-seektot-go-to-the-exact-specified-instant-t?lq=1
+     * http://stackoverflow.com/questions/16077026/mediaplayer-seekto-not-seeking-to-position-on-android
+     * I think one bug has been fixed
+     * https://code.google.com/p/android/issues/detail?id=4124
+     */
     public void seekTo(int msec) {
         if (mMediaPlayer != null) {
             mMediaPlayer.seekTo(msec);
