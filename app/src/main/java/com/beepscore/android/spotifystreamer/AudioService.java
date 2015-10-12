@@ -88,15 +88,22 @@ public class AudioService extends Service {
     /**
      * @return duration in msec
      */
-    public int getDuration() {
+    public int getDurationMsec() {
         return mBSMediaPlayer.getDuration();
     }
 
     /**
      * @return current position in msec
      */
-    public int getCurrentPosition() {
+    public int getCurrentPositionMsec() {
         return mBSMediaPlayer.getCurrentPosition();
+    }
+
+    /**
+     * @return time remaining as (duration - current position) in msec
+     */
+    public int getTimeRemainingMsec() {
+        return (getDurationMsec() - getCurrentPositionMsec());
     }
 
     ///////////////////////////////////////////////////////////////////////////

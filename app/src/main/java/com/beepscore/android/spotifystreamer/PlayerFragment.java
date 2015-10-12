@@ -9,7 +9,6 @@ import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,8 +40,8 @@ public class PlayerFragment extends Fragment
     private boolean mIsBound;
 
     private SeekBar mSeekBar;
-    private TextView mTimeElapsed;
-    private TextView mTimeRemaining;
+    private TextView mTimeElapsedTextView;
+    private TextView mTimeRemainingTextView;
 
     private ImageButton mNextButton;
     private ImageButton mPlayButton;
@@ -112,9 +111,8 @@ public class PlayerFragment extends Fragment
             trackView.setText(trackParcelable.name);
 
             mSeekBar = (SeekBar) playerView.findViewById(R.id.seek_bar);
-            mTimeElapsed = (TextView) playerView.findViewById(R.id.time_elapsed);
-
-            mTimeRemaining = (TextView) playerView.findViewById(R.id.time_remaining);
+            mTimeElapsedTextView = (TextView) playerView.findViewById(R.id.time_elapsed);
+            mTimeRemainingTextView = (TextView) playerView.findViewById(R.id.time_remaining);
 
             mSeekBar.setOnSeekBarChangeListener(this);
 
@@ -125,9 +123,8 @@ public class PlayerFragment extends Fragment
                     if (mAudioService != null
                             && mIsBound
                             && mAudioService.isPrepared()) {
-                        // TODO: set duration before onClick, as soon as player isPrepared
-                        mSeekBar.setMax(mAudioService.getDuration());
-                        mTimeRemaining.setText(formattedDuration(mAudioService.getDuration()));
+                        mTimeElapsedTextView.setText(TimeUtils.minutesSecondsStringFromMsec(mAudioService.getCurrentPositionMsec()));
+                        mTimeRemainingTextView.setText(TimeUtils.minutesSecondsStringFromMsec(mAudioService.getTimeRemainingMsec()));
                     }
 
                     // Toggle between play and pause
@@ -167,10 +164,13 @@ public class PlayerFragment extends Fragment
             @Override
             public void run() {
                 if (mAudioService != null) {
-                    int mCurrentPosition = mAudioService.getCurrentPosition() / 1000;
-                    mSeekBar.setProgress(mCurrentPosition);
-                    //mHandler.postDelayed(this, 1000);
-                    mHandler.postDelayed(this, 1000);
+                    int percentProgress = TimeUtils.getPercentProgress(mAudioService.getCurrentPositionMsec(),
+                            mAudioService.getDurationMsec());
+                    mSeekBar.setProgress(percentProgress);
+                    mTimeElapsedTextView.setText(TimeUtils.minutesSecondsStringFromMsec(mAudioService.getCurrentPositionMsec()));
+                    mTimeRemainingTextView.setText(TimeUtils.minutesSecondsStringFromMsec(mAudioService.getTimeRemainingMsec()));
+                    final int delayMsec = 1000;
+                    mHandler.postDelayed(this, delayMsec);
                 }
             }
         };
@@ -204,32 +204,22 @@ public class PlayerFragment extends Fragment
         super.onDestroy();
     }
 
-    private String formattedDuration(double milliSeconds) {
-        final int MILLISECONDS_PER_SECOND = 1000;
-        final int SECONDS_PER_MINUTE = 60;
-        double seconds = milliSeconds / MILLISECONDS_PER_SECOND;
-        double minutes = seconds / SECONDS_PER_MINUTE;
-        String durationString = DateUtils.formatElapsedTime((long) seconds);
-        if (minutes < 10) {
-            // remove leading 0
-            durationString = durationString.substring(1);
-        }
-        return durationString;
-    }
-
     ///////////////////////////////////////////////////////////////////////////
     // OnSeekBarChangeListener
     // https://developer.android.com/reference/android/widget/SeekBar.OnSeekBarChangeListener.html
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        Log.d(LOG_TAG, "onProgressChanged durationMsec " + String.valueOf(mAudioService.getDurationMsec()));
         // by default progress range is 0-100
-        Log.d(LOG_TAG, "progress " + String.valueOf(progress));
+        Log.d(LOG_TAG, "onProgressChanged progress " + String.valueOf(progress));
 
-        double timeElapsedMsec = (progress/100.) * mAudioService.getDuration();
-        mTimeElapsed.setText(formattedDuration(timeElapsedMsec));
+        String timeElapsedString = TimeUtils.minutesSecondsStringFromMsec(mAudioService.getCurrentPositionMsec());
+        mTimeElapsedTextView.setText(timeElapsedString);
+        Log.d(LOG_TAG, "onProgressChanged time elapsed " + timeElapsedString);
 
-        double timeRemainingMsec = mAudioService.getDuration() - timeElapsedMsec;
-        mTimeRemaining.setText(formattedDuration(timeRemainingMsec));
+        String timeRemainingString = TimeUtils.minutesSecondsStringFromMsec(mAudioService.getTimeRemainingMsec());
+        mTimeRemainingTextView.setText(timeRemainingString);
+        Log.d(LOG_TAG, "onProgressChanged time remaining " + timeRemainingString);
     }
 
     @Override
