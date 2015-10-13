@@ -27,7 +27,7 @@ public class BSMediaPlayer
     private final String LOG_TAG = BSMediaPlayer.class.getSimpleName();
 
     private MediaPlayer mMediaPlayer;
-    public int durationMilliseconds = 0;
+    private int mDurationMilliseconds = 0;
 
     private boolean isPrepared = false;
     /**
@@ -36,11 +36,19 @@ public class BSMediaPlayer
      * @return true if player is prepared to play
      */
     public boolean isPrepared() {
-        return isPrepared;
+        if (mMediaPlayer == null) {
+            return false;
+        } else {
+            return isPrepared;
+        }
     }
 
     public boolean isPlaying() {
-        return mMediaPlayer.isPlaying();
+        if (mMediaPlayer == null) {
+            return false;
+        } else {
+            return mMediaPlayer.isPlaying();
+        }
     }
 
     public void play(Context c, String url) throws IllegalArgumentException, IOException {
@@ -64,13 +72,14 @@ public class BSMediaPlayer
 
     /**
      * @return duration in msec
-     * return 0 if internal media player is null
+     * return 0 if internal media player is null or not prepared
      */
     int getDuration() {
-        if (mMediaPlayer == null) {
+        if ((mMediaPlayer == null)
+                || (!isPrepared)) {
             return 0;
         } else {
-            return mMediaPlayer.getDuration();
+            return mDurationMilliseconds;
         }
     }
 
@@ -130,7 +139,7 @@ public class BSMediaPlayer
     public void onPrepared(MediaPlayer player) {
         isPrepared = true;
         // https://discussions.udacity.com/t/duration-of-the-track/25936
-        durationMilliseconds = player.getDuration();
+        mDurationMilliseconds = player.getDuration();
         player.start();
     }
 
