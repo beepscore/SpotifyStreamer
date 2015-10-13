@@ -1,6 +1,7 @@
 <resources>
     <string name="ARTISTS_KEY" translatable="false">com.beepscore.android.spotifystreamer.artists</string>
     <string name="ARTIST_KEY" translatable="false">com.beepscore.android.spotifystreamer.artist</string>
+    <string name="INDEX_KEY" translatable="false">com.beepscore.android.spotifystreamer.index</string>
     <string name="TRACKS_KEY" translatable="false">com.beepscore.android.spotifystreamer.tracks</string>
     <string name="TRACK_KEY" translatable="false">com.beepscore.android.spotifystreamer.track</string>
     <string name="action_settings">Settings</string>
