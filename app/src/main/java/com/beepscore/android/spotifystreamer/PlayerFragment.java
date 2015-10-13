@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  *
@@ -31,7 +32,8 @@ public class PlayerFragment extends Fragment
 
     private final String LOG_TAG = PlayerFragment.class.getSimpleName();
 
-    private TrackParcelable trackParcelable;
+    private ArrayList<TrackParcelable> mTracksList;
+    private TrackParcelable mTrackParcelable;
 
     private AudioService mAudioService;
     /**
@@ -49,6 +51,8 @@ public class PlayerFragment extends Fragment
 
     private Handler mHandler;
 
+    private int mTrackIndex;
+
     public PlayerFragment() {
     }
 
@@ -56,10 +60,17 @@ public class PlayerFragment extends Fragment
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // TODO: Start fragment with a bundle
+        // This decouples fragment from activity that started it.
+
         // get the intent the activity was started with
         // http://stackoverflow.com/questions/11387740/where-how-to-getintent-getextras-in-an-android-fragment
         Intent intent = getActivity().getIntent();
-        configureTrackParcelable(intent);
+
+        Bundle bundle = intent.getExtras();
+        mTracksList = bundle.getParcelableArrayList(getActivity().getString(R.string.TRACKS_KEY));
+        mTrackIndex = bundle.getInt(getActivity().getString(R.string.INDEX_KEY));
+        mTrackParcelable = mTracksList.get(mTrackIndex);
 
         // Use setRetainInstance to avoid interrupting audio during rotation.
         // When user rotates device, activity will be destroyed
@@ -90,25 +101,25 @@ public class PlayerFragment extends Fragment
 
         configureActionBarTitle(getString(R.string.app_name));
 
-        if (trackParcelable != null) {
+        if (mTrackParcelable != null) {
 
             TextView artistView = (TextView) playerView.findViewById(R.id.artist_view);
-            artistView.setText(trackParcelable.artistName);
+            artistView.setText(mTrackParcelable.artistName);
 
             TextView albumView = (TextView) playerView.findViewById(R.id.album_view);
-            albumView.setText(trackParcelable.albumName);
+            albumView.setText(mTrackParcelable.albumName);
 
             ImageView imageView = (ImageView) playerView.findViewById(R.id.image_view);
-            if (trackParcelable.imageWidestUrl == null
-                    || trackParcelable.imageWidestUrl.equals("")) {
+            if (mTrackParcelable.imageWidestUrl == null
+                    || mTrackParcelable.imageWidestUrl.equals("")) {
                 // show placeholder image
                 Picasso.with(getActivity()).load(R.mipmap.ic_launcher).into(imageView);
             } else {
-                Picasso.with(getActivity()).load(trackParcelable.imageWidestUrl).into(imageView);
+                Picasso.with(getActivity()).load(mTrackParcelable.imageWidestUrl).into(imageView);
             }
 
             final TextView trackView = (TextView) playerView.findViewById(R.id.track_view);
-            trackView.setText(trackParcelable.name);
+            trackView.setText(mTrackParcelable.name);
 
             mSeekBar = (SeekBar) playerView.findViewById(R.id.seek_bar);
             mTimeElapsedTextView = (TextView) playerView.findViewById(R.id.time_elapsed);
@@ -144,7 +155,7 @@ public class PlayerFragment extends Fragment
                                 // Spotify Streamer implementation guide, task 2
                                 // https://discussions.udacity.com/t/spotify-track-url/21127
                                 // http://stackoverflow.com/questions/20087804/should-have-subtitle-controller-already-set-mediaplayer-error-android
-                                mAudioService.play(getActivity(), trackParcelable.previewUrl);
+                                mAudioService.play(getActivity(), mTrackParcelable.previewUrl);
 
 
                             } catch (IllegalArgumentException e) {
@@ -175,13 +186,20 @@ public class PlayerFragment extends Fragment
             mNextButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
 
-                    if (mAudioService != null
-                            && mIsBound
-                            && mAudioService.isPrepared()) {
-                        // TODO go to next track, if it exists (else wrap around to track 0?)
-                        Toast.makeText(getActivity(), "TODO go to next track",
-                                Toast.LENGTH_SHORT).show();
+                    if (mAudioService != null) {
+                        mAudioService.stop();
+                        doUnbindService();
                     }
+
+                    Intent intent = new Intent(getActivity(), PlayerActivity.class);
+                    Bundle bundle = new Bundle();
+                    getActivity().getString(R.string.TRACKS_KEY);
+                    bundle.putParcelableArrayList(getActivity().getString(R.string.TRACKS_KEY),
+                            mTracksList);
+                    bundle.putInt(getActivity().getString(R.string.INDEX_KEY),
+                            indexNextWraps(mTracksList, mTrackIndex));
+                    intent.putExtras(bundle);
+                    startActivity(intent);
                 }
             });
         }
@@ -210,19 +228,23 @@ public class PlayerFragment extends Fragment
         return playerView;
     }
 
-    private void configureTrackParcelable(Intent intent) {
-        String TRACK_KEY = getActivity().getString(R.string.TRACK_KEY);
-        if (intent != null && intent.hasExtra(TRACK_KEY)) {
-            trackParcelable = intent.getParcelableExtra(TRACK_KEY);
-        }
-    }
-
     private void configureActionBarTitle(String title) {
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         if (activity != null
                 && activity.getSupportActionBar() != null) {
             activity.getSupportActionBar().setTitle(title);
         }
+    }
+
+    private Integer indexNextWraps(ArrayList list, int index) {
+        if ((list == null) || (list.size() == 0)) {
+            return null;
+        }
+        if (index == (list.size() - 1)) {
+            // at last element. Wrap ahead to first element
+            return 0;
+        }
+        return index + 1;
     }
 
     @Override
@@ -236,17 +258,19 @@ public class PlayerFragment extends Fragment
     // https://developer.android.com/reference/android/widget/SeekBar.OnSeekBarChangeListener.html
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        Log.d(LOG_TAG, "onProgressChanged durationMsec " + String.valueOf(mAudioService.getDurationMsec()));
-        // by default progress range is 0-100
-        Log.d(LOG_TAG, "onProgressChanged progress " + String.valueOf(progress));
+        if (mAudioService != null) {
+            Log.d(LOG_TAG, "onProgressChanged durationMsec " + String.valueOf(mAudioService.getDurationMsec()));
+            // by default progress range is 0-100
+            Log.d(LOG_TAG, "onProgressChanged progress " + String.valueOf(progress));
 
-        String timeElapsedString = TimeUtils.minutesSecondsStringFromMsec(mAudioService.getCurrentPositionMsec());
-        mTimeElapsedTextView.setText(timeElapsedString);
-        Log.d(LOG_TAG, "onProgressChanged time elapsed " + timeElapsedString);
+            String timeElapsedString = TimeUtils.minutesSecondsStringFromMsec(mAudioService.getCurrentPositionMsec());
+            mTimeElapsedTextView.setText(timeElapsedString);
+            Log.d(LOG_TAG, "onProgressChanged time elapsed " + timeElapsedString);
 
-        String timeRemainingString = TimeUtils.minutesSecondsStringFromMsec(mAudioService.getTimeRemainingMsec());
-        mTimeRemainingTextView.setText(timeRemainingString);
-        Log.d(LOG_TAG, "onProgressChanged time remaining " + timeRemainingString);
+            String timeRemainingString = TimeUtils.minutesSecondsStringFromMsec(mAudioService.getTimeRemainingMsec());
+            mTimeRemainingTextView.setText(timeRemainingString);
+            Log.d(LOG_TAG, "onProgressChanged time remaining " + timeRemainingString);
+        }
     }
 
     @Override
@@ -256,10 +280,12 @@ public class PlayerFragment extends Fragment
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
-        double seekBarProgressFraction = seekBar.getProgress()/100.;
-        int seekTimeMsec = (int)(seekBarProgressFraction * mAudioService.getDurationMsec());
-        Log.d(LOG_TAG, "onStopTrackingTouch seekTo " + String.valueOf(seekTimeMsec));
-        mAudioService.seekTo(seekTimeMsec);
+        if (mAudioService != null) {
+            double seekBarProgressFraction = seekBar.getProgress()/100.;
+            int seekTimeMsec = (int)(seekBarProgressFraction * mAudioService.getDurationMsec());
+            Log.d(LOG_TAG, "onStopTrackingTouch seekTo " + String.valueOf(seekTimeMsec));
+            mAudioService.seekTo(seekTimeMsec);
+        }
     }
 
     ///////////////////////////////////////////////////////////////////////////
