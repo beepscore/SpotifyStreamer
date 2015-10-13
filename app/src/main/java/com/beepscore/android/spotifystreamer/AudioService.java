@@ -54,7 +54,9 @@ public class AudioService extends Service {
     @Override
     public void onDestroy() {
         Toast.makeText(this, LOG_TAG + " onDestroy", Toast.LENGTH_SHORT).show();
-        mBSMediaPlayer.stop();
+        if (mBSMediaPlayer != null) {
+            mBSMediaPlayer.stop();
+        }
         super.onDestroy();
     }
 
@@ -78,25 +80,41 @@ public class AudioService extends Service {
      * @return true if player is prepared to play
      */
     public boolean isPrepared() {
-        return mBSMediaPlayer.isPrepared();
+        if (mBSMediaPlayer == null) {
+            return false;
+        } else {
+            return mBSMediaPlayer.isPrepared();
+        }
     }
 
     public boolean isPlaying() {
-        return mBSMediaPlayer.isPlaying();
+        if (mBSMediaPlayer == null) {
+            return false;
+        } else {
+            return mBSMediaPlayer.isPlaying();
+        }
     }
 
     /**
      * @return duration in msec
      */
     public int getDurationMsec() {
-        return mBSMediaPlayer.getDuration();
+        if (mBSMediaPlayer == null) {
+            return 0;
+        } else {
+            return mBSMediaPlayer.getDuration();
+        }
     }
 
     /**
      * @return current position in msec
      */
     public int getCurrentPositionMsec() {
-        return mBSMediaPlayer.getCurrentPosition();
+        if (mBSMediaPlayer == null) {
+            return 0;
+        } else {
+            return mBSMediaPlayer.getCurrentPosition();
+        }
     }
 
     /**
@@ -109,22 +127,32 @@ public class AudioService extends Service {
     ///////////////////////////////////////////////////////////////////////////
 
     public void start() {
-        mBSMediaPlayer.start();
+        if (mBSMediaPlayer != null) {
+            mBSMediaPlayer.start();
+        }
     }
 
     public void play(Context context, String url) throws IOException {
-        mBSMediaPlayer.play(context, url);
+        if (mBSMediaPlayer != null) {
+            mBSMediaPlayer.play(context, url);
+        }
     }
 
     public void pause() {
-        mBSMediaPlayer.pause();
+        if (mBSMediaPlayer != null) {
+            mBSMediaPlayer.pause();
+        }
     }
 
     public void stop() {
-        mBSMediaPlayer.stop();
+        if (mBSMediaPlayer != null) {
+            mBSMediaPlayer.stop();
+        }
     }
 
     public void seekTo(int msec) {
-        mBSMediaPlayer.seekTo(msec);
+        if (mBSMediaPlayer != null) {
+            mBSMediaPlayer.seekTo(msec);
+        }
     }
 }
