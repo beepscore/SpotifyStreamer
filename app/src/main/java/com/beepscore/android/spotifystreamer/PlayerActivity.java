@@ -11,8 +11,23 @@ public class PlayerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
-    }
 
+        if (savedInstanceState == null) {
+
+            // getExtras from Intent that was used to start the Activity
+            Bundle activity_extras = getIntent().getExtras();
+
+            PlayerFragment fragment = new PlayerFragment();
+
+            // Pass activity extras to fragment via fragment arguments.
+            fragment.setArguments(activity_extras);
+
+            // dynamically add PlayerFragment to player_container
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.player_container, fragment)
+                    .commit();
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

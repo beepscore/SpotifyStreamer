@@ -60,17 +60,16 @@ public class PlayerFragment extends Fragment
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // TODO: Start fragment with a bundle
-        // This decouples fragment from activity that started it.
-
-        // get the intent the activity was started with
-        // http://stackoverflow.com/questions/11387740/where-how-to-getintent-getextras-in-an-android-fragment
-        Intent intent = getActivity().getIntent();
-
-        Bundle bundle = intent.getExtras();
-        mTracksList = bundle.getParcelableArrayList(getActivity().getString(R.string.TRACKS_KEY));
-        mTrackIndex = bundle.getInt(getActivity().getString(R.string.INDEX_KEY));
-        mTrackParcelable = mTracksList.get(mTrackIndex);
+        // The instantiating activity sets this fragment's arguments
+        // as a way to pass information to it.
+        // This decouples the fragment from a particular activity.
+        // Note the Bundle from getArguments() is separate from Bundle savedInstanceState
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            mTracksList = arguments.getParcelableArrayList(getActivity().getString(R.string.TRACKS_KEY));
+            mTrackIndex = arguments.getInt(getActivity().getString(R.string.INDEX_KEY));
+            mTrackParcelable = mTracksList.get(mTrackIndex);
+        }
 
         // Use setRetainInstance to avoid interrupting audio during rotation.
         // When user rotates device, activity will be destroyed
