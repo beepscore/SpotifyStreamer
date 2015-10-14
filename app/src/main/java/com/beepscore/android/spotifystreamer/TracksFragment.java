@@ -87,7 +87,7 @@ public class TracksFragment extends Fragment {
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int index, long l) {
 
                 Intent intent = new Intent(getActivity(), PlayerActivity.class);
                 Bundle bundle = new Bundle();
@@ -95,7 +95,7 @@ public class TracksFragment extends Fragment {
                 bundle.putParcelableArrayList(getActivity().getString(R.string.TRACKS_KEY),
                         tracksList);
                 bundle.putInt(getActivity().getString(R.string.INDEX_KEY),
-                        i);
+                        index);
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
