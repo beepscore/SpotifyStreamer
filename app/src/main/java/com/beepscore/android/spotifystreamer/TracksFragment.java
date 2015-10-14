@@ -88,10 +88,8 @@ public class TracksFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //TrackParcelable trackParcelable = adapter.getItem(i);
 
                 Intent intent = new Intent(getActivity(), PlayerActivity.class);
-                //intent.putExtra(getActivity().getString(R.string.TRACKS_KEY), trackParcelable);
                 Bundle bundle = new Bundle();
                 getActivity().getString(R.string.TRACKS_KEY);
                 bundle.putParcelableArrayList(getActivity().getString(R.string.TRACKS_KEY),
