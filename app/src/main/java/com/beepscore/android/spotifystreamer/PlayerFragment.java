@@ -196,7 +196,7 @@ public class PlayerFragment extends Fragment
                     bundle.putParcelableArrayList(getActivity().getString(R.string.TRACKS_KEY),
                             mTracksList);
                     bundle.putInt(getActivity().getString(R.string.INDEX_KEY),
-                            indexNextWraps(mTracksList, mTrackIndex));
+                            ListUtils.indexNextWraps(mTracksList, mTrackIndex));
                     intent.putExtras(bundle);
                     startActivity(intent);
                 }
@@ -233,17 +233,6 @@ public class PlayerFragment extends Fragment
                 && activity.getSupportActionBar() != null) {
             activity.getSupportActionBar().setTitle(title);
         }
-    }
-
-    private Integer indexNextWraps(ArrayList list, int index) {
-        if ((list == null) || (list.size() == 0)) {
-            return null;
-        }
-        if (index == (list.size() - 1)) {
-            // at last element. Wrap ahead to first element
-            return 0;
-        }
-        return index + 1;
     }
 
     @Override
