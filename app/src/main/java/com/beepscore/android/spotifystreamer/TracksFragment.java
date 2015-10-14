@@ -91,7 +91,6 @@ public class TracksFragment extends Fragment {
 
                 Intent intent = new Intent(getActivity(), PlayerActivity.class);
                 Bundle bundle = new Bundle();
-                getActivity().getString(R.string.TRACKS_KEY);
                 bundle.putParcelableArrayList(getActivity().getString(R.string.TRACKS_KEY),
                         tracksList);
                 bundle.putInt(getActivity().getString(R.string.INDEX_KEY),
