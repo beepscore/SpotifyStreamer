@@ -171,13 +171,20 @@ public class PlayerFragment extends Fragment
             mPreviousButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
 
-                    if (mAudioService != null
-                            && mIsBound
-                            && mAudioService.isPrepared()) {
-                        // TODO go to previous track, if it exists (else wrap around to last track?)
-                        Toast.makeText(getActivity(), "TODO go to previous track",
-                                Toast.LENGTH_SHORT).show();
+                    if (mAudioService != null) {
+                        mAudioService.stop();
+                        doUnbindService();
                     }
+
+                    Intent intent = new Intent(getActivity(), PlayerActivity.class);
+                    Bundle bundle = new Bundle();
+                    getActivity().getString(R.string.TRACKS_KEY);
+                    bundle.putParcelableArrayList(getActivity().getString(R.string.TRACKS_KEY),
+                            mTracksList);
+                    bundle.putInt(getActivity().getString(R.string.INDEX_KEY),
+                            ListUtils.indexPreviousWraps(mTracksList, mTrackIndex));
+                    intent.putExtras(bundle);
+                    startActivity(intent);
                 }
             });
 
