@@ -21,8 +21,15 @@ public class ListUtilsTests extends ApplicationTestCase<Application> {
 
     public void testIndexNextWrapsListEmpty() {
         List list = new ArrayList();
-
         assertEquals(null, ListUtils.indexNextWraps(list, 0));
+    }
+
+    public void testIndexNextWrapsListOneElement() {
+        List list = new ArrayList();
+        list.add("a");
+
+        // cast to avoid error "reference to assertEquals is ambiguous"
+        assertEquals((Integer)0, ListUtils.indexNextWraps(list, 0));
     }
 
     public void testIndexNextWraps() {
@@ -34,6 +41,7 @@ public class ListUtilsTests extends ApplicationTestCase<Application> {
 
         // cast to avoid error "reference to assertEquals is ambiguous"
         assertEquals((Integer)1, ListUtils.indexNextWraps(list, 0));
+        assertEquals((Integer)2, ListUtils.indexNextWraps(list, 1));
         assertEquals((Integer)3, ListUtils.indexNextWraps(list, 2));
     }
 
@@ -46,5 +54,46 @@ public class ListUtilsTests extends ApplicationTestCase<Application> {
 
         // cast to avoid error "reference to assertEquals is ambiguous"
         assertEquals((Integer)0, ListUtils.indexNextWraps(list, 3));
+    }
+
+    public void testIndexPreviousWrapsListNull() {
+        assertEquals(null, ListUtils.indexPreviousWraps(null, 3));
+    }
+
+    public void testIndexPreviousWrapsListEmpty() {
+        List list = new ArrayList();
+        assertEquals(null, ListUtils.indexPreviousWraps(list, 0));
+    }
+
+    public void testIndexPreviousWrapsListOneElement() {
+        List list = new ArrayList();
+        list.add("a");
+
+        // cast to avoid error "reference to assertEquals is ambiguous"
+        assertEquals((Integer)0, ListUtils.indexPreviousWraps(list, 0));
+    }
+
+    public void testIndexPreviousWraps() {
+        List list = new ArrayList();
+        list.add("a");
+        list.add("b");
+        list.add("c");
+        list.add("d");
+
+        // cast to avoid error "reference to assertEquals is ambiguous"
+        assertEquals((Integer)0, ListUtils.indexPreviousWraps(list, 1));
+        assertEquals((Integer)1, ListUtils.indexPreviousWraps(list, 2));
+        assertEquals((Integer)2, ListUtils.indexPreviousWraps(list, 3));
+    }
+
+    public void testIndexPreviousWrapsFirst() {
+        List list = new ArrayList();
+        list.add("a");
+        list.add("b");
+        list.add("c");
+        list.add("d");
+
+        // cast to avoid error "reference to assertEquals is ambiguous"
+        assertEquals((Integer)3, ListUtils.indexPreviousWraps(list, 0));
     }
 }
