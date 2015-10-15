@@ -129,41 +129,7 @@ public class PlayerFragment extends Fragment
             mPlayButton = (ImageButton) playerView.findViewById(R.id.play_button);
             mPlayButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-
-                    if (mAudioService != null
-                            && mIsBound
-                            && mAudioService.isPrepared()) {
-                        mTimeElapsedTextView.setText(TimeUtils.minutesSecondsStringFromMsec(mAudioService.getCurrentPositionMsec()));
-                        mTimeRemainingTextView.setText(TimeUtils.minutesSecondsStringFromMsec(mAudioService.getTimeRemainingMsec()));
-                    }
-
-                    // Toggle between play and pause
-                    if (mAudioService != null
-                            && mAudioService.isPrepared()
-                            && mAudioService.isPlaying()) {
-                        mPlayButton.setImageResource(android.R.drawable.ic_media_play);
-                        mAudioService.pause();
-                    } else {
-                        mPlayButton.setImageResource(android.R.drawable.ic_media_pause);
-                        if (mAudioService != null
-                                && mIsBound) {
-                            try {
-                                // Use Android’s MediaPlayer API to stream the track preview of a currently selected track.
-                                // Apparently full song uri requires Spotify sdk player.
-                                // References
-                                // Spotify Streamer implementation guide, task 2
-                                // https://discussions.udacity.com/t/spotify-track-url/21127
-                                // http://stackoverflow.com/questions/20087804/should-have-subtitle-controller-already-set-mediaplayer-error-android
-                                mAudioService.play(getActivity(), mTrackParcelable.previewUrl);
-
-
-                            } catch (IllegalArgumentException e) {
-                                Log.e(LOG_TAG, e.getLocalizedMessage());
-                            } catch (IOException e) {
-                                Log.e(LOG_TAG, e.getLocalizedMessage());
-                            }
-                        }
-                    }
+                    handlePlayPauseTapped();
                 }
             });
 
@@ -232,6 +198,47 @@ public class PlayerFragment extends Fragment
         mHandler.post(runnable);
 
         return playerView;
+    }
+
+    private void handlePlayPauseTapped() {
+        if (mAudioService != null
+                && mIsBound
+                && mAudioService.isPrepared()) {
+            mTimeElapsedTextView.setText(TimeUtils.minutesSecondsStringFromMsec(mAudioService.getCurrentPositionMsec()));
+            mTimeRemainingTextView.setText(TimeUtils.minutesSecondsStringFromMsec(mAudioService.getTimeRemainingMsec()));
+        }
+
+        // Toggle between play and pause
+        if (mAudioService != null
+                && mAudioService.isPrepared()
+                && mAudioService.isPlaying()) {
+            mPlayButton.setImageResource(android.R.drawable.ic_media_play);
+            mAudioService.pause();
+        } else {
+            handlePlayTapped();
+        }
+    }
+
+    private void handlePlayTapped() {
+        mPlayButton.setImageResource(android.R.drawable.ic_media_pause);
+        if (mAudioService != null
+                && mIsBound) {
+            try {
+                // Use Android’s MediaPlayer API to stream the track preview of a currently selected track.
+                // Apparently full song uri requires Spotify sdk player.
+                // References
+                // Spotify Streamer implementation guide, task 2
+                // https://discussions.udacity.com/t/spotify-track-url/21127
+                // http://stackoverflow.com/questions/20087804/should-have-subtitle-controller-already-set-mediaplayer-error-android
+                mAudioService.play(getActivity(), mTrackParcelable.previewUrl);
+
+
+            } catch (IllegalArgumentException e) {
+                Log.e(LOG_TAG, e.getLocalizedMessage());
+            } catch (IOException e) {
+                Log.e(LOG_TAG, e.getLocalizedMessage());
+            }
+        }
     }
 
     private void configureActionBarTitle(String title) {
