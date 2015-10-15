@@ -304,6 +304,7 @@ public class PlayerFragment extends Fragment
             // Tell the user about this for our demo.
             Toast.makeText(getActivity(), R.string.audio_service_connected,
                     Toast.LENGTH_SHORT).show();
+            handlePlayTapped();
         }
 
         public void onServiceDisconnected(ComponentName className) {
