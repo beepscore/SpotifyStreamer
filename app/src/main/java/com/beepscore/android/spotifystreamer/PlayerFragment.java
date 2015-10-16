@@ -272,7 +272,6 @@ public class PlayerFragment extends Fragment
 
     @Override
     public void onStartTrackingTouch(SeekBar seekBar) {
-
     }
 
     @Override
