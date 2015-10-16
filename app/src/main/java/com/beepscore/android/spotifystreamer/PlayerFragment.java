@@ -81,12 +81,10 @@ public class PlayerFragment extends Fragment
         // http://stackoverflow.com/questions/3514287/android-service-startservice-and-bindservice
         //getActivity().getApplicationContext().startService(mPlayIntent);
 
-        // Handler runs on the thread it was created in.
-        // https://www.youtube.com/watch?v=GaO1uHeIcj0
-        // http://www.vogella.com/tutorials/AndroidBackgroundProcessing/article.html#concurrency_handler2
-        // http://stackoverflow.com/questions/31286196/how-do-i-update-seekbar-mp3-progress-every-second-with-a-threadcode-pics-inclu?lq=1
-        // http://stackoverflow.com/questions/5242918/android-media-player-and-seekbar-sync-issue?lq=1
-        // http://stackoverflow.com/questions/17168215/seekbar-and-media-player-in-android?lq=1
+        // I *think* onCreate runs on UI thread
+        // Handler runs on the thread it is attached to.
+        // To avoid crash, only update UI elements such as seekbar on UI thread
+        // So ok to use this handler to update UI elements
         mHandler = new Handler();
 
         doBindService();
@@ -227,7 +225,6 @@ public class PlayerFragment extends Fragment
                 // http://stackoverflow.com/questions/20087804/should-have-subtitle-controller-already-set-mediaplayer-error-android
                 mAudioService.play(getActivity(), mTrackParcelable.previewUrl);
 
-
             } catch (IllegalArgumentException e) {
                 Log.e(LOG_TAG, e.getLocalizedMessage());
             } catch (IOException e) {
@@ -295,6 +292,11 @@ public class PlayerFragment extends Fragment
             // cast its IBinder to a concrete class and directly access it.
             mAudioService = ((AudioService.LocalBinder)service).getService();
 
+            // Info on using Runnable to update MediaPlayer
+            // https://www.youtube.com/watch?v=GaO1uHeIcj0
+            // http://www.vogella.com/tutorials/AndroidBackgroundProcessing/article.html#concurrency_handler2
+            // http://stackoverflow.com/questions/5242918/android-media-player-and-seekbar-sync-issue?lq=1
+            // http://stackoverflow.com/questions/17168215/seekbar-and-media-player-in-android?lq=1
             Runnable runnable = new Runnable() {
 
                 @Override
@@ -310,11 +312,7 @@ public class PlayerFragment extends Fragment
                     }
                 }
             };
-            // to avoid crash, only update UI elements such as Seekbar on UI thread
-            //PlayerActivity.this.runOnUiThread(runnable);
-            //PlayerActivity.this.post(runnable);
             mHandler.post(runnable);
-
         }
 
         public void onServiceDisconnected(ComponentName className) {
