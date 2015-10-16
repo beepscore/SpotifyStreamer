@@ -115,28 +115,6 @@ public class PlayerFragment extends Fragment
             configureNextButton(playerView);
             configurePlayButton(playerView);
         }
-
-        Runnable runnable = new Runnable() {
-
-            @Override
-            public void run() {
-                if (mAudioService != null) {
-                    int percentProgress = TimeUtils.getPercentProgress(mAudioService.getCurrentPositionMsec(),
-                            mAudioService.getDurationMsec());
-                    mSeekBar.setProgress(percentProgress);
-                    mTimeElapsedTextView.setText(TimeUtils.minutesSecondsStringFromMsec(mAudioService.getCurrentPositionMsec()));
-                    mTimeRemainingTextView.setText(TimeUtils.minutesSecondsStringFromMsec(mAudioService.getTimeRemainingMsec()));
-                    final int delayMsec = 1000;
-                    mHandler.postDelayed(this, delayMsec);
-                }
-            }
-        };
-
-        // Make sure you update Seekbar on UI thread
-        //PlayerActivity.this.runOnUiThread(runnable);
-        //PlayerActivity.this.post(runnable);
-        mHandler.post(runnable);
-
         return playerView;
     }
 
@@ -321,7 +299,27 @@ public class PlayerFragment extends Fragment
             // Tell the user about this for our demo.
             Toast.makeText(getActivity(), R.string.audio_service_connected,
                     Toast.LENGTH_SHORT).show();
-            //handlePlayTapped();
+
+            Runnable runnable = new Runnable() {
+
+                @Override
+                public void run() {
+                    if (mAudioService != null) {
+                        int percentProgress = TimeUtils.getPercentProgress(mAudioService.getCurrentPositionMsec(),
+                                mAudioService.getDurationMsec());
+                        mSeekBar.setProgress(percentProgress);
+                        mTimeElapsedTextView.setText(TimeUtils.minutesSecondsStringFromMsec(mAudioService.getCurrentPositionMsec()));
+                        mTimeRemainingTextView.setText(TimeUtils.minutesSecondsStringFromMsec(mAudioService.getTimeRemainingMsec()));
+                        final int delayMsec = 1000;
+                        mHandler.postDelayed(this, delayMsec);
+                    }
+                }
+            };
+            // Make sure you update Seekbar on UI thread
+            //PlayerActivity.this.runOnUiThread(runnable);
+            //PlayerActivity.this.post(runnable);
+            mHandler.post(runnable);
+
         }
 
         public void onServiceDisconnected(ComponentName className) {
