@@ -256,17 +256,17 @@ public class PlayerFragment extends Fragment
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         if (mAudioService != null) {
-            Log.d(LOG_TAG, "onProgressChanged durationMsec " + String.valueOf(mAudioService.getDurationMsec()));
+            // Log.d(LOG_TAG, "onProgressChanged durationMsec " + String.valueOf(mAudioService.getDurationMsec()));
             // by default progress range is 0-100
-            Log.d(LOG_TAG, "onProgressChanged progress " + String.valueOf(progress));
+            // Log.d(LOG_TAG, "onProgressChanged progress " + String.valueOf(progress));
 
             String timeElapsedString = TimeUtils.minutesSecondsStringFromMsec(mAudioService.getCurrentPositionMsec());
             mTimeElapsedTextView.setText(timeElapsedString);
-            Log.d(LOG_TAG, "onProgressChanged time elapsed " + timeElapsedString);
+            // Log.d(LOG_TAG, "onProgressChanged time elapsed " + timeElapsedString);
 
             String timeRemainingString = TimeUtils.minutesSecondsStringFromMsec(mAudioService.getTimeRemainingMsec());
             mTimeRemainingTextView.setText(timeRemainingString);
-            Log.d(LOG_TAG, "onProgressChanged time remaining " + timeRemainingString);
+            // Log.d(LOG_TAG, "onProgressChanged time remaining " + timeRemainingString);
         }
     }
 
