@@ -311,7 +311,7 @@ public class PlayerFragment extends Fragment
                     }
                 }
             };
-            // Make sure you update Seekbar on UI thread
+            // to avoid crash, only update UI elements such as Seekbar on UI thread
             //PlayerActivity.this.runOnUiThread(runnable);
             //PlayerActivity.this.post(runnable);
             mHandler.post(runnable);
