@@ -296,10 +296,6 @@ public class PlayerFragment extends Fragment
             // cast its IBinder to a concrete class and directly access it.
             mAudioService = ((AudioService.LocalBinder)service).getService();
 
-            // Tell the user about this for our demo.
-            Toast.makeText(getActivity(), R.string.audio_service_connected,
-                    Toast.LENGTH_SHORT).show();
-
             Runnable runnable = new Runnable() {
 
                 @Override
