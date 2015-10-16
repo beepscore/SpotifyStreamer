@@ -102,11 +102,7 @@ public class PlayerFragment extends Fragment
 
         if (mTrackParcelable != null) {
 
-            TextView artistView = (TextView) playerView.findViewById(R.id.artist_view);
-            artistView.setText(mTrackParcelable.artistName);
-
-            TextView albumView = (TextView) playerView.findViewById(R.id.album_view);
-            albumView.setText(mTrackParcelable.albumName);
+            configureArtistAlbumTrackTextViews(playerView);
 
             ImageView imageView = (ImageView) playerView.findViewById(R.id.image_view);
             if (mTrackParcelable.imageWidestUrl == null
@@ -117,13 +113,10 @@ public class PlayerFragment extends Fragment
                 Picasso.with(getActivity()).load(mTrackParcelable.imageWidestUrl).into(imageView);
             }
 
-            final TextView trackView = (TextView) playerView.findViewById(R.id.track_view);
-            trackView.setText(mTrackParcelable.name);
-
-            mSeekBar = (SeekBar) playerView.findViewById(R.id.seek_bar);
             mTimeElapsedTextView = (TextView) playerView.findViewById(R.id.time_elapsed);
             mTimeRemainingTextView = (TextView) playerView.findViewById(R.id.time_remaining);
 
+            mSeekBar = (SeekBar) playerView.findViewById(R.id.seek_bar);
             mSeekBar.setOnSeekBarChangeListener(this);
 
             configurePreviousButton(playerView);
@@ -153,6 +146,17 @@ public class PlayerFragment extends Fragment
         mHandler.post(runnable);
 
         return playerView;
+    }
+
+    private void configureArtistAlbumTrackTextViews(View playerView) {
+        TextView artistView = (TextView) playerView.findViewById(R.id.artist_view);
+        artistView.setText(mTrackParcelable.artistName);
+
+        TextView albumView = (TextView) playerView.findViewById(R.id.album_view);
+        albumView.setText(mTrackParcelable.albumName);
+
+        final TextView trackView = (TextView) playerView.findViewById(R.id.track_view);
+        trackView.setText(mTrackParcelable.name);
     }
 
     private void configurePreviousButton(View playerView) {
