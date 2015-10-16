@@ -126,54 +126,9 @@ public class PlayerFragment extends Fragment
 
             mSeekBar.setOnSeekBarChangeListener(this);
 
-            mPlayButton = (ImageButton) playerView.findViewById(R.id.play_button);
-            mPlayButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    handlePlayPauseTapped();
-                }
-            });
-
-            mPreviousButton = (ImageButton) playerView.findViewById(R.id.previous_button);
-            mPreviousButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-
-                    if (mAudioService != null) {
-                        mAudioService.stop();
-                        doUnbindService();
-                    }
-
-                    Intent intent = new Intent(getActivity(), PlayerActivity.class);
-                    Bundle bundle = new Bundle();
-                    getActivity().getString(R.string.TRACKS_KEY);
-                    bundle.putParcelableArrayList(getActivity().getString(R.string.TRACKS_KEY),
-                            mTracksList);
-                    bundle.putInt(getActivity().getString(R.string.INDEX_KEY),
-                            ListUtils.indexPreviousWraps(mTracksList, mTrackIndex));
-                    intent.putExtras(bundle);
-                    startActivity(intent);
-                }
-            });
-
-            mNextButton = (ImageButton) playerView.findViewById(R.id.next_button);
-            mNextButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-
-                    if (mAudioService != null) {
-                        mAudioService.stop();
-                        doUnbindService();
-                    }
-
-                    Intent intent = new Intent(getActivity(), PlayerActivity.class);
-                    Bundle bundle = new Bundle();
-                    getActivity().getString(R.string.TRACKS_KEY);
-                    bundle.putParcelableArrayList(getActivity().getString(R.string.TRACKS_KEY),
-                            mTracksList);
-                    bundle.putInt(getActivity().getString(R.string.INDEX_KEY),
-                            ListUtils.indexNextWraps(mTracksList, mTrackIndex));
-                    intent.putExtras(bundle);
-                    startActivity(intent);
-                }
-            });
+            configurePreviousButton(playerView);
+            configureNextButton(playerView);
+            configurePlayButton(playerView);
         }
 
         Runnable runnable = new Runnable() {
@@ -198,6 +153,61 @@ public class PlayerFragment extends Fragment
         mHandler.post(runnable);
 
         return playerView;
+    }
+
+    private void configurePreviousButton(View playerView) {
+        mPreviousButton = (ImageButton) playerView.findViewById(R.id.previous_button);
+        mPreviousButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                if (mAudioService != null) {
+                    mAudioService.stop();
+                    doUnbindService();
+                }
+
+                Intent intent = new Intent(getActivity(), PlayerActivity.class);
+                Bundle bundle = new Bundle();
+                getActivity().getString(R.string.TRACKS_KEY);
+                bundle.putParcelableArrayList(getActivity().getString(R.string.TRACKS_KEY),
+                        mTracksList);
+                bundle.putInt(getActivity().getString(R.string.INDEX_KEY),
+                        ListUtils.indexPreviousWraps(mTracksList, mTrackIndex));
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void configureNextButton(View playerView) {
+        mNextButton = (ImageButton) playerView.findViewById(R.id.next_button);
+        mNextButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                if (mAudioService != null) {
+                    mAudioService.stop();
+                    doUnbindService();
+                }
+
+                Intent intent = new Intent(getActivity(), PlayerActivity.class);
+                Bundle bundle = new Bundle();
+                getActivity().getString(R.string.TRACKS_KEY);
+                bundle.putParcelableArrayList(getActivity().getString(R.string.TRACKS_KEY),
+                        mTracksList);
+                bundle.putInt(getActivity().getString(R.string.INDEX_KEY),
+                        ListUtils.indexNextWraps(mTracksList, mTrackIndex));
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void configurePlayButton(View playerView) {
+        mPlayButton = (ImageButton) playerView.findViewById(R.id.play_button);
+        mPlayButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                handlePlayPauseTapped();
+            }
+        });
     }
 
     private void handlePlayPauseTapped() {
@@ -304,7 +314,7 @@ public class PlayerFragment extends Fragment
             // Tell the user about this for our demo.
             Toast.makeText(getActivity(), R.string.audio_service_connected,
                     Toast.LENGTH_SHORT).show();
-            handlePlayTapped();
+            //handlePlayTapped();
         }
 
         public void onServiceDisconnected(ComponentName className) {
