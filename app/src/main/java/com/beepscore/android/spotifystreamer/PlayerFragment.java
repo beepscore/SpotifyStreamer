@@ -103,15 +103,7 @@ public class PlayerFragment extends Fragment
         if (mTrackParcelable != null) {
 
             configureArtistAlbumTrackTextViews(playerView);
-
-            ImageView imageView = (ImageView) playerView.findViewById(R.id.image_view);
-            if (mTrackParcelable.imageWidestUrl == null
-                    || mTrackParcelable.imageWidestUrl.equals("")) {
-                // show placeholder image
-                Picasso.with(getActivity()).load(R.mipmap.ic_launcher).into(imageView);
-            } else {
-                Picasso.with(getActivity()).load(mTrackParcelable.imageWidestUrl).into(imageView);
-            }
+            configureImageView(playerView);
 
             mTimeElapsedTextView = (TextView) playerView.findViewById(R.id.time_elapsed);
             mTimeRemainingTextView = (TextView) playerView.findViewById(R.id.time_remaining);
@@ -157,6 +149,17 @@ public class PlayerFragment extends Fragment
 
         final TextView trackView = (TextView) playerView.findViewById(R.id.track_view);
         trackView.setText(mTrackParcelable.name);
+    }
+
+    private void configureImageView(View playerView) {
+        ImageView imageView = (ImageView) playerView.findViewById(R.id.image_view);
+        if (mTrackParcelable.imageWidestUrl == null
+                || mTrackParcelable.imageWidestUrl.equals("")) {
+            // show placeholder image
+            Picasso.with(getActivity()).load(R.mipmap.ic_launcher).into(imageView);
+        } else {
+            Picasso.with(getActivity()).load(mTrackParcelable.imageWidestUrl).into(imageView);
+        }
     }
 
     private void configurePreviousButton(View playerView) {
