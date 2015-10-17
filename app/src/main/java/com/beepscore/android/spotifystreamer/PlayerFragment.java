@@ -310,7 +310,8 @@ public class PlayerFragment extends Fragment
 
                         if (mAudioService.isPlaying()) {
                             // e.g. if player is playing and user rotates device,
-                            // when service reconnects keep playing and set button image to pause
+                            // when fragment reconnects to service that is playing
+                            // set button image to pause.
                             mPlayButton.setImageResource(android.R.drawable.ic_media_pause);
                         } else {
                             mPlayButton.setImageResource(android.R.drawable.ic_media_play);
