@@ -5,6 +5,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+// TODO: Only used in 1 pane mode
+// References:
+// Sunshine / DetailActivity
+// https://github.com/udacity/Sunshine-Version-2/blob/3.02_create_detail_activity/app/src/main/java/com/example/android/sunshine/app/DetailActivity.java
 public class PlayerActivity extends AppCompatActivity {
 
     @Override
