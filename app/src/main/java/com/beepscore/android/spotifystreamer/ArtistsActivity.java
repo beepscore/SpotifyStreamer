@@ -56,7 +56,7 @@ public class ArtistsActivity extends AppCompatActivity
 
     // ArtistsFragment.Callback
     @Override
-    public void onItemSelected(ArtistParcelable artistParcelable) {
+    public void onArtistSelected(ArtistParcelable artistParcelable) {
         if (mTwoPane) {
             // Two pane mode
             // In ArtistsActivity show ArtistsFragment as master and TracksFragment as detail

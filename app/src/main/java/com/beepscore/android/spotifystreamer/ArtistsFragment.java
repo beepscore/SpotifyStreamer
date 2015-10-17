@@ -33,18 +33,20 @@ public class ArtistsFragment extends Fragment {
     boolean isRetrofitError = false;
 
     /**
-     * A callback interface that all activities containing this fragment must implement.
-     * This mechanism allows activities to be notified of item selections.
-     * This mechanism enables passing information from this fragment to
+     * Any activity that uses ArtistsFragment must implement this interface.
+     * Java interface pattern is similar to Objective C protocol and delegate.
+     * This pattern allows activities to be notified of item selections.
+     * This pattern enables passing information from this fragment to
      * the activity that has implemented the Callback interface.
      * This decouples the fragment from a particular activity (e.g. ArtistsActivity).
      * This also decouples the fragment from other fragments (e.g. TracksFragment).
      */
     public interface Callback {
         /**
-         * DetailFragmentCallback for when an item has been selected.
+         * When user selects an artist,
+         * ArtistsFragment will call the containing activity's implementation.
          */
-        public void onItemSelected(ArtistParcelable artistParcelable);
+        public void onArtistSelected(ArtistParcelable artistParcelable);
     }
 
     public ArtistsFragment() {
@@ -93,7 +95,7 @@ public class ArtistsFragment extends Fragment {
 
                 // Use callback to pass information from fragment
                 // to Callback implementing Activity
-                ((Callback)getActivity()).onItemSelected(artistParcelable);
+                ((Callback)getActivity()).onArtistSelected(artistParcelable);
             }
         });
 
