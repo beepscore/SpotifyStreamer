@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Handler;
 import android.os.IBinder;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.DialogFragment;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -25,9 +25,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- *
+ * PlayerFragment is a DialogFragment.
+ * A DialogFragment can still optionally be used as a normal fragment, if desired.
+ * This is useful if you have a fragment that in some cases should be shown as a dialog
+ * and others embedded in a larger UI
+ * https://developer.android.com/reference/android/app/DialogFragment.html
+ * see section - Selecting Between Dialog or Embedding
  */
-public class PlayerFragment extends Fragment
+public class PlayerFragment extends DialogFragment
         implements SeekBar.OnSeekBarChangeListener {
 
     private final String LOG_TAG = PlayerFragment.class.getSimpleName();
