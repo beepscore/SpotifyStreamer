@@ -307,6 +307,15 @@ public class PlayerFragment extends Fragment
                         mSeekBar.setProgress(percentProgress);
                         mTimeElapsedTextView.setText(TimeUtils.minutesSecondsStringFromMsec(mAudioService.getCurrentPositionMsec()));
                         mTimeRemainingTextView.setText(TimeUtils.minutesSecondsStringFromMsec(mAudioService.getTimeRemainingMsec()));
+
+                        if (mAudioService.isPlaying()) {
+                            // e.g. if player is playing and user rotates device,
+                            // when service reconnects keep playing and set button image to pause
+                            mPlayButton.setImageResource(android.R.drawable.ic_media_pause);
+                        } else {
+                            mPlayButton.setImageResource(android.R.drawable.ic_media_play);
+                        }
+
                         final int delayMsec = 1000;
                         mHandler.postDelayed(this, delayMsec);
                     }
