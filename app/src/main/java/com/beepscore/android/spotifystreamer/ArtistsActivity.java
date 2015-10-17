@@ -19,14 +19,7 @@ public class ArtistsActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_artists);
 
-        boolean hasDetailContainer = (findViewById(R.id.tracks_detail_container) != null);
-        if (hasDetailContainer) {
-            // The detail container view is present only in the large-screen layouts
-            // e.g. (res/layout-sw400dp)
-            mTwoPane = true;
-        } else {
-            mTwoPane = false;
-        }
+        mTwoPane = LayoutUtils.isTwoPane(this);
 
         if ((mTwoPane == true) && (savedInstanceState == null)) {
             // show the detail fragment in this activity
