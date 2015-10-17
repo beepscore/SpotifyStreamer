@@ -14,15 +14,15 @@ public class PlayerActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
 
-            // getExtras from Intent that was used to start the Activity
+            // getExtras from Intent that started PlayerActivity
             Bundle activity_extras = getIntent().getExtras();
 
             PlayerFragment fragment = new PlayerFragment();
 
-            // Pass activity extras to fragment via fragment arguments.
+            // Pass info to fragment via fragment.setArguments
             fragment.setArguments(activity_extras);
 
-            // dynamically add PlayerFragment to player_container
+            // Dynamically add PlayerFragment to player_container using a fragment transaction.
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.player_container, fragment)
                     .commit();
