@@ -316,7 +316,7 @@ public class PlayerFragment extends Fragment
                             mPlayButton.setImageResource(android.R.drawable.ic_media_play);
                         }
 
-                        final int delayMsec = 1000;
+                        final int delayMsec = 250;
                         mHandler.postDelayed(this, delayMsec);
                     }
                 }
