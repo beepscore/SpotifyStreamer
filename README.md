@@ -100,4 +100,15 @@ http://stackoverflow.com/questions/28929637/difference-and-uses-of-oncreate-oncr
 ---
 
 ### Stage 2 Issues/Questions
-If user rotates device, don't stop music playback
+
+#### runnable
+Does fragment onCreate run on UI thread, so its a good place to create Handler for UI updates?
+I read several references, still don't completely understand Runnable and Handler.
+
+#### use of service
+PlayerFragment is able to get info from the service.
+Do you have any suggestions to improve the way the app uses its service?
+
+#### next/previous
+The app passes entire tracks list to PlayerFragment in order to make next/previous easier to implement.
+I didn't want to prematurely optimize, but wonder if there's a less memory intensive solution.
