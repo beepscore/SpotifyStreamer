@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.IOException;
 
@@ -40,7 +39,6 @@ public class AudioService extends Service {
 
     @Override
     public void onCreate() {
-        Toast.makeText(this, LOG_TAG + " onCreate", Toast.LENGTH_SHORT).show();
         super.onCreate();
         mBSMediaPlayer = new BSMediaPlayer();
     }
@@ -53,7 +51,6 @@ public class AudioService extends Service {
 
     @Override
     public void onDestroy() {
-        Toast.makeText(this, LOG_TAG + " onDestroy", Toast.LENGTH_SHORT).show();
         if (mBSMediaPlayer != null) {
             mBSMediaPlayer.stop();
         }
