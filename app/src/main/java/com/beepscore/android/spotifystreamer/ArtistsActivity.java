@@ -11,7 +11,7 @@ public class ArtistsActivity extends AppCompatActivity
         implements ArtistsFragment.Callback, TracksFragment.Callback, PlayerFragment.Callback {
 
     private final String LOG_TAG = ArtistsActivity.class.getSimpleName();
-    private static final String ARTISTS_FRAGMENT_TAG = "ARTISTS_FRAGMENT_TAG";
+    private static final String TRACKS_FRAGMENT_TAG = "TRACKS_FRAGMENT_TAG";
     private static final String PLAYERFRAGMENT_TAG = "PLAYERFRAGMENT_TAG";
     protected boolean mTwoPane;
 
@@ -26,7 +26,7 @@ public class ArtistsActivity extends AppCompatActivity
             // show the detail fragment in this activity
             // add or replace the detail fragment using a fragment transaction.
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.tracks_detail_container, new TracksFragment(), ARTISTS_FRAGMENT_TAG)
+                    .replace(R.id.tracks_detail_container, new TracksFragment(), TRACKS_FRAGMENT_TAG)
                     .commit();
         }
     }
@@ -73,7 +73,7 @@ public class ArtistsActivity extends AppCompatActivity
 
             // Use fragment transaction to replace the detail fragment
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.tracks_detail_container, fragment, ARTISTS_FRAGMENT_TAG)
+                    .replace(R.id.tracks_detail_container, fragment, TRACKS_FRAGMENT_TAG)
                     .commit();
 
         } else {
