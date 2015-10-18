@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="SCREEN_TYPE" translatable="false">@string/SCREEN_TYPE_LARGE</string>
+</resources>

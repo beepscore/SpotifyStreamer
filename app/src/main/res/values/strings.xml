@@ -4,6 +4,8 @@
     <string name="INDEX_KEY" translatable="false">com.beepscore.android.spotifystreamer.index</string>
     <string name="TRACKS_KEY" translatable="false">com.beepscore.android.spotifystreamer.tracks</string>
     <string name="TRACK_KEY" translatable="false">com.beepscore.android.spotifystreamer.track</string>
+    <string name="SCREEN_TYPE_SMALL" translatable="false">SCREEN_TYPE_SMALL</string>
+    <string name="SCREEN_TYPE_LARGE" translatable="false">SCREEN_TYPE_LARGE</string>
     <string name="action_settings">Settings</string>
     <string name="app_name">Spotify Streamer</string>
     <string name="artist">Artist</string>

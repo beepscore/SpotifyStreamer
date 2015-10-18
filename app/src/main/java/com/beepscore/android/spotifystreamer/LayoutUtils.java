@@ -12,8 +12,10 @@ public class LayoutUtils {
      * @return true if activity is using a large-screen layout
      */
     public static boolean isTwoPane(Activity activity) {
-        // If tracks_detail_container is present, app is using a large screen layout
+        // http://stackoverflow.com/questions/5832368/tablet-or-phone-android?lq=1
         // e.g. (res/layout-sw400dp)
-        return (activity.findViewById(R.id.tracks_detail_container) != null);
+        boolean isTwoPane = activity.getString(R.string.screen_type)
+                .equals(activity.getString(R.string.SCREEN_TYPE_LARGE));
+        return isTwoPane;
     }
 }
