@@ -138,6 +138,20 @@ public class PlayerFragment extends DialogFragment
         return playerView;
     }
 
+    // fix bug in two pane mode with player showing,
+    // if user rotates tablet the player did not reappear.
+    // This is a workaround for a possible bug in Android DialogFragment support library.
+    // override onDestroyView
+    // https://code.google.com/p/android/issues/detail?id=17423
+    // http://stackoverflow.com/questions/14657490/how-to-properly-retain-a-dialogfragment-through-rotation?rq=1
+    // http://android.codeandmagic.org/android-dialogfragment-confuses-part-2/
+    @Override
+    public void onDestroyView() {
+        if (getDialog() != null && getRetainInstance())
+            getDialog().setOnDismissListener(null);
+        super.onDestroyView();
+    }
+
     private void configureArtistAlbumTrackTextViews(View playerView) {
         TextView artistView = (TextView) playerView.findViewById(R.id.artist_view);
         artistView.setText(mTrackParcelable.artistName);
