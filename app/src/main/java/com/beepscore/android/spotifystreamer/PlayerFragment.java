@@ -181,7 +181,7 @@ public class PlayerFragment extends DialogFragment
                     // Two pane mode
                     // Use callback to pass information from fragment
                     // to Activity that implements Callback
-                    ((Callback)getActivity()).onNextSelected(bundle);
+                    ((Callback)getActivity()).onPreviousSelected(bundle);
 
                 } else {
                     // One pane mode
