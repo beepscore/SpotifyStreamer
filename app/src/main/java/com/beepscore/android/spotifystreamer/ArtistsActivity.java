@@ -7,6 +7,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
+// TODO: fix when rotate device playerfragment disappears (artistsfragment and tracksfragment remain)
+// TODO: for playerfragment try use fragment transaction instead of show
+
 public class ArtistsActivity extends AppCompatActivity
         implements ArtistsFragment.Callback, TracksFragment.Callback, PlayerFragment.Callback {
 
