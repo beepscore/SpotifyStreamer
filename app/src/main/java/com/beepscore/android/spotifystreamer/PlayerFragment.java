@@ -138,6 +138,26 @@ public class PlayerFragment extends DialogFragment
         return playerView;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        if (getDialog() == null) {
+            return;
+        }
+
+        // http://stackoverflow.com/questions/12478520/how-to-set-dialogfragments-width-and-height
+        // http://adilatwork.blogspot.com/2012/11/android-dialogfragment-dialog-sizing.html
+        if (LayoutUtils.isTwoPane(getActivity()) == true) {
+            int screenWidth = getResources().getDisplayMetrics().widthPixels;
+            int screenHeight = getResources().getDisplayMetrics().heightPixels;
+
+            int dialogWidth = (int)(0.8 * screenWidth);
+            int dialogHeight = (int)(0.8 * screenHeight);
+            getDialog().getWindow().setLayout(dialogWidth, dialogHeight);
+        }
+    }
+
     // fix bug in two pane mode with player showing,
     // if user rotates tablet the player did not reappear.
     // This is a workaround for a possible bug in Android DialogFragment support library.
