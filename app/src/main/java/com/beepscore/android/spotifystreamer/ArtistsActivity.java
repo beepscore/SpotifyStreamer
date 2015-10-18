@@ -12,7 +12,7 @@ public class ArtistsActivity extends AppCompatActivity
 
     private final String LOG_TAG = ArtistsActivity.class.getSimpleName();
     private static final String TRACKS_FRAGMENT_TAG = "TRACKS_FRAGMENT_TAG";
-    private static final String PLAYERFRAGMENT_TAG = "PLAYERFRAGMENT_TAG";
+    private static final String PLAYER_FRAGMENT_TAG = "PLAYER_FRAGMENT_TAG";
     protected boolean mTwoPane;
 
     @Override
@@ -98,7 +98,7 @@ public class ArtistsActivity extends AppCompatActivity
     public void onTrackSelected(Bundle bundle) {
         PlayerFragment fragment = new PlayerFragment();
         fragment.setArguments(bundle);
-        fragment.show(getSupportFragmentManager(), PLAYERFRAGMENT_TAG);
+        fragment.show(getSupportFragmentManager(), PLAYER_FRAGMENT_TAG);
     }
     ///////////////////////////////////////////////////////////////////////////
 
@@ -112,7 +112,7 @@ public class ArtistsActivity extends AppCompatActivity
     public void onNextSelected(Bundle bundle) {
         PlayerFragment fragment = new PlayerFragment();
         fragment.setArguments(bundle);
-        fragment.show(getSupportFragmentManager(), PLAYERFRAGMENT_TAG);
+        fragment.show(getSupportFragmentManager(), PLAYER_FRAGMENT_TAG);
     }
 
     /**
@@ -123,7 +123,7 @@ public class ArtistsActivity extends AppCompatActivity
     public void onPreviousSelected(Bundle bundle) {
         PlayerFragment fragment = new PlayerFragment();
         fragment.setArguments(bundle);
-        fragment.show(getSupportFragmentManager(), PLAYERFRAGMENT_TAG);
+        fragment.show(getSupportFragmentManager(), PLAYER_FRAGMENT_TAG);
     }
     ///////////////////////////////////////////////////////////////////////////
 }
