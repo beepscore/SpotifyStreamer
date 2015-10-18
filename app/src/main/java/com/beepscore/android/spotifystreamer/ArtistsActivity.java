@@ -8,10 +8,11 @@ import android.view.MenuItem;
 
 
 public class ArtistsActivity extends AppCompatActivity
-        implements ArtistsFragment.Callback {
+        implements ArtistsFragment.Callback, TracksFragment.Callback, PlayerFragment.Callback {
 
     private final String LOG_TAG = ArtistsActivity.class.getSimpleName();
     private static final String DETAILFRAGMENT_TAG = "DFTAG";
+    private static final String PLAYERFRAGMENT_TAG = "PLAYERFRAGMENT_TAG";
     protected boolean mTwoPane;
 
     @Override
@@ -57,7 +58,7 @@ public class ArtistsActivity extends AppCompatActivity
     // ArtistsFragment.Callback
     @Override
     public void onArtistSelected(ArtistParcelable artistParcelable) {
-        if (mTwoPane) {
+        if (mTwoPane == true) {
             // Two pane mode
             // In ArtistsActivity show ArtistsFragment as master and TracksFragment as detail
 
@@ -84,6 +85,45 @@ public class ArtistsActivity extends AppCompatActivity
             intent.putExtra(this.getString(R.string.ARTIST_KEY), artistParcelable);
             startActivity(intent);
         }
+    }
+    ///////////////////////////////////////////////////////////////////////////
+
+    // TracksFragment.Callback
+
+    /**
+     * show PlayerFragment as dialog
+     * @param bundle will be passed to PlayerFragment as arguments
+     */
+    @Override
+    public void onTrackSelected(Bundle bundle) {
+        PlayerFragment fragment = new PlayerFragment();
+        fragment.setArguments(bundle);
+        fragment.show(getSupportFragmentManager(), PLAYERFRAGMENT_TAG);
+    }
+    ///////////////////////////////////////////////////////////////////////////
+
+    // PlayerFragment.Callback
+
+    /**
+     * show PlayerFragment as dialog
+     * @param bundle will be passed to PlayerFragment as arguments
+     */
+    @Override
+    public void onNextSelected(Bundle bundle) {
+        PlayerFragment fragment = new PlayerFragment();
+        fragment.setArguments(bundle);
+        fragment.show(getSupportFragmentManager(), PLAYERFRAGMENT_TAG);
+    }
+
+    /**
+     * show PlayerFragment as dialog
+     * @param bundle will be passed to PlayerFragment as arguments
+     */
+    @Override
+    public void onPreviousSelected(Bundle bundle) {
+        PlayerFragment fragment = new PlayerFragment();
+        fragment.setArguments(bundle);
+        fragment.show(getSupportFragmentManager(), PLAYERFRAGMENT_TAG);
     }
     ///////////////////////////////////////////////////////////////////////////
 }

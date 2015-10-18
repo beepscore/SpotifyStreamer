@@ -45,6 +45,7 @@ public class PlayerFragment extends DialogFragment
      * Flag indicating whether we have called bind on the service.
      */
     private boolean mIsBound;
+    protected boolean mTwoPane;
 
     private SeekBar mSeekBar;
     private TextView mTimeElapsedTextView;
@@ -57,6 +58,20 @@ public class PlayerFragment extends DialogFragment
     private Handler mHandler;
 
     private int mTrackIndex;
+
+    public interface Callback {
+        /**
+         * If in two pane mode, when user selects next track,
+         * PlayerFragment will call the containing activity's implementation.
+         */
+        void onNextSelected(Bundle bundle);
+
+        /**
+         * If in two pane mode, when user selects previous track,
+         * PlayerFragment will call the containing activity's implementation.
+         */
+        void onPreviousSelected(Bundle bundle);
+    }
 
     public PlayerFragment() {
     }
@@ -75,6 +90,8 @@ public class PlayerFragment extends DialogFragment
             mTrackIndex = arguments.getInt(getActivity().getString(R.string.INDEX_KEY));
             mTrackParcelable = mTracksList.get(mTrackIndex);
         }
+
+        mTwoPane = LayoutUtils.isTwoPane(getActivity());
 
         // Use setRetainInstance to avoid interrupting audio during rotation.
         // When user rotates device, activity will be destroyed
@@ -153,15 +170,25 @@ public class PlayerFragment extends DialogFragment
                     doUnbindService();
                 }
 
-                Intent intent = new Intent(getActivity(), PlayerActivity.class);
                 Bundle bundle = new Bundle();
                 getActivity().getString(R.string.TRACKS_KEY);
                 bundle.putParcelableArrayList(getActivity().getString(R.string.TRACKS_KEY),
                         mTracksList);
                 bundle.putInt(getActivity().getString(R.string.INDEX_KEY),
                         ListUtils.indexPreviousWraps(mTracksList, mTrackIndex));
-                intent.putExtras(bundle);
-                startActivity(intent);
+
+                if (mTwoPane == true) {
+                    // Two pane mode
+                    // Use callback to pass information from fragment
+                    // to Activity that implements Callback
+                    ((Callback)getActivity()).onNextSelected(bundle);
+
+                } else {
+                    // One pane mode
+                    Intent intent = new Intent(getActivity(), PlayerActivity.class);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }
             }
         });
     }
@@ -176,15 +203,25 @@ public class PlayerFragment extends DialogFragment
                     doUnbindService();
                 }
 
-                Intent intent = new Intent(getActivity(), PlayerActivity.class);
                 Bundle bundle = new Bundle();
                 getActivity().getString(R.string.TRACKS_KEY);
                 bundle.putParcelableArrayList(getActivity().getString(R.string.TRACKS_KEY),
                         mTracksList);
                 bundle.putInt(getActivity().getString(R.string.INDEX_KEY),
                         ListUtils.indexNextWraps(mTracksList, mTrackIndex));
-                intent.putExtras(bundle);
-                startActivity(intent);
+
+                if (mTwoPane == true) {
+                    // Two pane mode
+                    // Use callback to pass information from fragment
+                    // to Activity that implements Callback
+                    ((Callback)getActivity()).onNextSelected(bundle);
+
+                } else {
+                    // One pane mode
+                    Intent intent = new Intent(getActivity(), PlayerActivity.class);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }
             }
         });
     }

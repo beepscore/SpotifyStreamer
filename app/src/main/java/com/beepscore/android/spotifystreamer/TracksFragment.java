@@ -36,6 +36,15 @@ public class TracksFragment extends Fragment {
     private String artistName = "";
     TracksArrayAdapter adapter = null;
     boolean isRetrofitError = false;
+    protected boolean mTwoPane;
+
+    public interface Callback {
+        /**
+         * If in two pane mode, when user selects a track,
+         * TracksFragment will call the containing activity's implementation.
+         */
+        void onTrackSelected(Bundle bundle);
+    }
 
     public TracksFragment() {
     }
@@ -78,6 +87,8 @@ public class TracksFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        mTwoPane = LayoutUtils.isTwoPane(getActivity());
+
         View tracksView = inflater.inflate(R.layout.fragment_tracks, container, false);
 
         configureActionBarSubtitle(artistName);
@@ -89,14 +100,24 @@ public class TracksFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int index, long l) {
 
-                Intent intent = new Intent(getActivity(), PlayerActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putParcelableArrayList(getActivity().getString(R.string.TRACKS_KEY),
                         tracksList);
                 bundle.putInt(getActivity().getString(R.string.INDEX_KEY),
                         index);
-                intent.putExtras(bundle);
-                startActivity(intent);
+
+                if (mTwoPane == true) {
+                    // Two pane mode
+                    // Use callback to pass information from fragment
+                    // to Activity that implements Callback
+                    ((Callback)getActivity()).onTrackSelected(bundle);
+
+                } else {
+                    // One pane mode
+                    Intent intent = new Intent(getActivity(), PlayerActivity.class);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }
             }
         });
 
