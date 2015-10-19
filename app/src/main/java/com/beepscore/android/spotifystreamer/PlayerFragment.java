@@ -173,8 +173,13 @@ public class PlayerFragment extends DialogFragment
     }
 
     private void configureArtistAlbumTrackTextViews(View playerView) {
-        TextView artistView = (TextView) playerView.findViewById(R.id.artist_view);
-        artistView.setText(mTrackParcelable.artistName);
+
+        if (mTwoPane) {
+            getDialog().setTitle(mTrackParcelable.artistName);
+        } else {
+            TextView artistView = (TextView) playerView.findViewById(R.id.artist_view);
+            artistView.setText(mTrackParcelable.artistName);
+        }
 
         TextView albumView = (TextView) playerView.findViewById(R.id.album_view);
         albumView.setText(mTrackParcelable.albumName);
