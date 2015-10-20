@@ -101,14 +101,26 @@ http://stackoverflow.com/questions/28929637/difference-and-uses-of-oncreate-oncr
 
 ### Stage 2 Issues/Questions
 
+##### Additional Reviewer Comments
+Well done with your app. You have a minor fix and I've left you some tips.
+
 #### runnable
 Does fragment onCreate run on UI thread, so its a good place to create Handler for UI updates?
 I read several references, still don't completely understand Runnable and Handler.
+
+##### Answer
+onCreate runs before onCreateView and it does run on the main thread of your app. It is a good place to create a handler.
 
 #### use of service
 PlayerFragment is able to get info from the service.
 Do you have any suggestions to improve the way the app uses its service?
 
+##### Answer
+You can try and implementing a now playing feature button in the action bar. Your service can keep the song alive even after you exit the player fragment. This gives a chance to bring up which song is being currently played.
+
 #### next/previous
 The app passes entire tracks list to PlayerFragment in order to make next/previous easier to implement.
 I didn't want to prematurely optimize, but wonder if there's a less memory intensive solution.
+
+##### Answer
+In this case its ok since its only 10 songs. For longer lists, its better to store the songs in a content provider and just pass in the index in a list
