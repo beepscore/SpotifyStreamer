@@ -365,12 +365,12 @@ public class PlayerFragment extends DialogFragment
     ///////////////////////////////////////////////////////////////////////////
 
     private ServiceConnection mConnection = new ServiceConnection() {
+
         public void onServiceConnected(ComponentName className, IBinder service) {
-            // This is called when the connection with the service has been
-            // established, giving us the service object we can use to
-            // interact with the service.  Because we have bound to a explicit
-            // service that we know is running in our own process, we can
-            // cast its IBinder to a concrete class and directly access it.
+            // Called when the connection with the service has been established,
+            // giving us the service object we can use to interact with the service.
+            // Because we have bound to a explicit service that we know is running in our own process,
+            // we can cast its IBinder to a concrete class and directly access it.
             mAudioService = ((AudioService.LocalBinder)service).getService();
 
             // Info on using Runnable to update MediaPlayer
@@ -429,6 +429,14 @@ public class PlayerFragment extends DialogFragment
         // https://developer.android.com/guide/components/intents-filters.html
         Intent intent = new Intent(getActivity(), AudioService.class);
 
+        // A client can bind to the service by calling bindService().
+        // When it does, it must provide an implementation of ServiceConnection,
+        // which monitors the connection with the service.
+        // The bindService() method returns immediately without a value,
+        // but when the Android system creates the connection between the client and service,
+        // it calls onServiceConnected() on the ServiceConnection,
+        // to deliver the IBinder that the client can use to communicate with the service.
+        // http://developer.android.com/guide/components/bound-services.html#Basics
         getActivity().getApplicationContext().bindService(intent,
                 mConnection,
                 Context.BIND_AUTO_CREATE);
