@@ -418,10 +418,11 @@ public class PlayerFragment extends DialogFragment
     };
 
     void doBindService() {
-        // Establish a connection with the service.  We use an explicit
-        // class name because we want a specific service implementation that
-        // we know will be running in our own process (and thus won't be
-        // supporting component replacement by other applications).
+        // Establish a connection with the service.
+        // For second parameter use an explicit class name
+        // because we want a specific service implementation
+        // that we know will be running in our own process
+        // (and thus won't be supporting component replacement by other applications).
 
         // To ensure your app is secure, always use an explicit intent when starting a Service
         // and do not declare intent filters for your services.
