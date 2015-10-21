@@ -124,3 +124,23 @@ I didn't want to prematurely optimize, but wonder if there's a less memory inten
 
 ##### Answer
 In this case its ok since its only 10 songs. For longer lists, its better to store the songs in a content provider and just pass in the index in a list
+
+#### Back button
+After tapping Back button sometimes play button doesn't work.
+(This is the Android system Back button, not the PlayerFragment previous track button.)
+
+Steps to reproduce
+Start app.
+Search for an artist, select an artist.
+Select a track, play starts.
+Tap next track button, play starts.
+Tap back button, play doesn't start. I think this is ok.
+Tap play button, audio won't play. Button image changes briefly to pause and then back to play.
+Next and Previous buttons work.
+Also tapping Back until get to tracks list works.
+
+TODO Debug with breakpoints in handlePlayPauseTapped.
+May be able to fix this by adjusting some conditional statements.
+Possibly implement onBackPressed.
+http://stackoverflow.com/questions/2000102/override-back-button-to-act-like-home-button?rq=1
+
