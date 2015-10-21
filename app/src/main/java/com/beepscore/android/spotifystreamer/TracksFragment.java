@@ -228,10 +228,19 @@ public class TracksFragment extends Fragment {
 
             if (!isRetrofitError
                     && isTracksListNullOrEmpty(tracksList)) {
-                Toast toast = Toast.makeText(getActivity(),
-                        getActivity().getString(R.string.search_found_no_tracks),
-                        Toast.LENGTH_SHORT);
-                toast.show();
+
+                // Check activity not null to avoid potential NullPointerException
+                // Udacity reviewer suggested
+                // "Be careful using getActivity() in onPostExecute.
+                // If the activity has finished before the background task ended
+                // then you could end up with a NullPointerException."
+                if (getActivity() != null) {
+
+                    Toast toast = Toast.makeText(getActivity(),
+                            getActivity().getString(R.string.search_found_no_tracks),
+                            Toast.LENGTH_SHORT);
+                    toast.show();
+                }
             }
 
             adapter.clear();
