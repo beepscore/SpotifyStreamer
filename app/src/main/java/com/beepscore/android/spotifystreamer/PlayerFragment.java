@@ -373,6 +373,8 @@ public class PlayerFragment extends DialogFragment
             // we can cast its IBinder to a concrete class and directly access it.
             mAudioService = ((AudioService.LocalBinder)service).getService();
 
+            handlePlayPauseTapped();
+
             // Info on using Runnable to update MediaPlayer
             // https://www.youtube.com/watch?v=GaO1uHeIcj0
             // http://www.vogella.com/tutorials/AndroidBackgroundProcessing/article.html#concurrency_handler2
