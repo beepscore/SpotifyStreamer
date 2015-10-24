@@ -328,7 +328,7 @@ public class PlayerFragment extends DialogFragment
 
     @Override
     public void onDestroy() {
-        doUnbindService();
+        stopAndUnbindService();
         super.onDestroy();
     }
 

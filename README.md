@@ -129,26 +129,3 @@ I didn't want to prematurely optimize, but wonder if there's a less memory inten
 In this case its ok since its only 10 songs.
 For longer lists, its better to store the songs in a content provider and just pass in the index in a list
 
-#### bug 2 different songs play simultaneously
-Steps to reproduce
-
-Start app.
-Search for an artist, select an artist.
-
-Select a track, play starts.
-Tap next track button, play starts.
-Tap next track button again, play starts.
-Rotate device.
-Tap Android Back button, play doesn't start. I think this is ok.
-Tap play button, play starts.
-Tap Android Back button.
-Previous track playback continues, new track play doesn't start.
-Tap play button.
-Previous track playback continues, new track play starts.
-App plays 2 different songs simultaneously.
-I think this means there are 2 mediaplayer instances.
-If so app may have a memory leak.
-May be due to use of retained PlayerFragment.
-https://developer.android.com/guide/topics/media/mediaplayer.html
-https://discussions.udacity.com/t/problem-with-mixing-songs-when-i-press-the-previous-button/29171/2
-https://discussions.udacity.com/t/service-life-is-bonded-with-main-activity-problem-on-rotation/25569/12
