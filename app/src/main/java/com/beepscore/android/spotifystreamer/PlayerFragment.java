@@ -80,6 +80,8 @@ public class PlayerFragment extends DialogFragment
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Log.d(LOG_TAG, "onCreate");
+
         // The instantiating activity sets this fragment's arguments
         // as a way to pass information to it.
         // This decouples the fragment from a particular activity.
@@ -204,10 +206,7 @@ public class PlayerFragment extends DialogFragment
         mPreviousButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                if (mAudioService != null) {
-                    mAudioService.stop();
-                    doUnbindService();
-                }
+                stopAndUnbindService();
 
                 Bundle bundle = new Bundle();
                 getActivity().getString(R.string.TRACKS_KEY);
@@ -237,10 +236,7 @@ public class PlayerFragment extends DialogFragment
         mNextButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                if (mAudioService != null) {
-                    mAudioService.stop();
-                    doUnbindService();
-                }
+                stopAndUnbindService();
 
                 Bundle bundle = new Bundle();
                 getActivity().getString(R.string.TRACKS_KEY);
@@ -263,6 +259,13 @@ public class PlayerFragment extends DialogFragment
                 }
             }
         });
+    }
+
+    protected void stopAndUnbindService() {
+        if (mAudioService != null) {
+            mAudioService.stop();
+            doUnbindService();
+        }
     }
 
     private void configurePlayButton(View playerView) {
@@ -295,8 +298,9 @@ public class PlayerFragment extends DialogFragment
 
     private void handlePlayTapped() {
         mPlayButton.setImageResource(android.R.drawable.ic_media_pause);
-        if (mAudioService != null
-                && mIsBound) {
+            if (mAudioService != null) {
+                // fixed bug: tap Android Back button, then track play button didn't work
+                // fixed by removing conditional check (mIsBound == true)
             try {
                 // Use Android’s MediaPlayer API to stream the track preview of a currently selected track.
                 // Apparently full song uri requires Spotify sdk player.

@@ -2,6 +2,7 @@ package com.beepscore.android.spotifystreamer;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -10,6 +11,9 @@ import android.view.MenuItem;
 // Sunshine / DetailActivity
 // https://github.com/udacity/Sunshine-Version-2/blob/3.02_create_detail_activity/app/src/main/java/com/example/android/sunshine/app/DetailActivity.java
 public class PlayerActivity extends AppCompatActivity {
+
+    private final String LOG_TAG = PlayerActivity.class.getSimpleName();
+    private PlayerFragment mPlayerFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,14 +25,14 @@ public class PlayerActivity extends AppCompatActivity {
             // getExtras from Intent that started PlayerActivity
             Bundle activity_extras = getIntent().getExtras();
 
-            PlayerFragment fragment = new PlayerFragment();
+            mPlayerFragment = new PlayerFragment();
 
             // Pass info to fragment via fragment.setArguments
-            fragment.setArguments(activity_extras);
+            mPlayerFragment.setArguments(activity_extras);
 
             // Dynamically add PlayerFragment to player_container using a fragment transaction.
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.player_container, fragment)
+                    .add(R.id.player_container, mPlayerFragment)
                     .commit();
         }
     }
@@ -53,5 +57,15 @@ public class PlayerActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Log.d(LOG_TAG, "onBackPressed");
+        if (mPlayerFragment != null) {
+            mPlayerFragment.stopAndUnbindService();
+            // TODO: check if onBackPressed should delete retained player fragment
+        }
+        super.onBackPressed();
     }
 }

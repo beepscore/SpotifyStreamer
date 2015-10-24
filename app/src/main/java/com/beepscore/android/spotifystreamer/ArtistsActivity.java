@@ -3,6 +3,7 @@ package com.beepscore.android.spotifystreamer;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -17,6 +18,7 @@ public class ArtistsActivity extends AppCompatActivity
     private static final String TRACKS_FRAGMENT_TAG = "TRACKS_FRAGMENT_TAG";
     private static final String PLAYER_FRAGMENT_TAG = "PLAYER_FRAGMENT_TAG";
     protected boolean mTwoPane;
+    private PlayerFragment mPlayerFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +56,15 @@ public class ArtistsActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Log.d(LOG_TAG, "onBackPressed");
+        if (mPlayerFragment != null) {
+            mPlayerFragment.stopAndUnbindService();
+        }
+        super.onBackPressed();
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -99,9 +110,9 @@ public class ArtistsActivity extends AppCompatActivity
      */
     @Override
     public void onTrackSelected(Bundle bundle) {
-        PlayerFragment fragment = new PlayerFragment();
-        fragment.setArguments(bundle);
-        fragment.show(getSupportFragmentManager(), PLAYER_FRAGMENT_TAG);
+        mPlayerFragment = new PlayerFragment();
+        mPlayerFragment.setArguments(bundle);
+        mPlayerFragment.show(getSupportFragmentManager(), PLAYER_FRAGMENT_TAG);
     }
     ///////////////////////////////////////////////////////////////////////////
 
@@ -113,9 +124,9 @@ public class ArtistsActivity extends AppCompatActivity
      */
     @Override
     public void onNextSelected(Bundle bundle) {
-        PlayerFragment fragment = new PlayerFragment();
-        fragment.setArguments(bundle);
-        fragment.show(getSupportFragmentManager(), PLAYER_FRAGMENT_TAG);
+        mPlayerFragment = new PlayerFragment();
+        mPlayerFragment.setArguments(bundle);
+        mPlayerFragment.show(getSupportFragmentManager(), PLAYER_FRAGMENT_TAG);
     }
 
     /**
@@ -124,9 +135,9 @@ public class ArtistsActivity extends AppCompatActivity
      */
     @Override
     public void onPreviousSelected(Bundle bundle) {
-        PlayerFragment fragment = new PlayerFragment();
-        fragment.setArguments(bundle);
-        fragment.show(getSupportFragmentManager(), PLAYER_FRAGMENT_TAG);
+        mPlayerFragment = new PlayerFragment();
+        mPlayerFragment.setArguments(bundle);
+        mPlayerFragment.show(getSupportFragmentManager(), PLAYER_FRAGMENT_TAG);
     }
     ///////////////////////////////////////////////////////////////////////////
 }

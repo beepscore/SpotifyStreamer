@@ -109,38 +109,43 @@ Does fragment onCreate run on UI thread, so its a good place to create Handler f
 I read several references, still don't completely understand Runnable and Handler.
 
 ##### Answer
-onCreate runs before onCreateView and it does run on the main thread of your app. It is a good place to create a handler.
+onCreate runs before onCreateView and it does run on the main thread of your app.
+It is a good place to create a handler.
 
 #### use of service
 PlayerFragment is able to get info from the service.
 Do you have any suggestions to improve the way the app uses its service?
 
 ##### Answer
-You can try and implementing a now playing feature button in the action bar. Your service can keep the song alive even after you exit the player fragment. This gives a chance to bring up which song is being currently played.
+You can try implementing a now playing feature button in the action bar.
+Your service can keep the song alive even after you exit the player fragment.
+This gives a chance to bring up which song is being currently played.
 
 #### next/previous
 The app passes entire tracks list to PlayerFragment in order to make next/previous easier to implement.
 I didn't want to prematurely optimize, but wonder if there's a less memory intensive solution.
 
 ##### Answer
-In this case its ok since its only 10 songs. For longer lists, its better to store the songs in a content provider and just pass in the index in a list
+In this case its ok since its only 10 songs.
+For longer lists, its better to store the songs in a content provider and just pass in the index in a list
 
-#### Back button
-After tapping Back button sometimes play button doesn't work.
-(This is the Android system Back button, not the PlayerFragment previous track button.)
-
+#### bug 2 different songs play simultaneously
 Steps to reproduce
+
 Start app.
 Search for an artist, select an artist.
 Select a track, play starts.
 Tap next track button, play starts.
-Tap back button, play doesn't start. I think this is ok.
-Tap play button, audio won't play. Button image changes briefly to pause and then back to play.
-Next and Previous buttons work.
-Also tapping Back until get to tracks list works.
-
-TODO Debug with breakpoints in handlePlayPauseTapped.
-May be able to fix this by adjusting some conditional statements.
-Possibly implement onBackPressed.
-http://stackoverflow.com/questions/2000102/override-back-button-to-act-like-home-button?rq=1
-
+Tap next track button again, play starts.
+Rotate device.
+Tap Android Back button, play doesn't start. I think this is ok.
+Tap play button.
+Rotate device back.
+Tap Android Back button, play doesn't start. I think this is ok.
+Tap play button.
+App plays 2 different songs simultaneously.
+I think this means there are 2 mediaplayer instances.
+If so app may have a memory leak.
+May be due to use of retained PlayerFragment.
+https://developer.android.com/guide/topics/media/mediaplayer.html
+https://discussions.udacity.com/t/problem-with-mixing-songs-when-i-press-the-previous-button/29171/2
